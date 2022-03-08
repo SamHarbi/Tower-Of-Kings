@@ -73,10 +73,12 @@ public class Player : MonoBehaviour
             Jump();
         }
 
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
+           anim.ResetTrigger("Attack");
            anim.SetTrigger("Attack");
         }
+
 
 
 
@@ -90,6 +92,13 @@ public class Player : MonoBehaviour
         }
 
     }
+
+    IEnumerator delay()
+    {
+        yield return new WaitForSeconds(0.2f);
+                   anim.ResetTrigger("Attack");
+    }
+
 
     void Jump()
     {
