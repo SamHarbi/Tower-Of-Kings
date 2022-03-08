@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private int speed;
     private int moveBuffer;
+    public bool attacking;
 
     private Animator anim;
     private SpriteRenderer SR;
@@ -14,6 +15,8 @@ public class Player : MonoBehaviour
     private GameObject bladeLeft;
     private GameObject bladeRight;
     private SpriteRenderer bladeSR;
+
+
 
     void Awake()
     {
@@ -29,6 +32,7 @@ public class Player : MonoBehaviour
 
         speed = 6;
         moveBuffer = 1;
+        attacking = false;
 
         anim = gameObject.GetComponent<Animator>();
         SR = gameObject.GetComponent<SpriteRenderer>();
@@ -69,6 +73,13 @@ public class Player : MonoBehaviour
             Jump();
         }
 
+        if (Input.GetButton("Fire1"))
+        {
+           anim.SetTrigger("Attack");
+        }
+
+
+
         if(RB.velocity.y < 0.1)
         {
             RB.gravityScale = 8;
@@ -96,7 +107,7 @@ public class Player : MonoBehaviour
         change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
         transform.position += change;
 
-        BackMove();
+
 
         if(mod > 0)
         {
@@ -111,15 +122,6 @@ public class Player : MonoBehaviour
             bladeLeft.SetActive(false);
         }
 
-    }
-
-    IEnumerator BackMove()
-    {
-        for(int i=moveBuffer; i<moveBuffer*Time.deltaTime; i--)
-        {
-            //Do Nothing
-        }
-        yield return true;
     }
 
     void MoveStance(int axis)
