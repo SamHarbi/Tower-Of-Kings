@@ -6,44 +6,25 @@ public class Player : MonoBehaviour
 {
     private int speed;
     private int moveBuffer;
-    public bool attacking;
-
     private Animator anim;
     private SpriteRenderer SR;
     private Rigidbody2D RB;
-    public GameObject blade;
-    private GameObject bladeLeft;
-    private GameObject bladeRight;
-    private SpriteRenderer bladeSR;
-
-
-
-    void Awake()
-    {
-        bladeRight = GameObject.Find("/Canvas/Panel/Arm-Right");
-        bladeLeft = GameObject.Find("/Canvas/Panel/Arm-Left");
-        blade = bladeRight;
-        blade.SetActive(true);
-    }
 
     // Start is called before the first frame update
     void Start()
     {
-
         speed = 6;
         moveBuffer = 1;
-        attacking = false;
 
         anim = gameObject.GetComponent<Animator>();
         SR = gameObject.GetComponent<SpriteRenderer>();
         RB = gameObject.GetComponent<Rigidbody2D>();
-        bladeSR = blade.GetComponent<SpriteRenderer>();
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Movement Logic - Walking Left and Right
         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
         {
             Move(-1.0f);
@@ -59,6 +40,7 @@ public class Player : MonoBehaviour
             anim.SetBool("Running", false);
         }
 
+
         if (Input.GetAxis("Combat-Vertical") < 0 || Input.GetKey("up"))
         {
             MoveStance(1);
@@ -68,20 +50,13 @@ public class Player : MonoBehaviour
             MoveStance(0);
         }
 
+        //Movement Logic - Jumping
         if (Input.GetButtonDown("Jump"))
         {
             Jump();
         }
 
-        if (Input.GetButtonDown("Fire1"))
-        {
-           anim.ResetTrigger("Attack");
-           anim.SetTrigger("Attack");
-        }
-
-
-
-
+        //Gravity Logic - Heavy Fall and light jump
         if(RB.velocity.y < 0.1)
         {
             RB.gravityScale = 8;
@@ -92,13 +67,6 @@ public class Player : MonoBehaviour
         }
 
     }
-
-    IEnumerator delay()
-    {
-        yield return new WaitForSeconds(0.2f);
-                   anim.ResetTrigger("Attack");
-    }
-
 
     void Jump()
     {
@@ -115,22 +83,6 @@ public class Player : MonoBehaviour
 
         change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
         transform.position += change;
-
-
-
-        if(mod > 0)
-        {
-            blade = bladeLeft;
-            blade.SetActive(true);
-            bladeRight.SetActive(false);
-        }
-        else
-        {
-            blade = bladeRight;
-            blade.SetActive(true);
-            bladeLeft.SetActive(false);
-        }
-
     }
 
     void MoveStance(int axis)
