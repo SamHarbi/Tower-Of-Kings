@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CombatEnter
+  - CombatExit
+  - EnemyBladeL
+  - EnemyBladeR
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -40,16 +40,6 @@ public class Player : MonoBehaviour
             anim.SetBool("Running", false);
         }
 
-
-        if (Input.GetAxis("Combat-Vertical") < 0 || Input.GetKey("up"))
-        {
-            MoveStance(1);
-        }
-        else if (Input.GetAxis("Combat-Vertical") < 0 || Input.GetKey("down"))
-        {
-            MoveStance(0);
-        }
-
         //Movement Logic - Jumping
         if (Input.GetButtonDown("Jump"))
         {
@@ -83,11 +73,6 @@ public class Player : MonoBehaviour
 
         change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
         transform.position += change;
-    }
-
-    void MoveStance(int axis)
-    {
-
     }
 
 
