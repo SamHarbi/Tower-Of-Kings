@@ -10,6 +10,13 @@ public class Player : MonoBehaviour
     private SpriteRenderer SR;
     private Rigidbody2D RB;
 
+    public GameObject leftEnemyDetect;
+    public GameObject rightEnemyDetect;
+
+    private EnemyDetector RED;
+    private EnemyDetector LED;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +26,10 @@ public class Player : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         SR = gameObject.GetComponent<SpriteRenderer>();
         RB = gameObject.GetComponent<Rigidbody2D>();
+
+        RED = rightEnemyDetect.GetComponent<EnemyDetector>();
+        LED = leftEnemyDetect.GetComponent<EnemyDetector>();
+
     }
 
     // Update is called once per frame
@@ -29,11 +40,18 @@ public class Player : MonoBehaviour
         {
             Move(-1.0f);
             SR.flipX = false;
+
+            LED.setView(true);
+            RED.setView(false);
+
         }
         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
         {
             Move(1.0f);
             SR.flipX = true;
+
+            LED.setView(false);
+            RED.setView(true);
         }
         else
         {

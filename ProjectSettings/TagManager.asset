@@ -9,6 +9,7 @@ TagManager:
   - EnemyBladeL
   - EnemyBladeR
   - Enemy
+  - EnemyBlade
   layers:
   - Default
   - TransparentFX

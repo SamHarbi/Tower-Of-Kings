@@ -16,13 +16,21 @@ public class CombatController : MonoBehaviour
     private float isBladeAtDestination;
 
     private Collider2D[] nearbyEnemyL;
-    private Collider2D nearbyEnemyR;
+    
     private Vector2 OverlapStart;
     private Vector2 OverlapEnd;
     public LayerMask layer;
-    public GameObject testItem;
+    
 
-    public GameObject[] detectedEnemies;
+
+    public EnemyDetector leftEnemyDetector;
+    public EnemyDetector rightEnemyDetector;
+    private bool previousDirection;
+
+    public GameObject BladeEntry;
+    public GameObject BladeExit;
+
+    public GameObject panel;
 
     void Awake()
     {
@@ -42,6 +50,8 @@ public class CombatController : MonoBehaviour
         OverlapStart = new Vector2(transform.position.x, transform.position.y - 3);
 
         OverlapEnd = new Vector2(transform.position.x - 5, transform.position.y + 5);
+
+        previousDirection = false; //left is false, right is true
 
         //Instantiate(testItem, OverlapStart, Quaternion.identity);
         //Instantiate(testItem, OverlapEnd, Quaternion.identity);
@@ -63,10 +73,20 @@ public class CombatController : MonoBehaviour
         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
         {
             Move(true);
+            if(previousDirection == true)
+            {
+                rightEnemyDetector.resetViewControl();
+                previousDirection = false;
+            }
         }
         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
         {
             Move(false);
+            if(previousDirection == false)
+            {
+                leftEnemyDetector.resetViewControl();
+                previousDirection = true;
+            }
         }
 
         if (Input.GetAxis("Combat-Vertical") < 0 || Input.GetKey("up"))
@@ -90,28 +110,24 @@ public class CombatController : MonoBehaviour
             }
         }
 
-        OverlapStart = new Vector2(transform.position.x, transform.position.y - 3);
-        OverlapEnd = new Vector2(transform.position.x - 5, transform.position.y + 5);
-        nearbyEnemyL = Physics2D.OverlapAreaAll(OverlapStart, OverlapEnd, layer);
-        if(nearbyEnemyL != null && nearbyEnemyL[0].tag == "Enemy")
-        {
-            Debug.Log("A bruh has entered the chat");
-        }
     }
 
     void Move(bool mod)
     {
-        if(mod == false)
+        if(mod == false) //Left
         {
             blade = bladeLeft;
             blade.SetActive(true);
             bladeRight.SetActive(false);
+            flipPositionLeft();
+
         }
-        else
+        else //Right
         {
             blade = bladeRight;
             blade.SetActive(true);
             bladeLeft.SetActive(false);
+            flipPositionRight();
         }
 
     }
@@ -134,6 +150,18 @@ public class CombatController : MonoBehaviour
             bladeSR.sprite = sprites[0];
         }
     }
+
+   public void flipPositionLeft()
+   {
+       BladeExit.transform.position = new Vector2(panel.transform.position.x + 6.3f, panel.transform.position.y + 1);
+       BladeEntry.transform.position = new Vector2(panel.transform.position.x + 3, panel.transform.position.y + 1);
+   }
+
+   public void flipPositionRight()
+   {
+       BladeExit.transform.position = new Vector2(panel.transform.position.x - 9f, panel.transform.position.y + 1);
+       BladeEntry.transform.position = new Vector2(panel.transform.position.x - 5.7f, panel.transform.position.y + 1);
+   }
 
 
 }

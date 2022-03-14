@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class EnemyBladeController : MonoBehaviour
 {
-    public GameObject UIAlt;
-    private Component SR;
-
+    
+    private bool locked;
+    public GameObject panel;
+    public GameObject permParent;
+    public bool direction;
 
     // Start is called before the first frame update
     void Start()
     {
-        UIAlt.SetActive(false);
-
-        SR = gameObject.GetComponent<SpriteRenderer>();
+        permParent = gameObject.transform.parent.gameObject;
+        switchDirection();
     }
 
     // Update is called once per frame
@@ -26,15 +27,45 @@ public class EnemyBladeController : MonoBehaviour
     {
         if(col.tag == "CombatEnter")
         {
-            UIAlt.SetActive(true);
-            gameObject.GetComponent<SpriteRenderer>().enabled = false;
-        }
-        else if(col.tag == "CombatExit")
-        {
-            UIAlt.SetActive(false);
-            gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            gameObject.transform.parent = panel.transform;
+            locked = true;
         }
         
     }
+
+    public void switchDirection()
+    {
+        if(direction == true)
+        {
+            direction = false;
+            permParent.GetComponent<SpriteRenderer>().flipX = true;
+            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            gameObject.transform.position = new Vector2(permParent.transform.position.x + 5f, permParent.transform.position.y - 5f);
+        }
+        else
+        {
+            direction = true;
+            permParent.GetComponent<SpriteRenderer>().flipX = false;
+            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            gameObject.transform.position = new Vector2(permParent.transform.position.x - 5f, permParent.transform.position.y - 5f);
+        }
+    }
+
+    public void CombatExit()
+    {
+        gameObject.transform.parent = permParent.transform;
+        locked = false;
+
+        if(direction == false)
+        {
+            gameObject.transform.position = new Vector2(permParent.transform.position.x + 5f, permParent.transform.position.y - 5f);
+        }
+        else
+        {
+            gameObject.transform.position = new Vector2(permParent.transform.position.x - 5f, permParent.transform.position.y - 5f);
+        }
+        
+    }
+   
 
 }
