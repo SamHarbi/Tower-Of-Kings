@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     private EnemyDetector RED;
     private EnemyDetector LED;
 
+    private bool continousMovementLeft;
+    private bool continousMovementRight;
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,8 +44,14 @@ public class Player : MonoBehaviour
             Move(-1.0f);
             SR.flipX = false;
 
-            LED.setView(true);
-            RED.setView(false);
+            if(continousMovementLeft == false)
+            {
+                LED.setView(true, false);
+                RED.setView(false, false);
+            }
+
+            continousMovementLeft = true;
+            continousMovementRight = false;
 
         }
         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
@@ -50,8 +59,14 @@ public class Player : MonoBehaviour
             Move(1.0f);
             SR.flipX = true;
 
-            LED.setView(false);
-            RED.setView(true);
+            if(continousMovementRight == false)
+            {
+                LED.setView(false, true);
+                RED.setView(true, true);
+            }
+
+            continousMovementLeft = false;
+            continousMovementRight = true;
         }
         else
         {
