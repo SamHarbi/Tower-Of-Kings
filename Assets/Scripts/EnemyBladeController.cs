@@ -28,6 +28,7 @@ public class EnemyBladeController : MonoBehaviour
         if(col.tag == "CombatEnter")
         {
             gameObject.transform.parent = panel.transform;
+            gameObject.transform.position = new Vector2(gameObject.transform.position.x, -5f);
             locked = true;
         }
         

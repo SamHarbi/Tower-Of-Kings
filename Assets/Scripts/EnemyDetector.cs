@@ -10,7 +10,7 @@ public class EnemyDetector : MonoBehaviour
 
     public GameObject panel;
     public GameObject blade;
-    private GameObject enemy;
+    public GameObject enemy;
     private bool enabled;
     
     // Start is called before the first frame update
@@ -39,7 +39,7 @@ public class EnemyDetector : MonoBehaviour
 
     public void resetViewControl()
     {
-       if(enemy != null)
+       if(enemy != null && enemy.tag == "Enemy")
        {
            enemy.GetComponent<SpriteRenderer>().enabled = false;
            enabled = false;
