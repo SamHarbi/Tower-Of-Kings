@@ -4,55 +4,45 @@ using UnityEngine;
 
 public class CombatController : MonoBehaviour
 {
-    private Animator anim;
-    public GameObject blade;
-    private GameObject bladeLeft;
-    private GameObject bladeRight;
-    private SpriteRenderer bladeSR;
+    private Animator anim; //Animation Controller
+    public GameObject blade; //Current active UI blade - left or right
+    private GameObject bladeLeft; //Left UI Blade 
+    private GameObject bladeRight;//Right UI Blade
+    private SpriteRenderer bladeSR; //Sprite Renderer for Blade - used to change stances UI
 
-    public Sprite[] sprites;
-    private Vector2[] bladeLocationData;
-
-    private float isBladeAtDestination;
-
-    private Collider2D[] nearbyEnemyL;
-    
-    private Vector2 OverlapStart;
-    private Vector2 OverlapEnd;
-    public LayerMask layer;
-    
-
+    public Sprite[] stanceSprites; //Hold sprites representing UI for each Stance
 
     public EnemyDetector leftEnemyDetector;
     public EnemyDetector rightEnemyDetector;
-    private bool previousDirection;
 
     public GameObject BladeEntry;
     public GameObject BladeExit;
 
     public GameObject panel;
 
-    void Awake()
-    {
-        bladeRight = GameObject.Find("/Canvas/Panel/Arm-Right");
-        bladeLeft = GameObject.Find("/Canvas/Panel/Arm-Left");
-        blade = bladeRight;
-        blade.SetActive(true);
-    }
     
     // Start is called before the first frame update
     void Start()
     {
+        //Import UI blades and initialize them 
+        bladeRight = GameObject.FindWithTag("ArmRight");
+        bladeLeft = GameObject.FindWithTag("ArmLeft");
         
-        anim = gameObject.GetComponent<Animator>();
+        bladeLeft.SetActive(false);
+        bladeRight.SetActive(false);
+        blade = bladeRight;
+
         bladeSR = blade.GetComponent<SpriteRenderer>();
+       
+        //Assign Animator to anim
+        anim = gameObject.GetComponent<Animator>();
 
-        OverlapStart = new Vector2(transform.position.x, transform.position.y - 3);
 
-        OverlapEnd = new Vector2(transform.position.x - 5, transform.position.y + 5);
+        //OverlapStart = new Vector2(transform.position.x, transform.position.y - 3);
+        //OverlapEnd = new Vector2(transform.position.x - 5, transform.position.y + 5);
 
-        previousDirection = false; //left is false, right is true
 
+        //previousDirection = false; //left is false, right is true
         //Instantiate(testItem, OverlapStart, Quaternion.identity);
         //Instantiate(testItem, OverlapEnd, Quaternion.identity);
         
@@ -69,35 +59,28 @@ public class CombatController : MonoBehaviour
            anim.SetTrigger("Attack");
         }
 
-        //Movement Logic - Walking Left and Right
-        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
-        {
-            Move(true);
-            if(previousDirection == true)
-            {
-                rightEnemyDetector.resetViewControl();
-                previousDirection = false;
-            }
-        }
-        else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
-        {
-            Move(false);
-            if(previousDirection == false)
-            {
-                leftEnemyDetector.resetViewControl();
-                previousDirection = true;
-            }
-        }
-
+        //Combat Stances - CHange UI and modify attack
         if (Input.GetAxis("Combat-Vertical") < 0 || Input.GetKey("up"))
         {
-            MoveStance(1);
+            MoveStance(1); //Upper Stance
         }
         else if (Input.GetAxis("Combat-Vertical") > 0 || Input.GetKey("down"))
         {
-            MoveStance(0);
+            MoveStance(0); //Lower Stance
         }
 
+        //Movement Logic - Walking Left and Right
+        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a")) //Left
+        {
+            Move(true);
+            rightEnemyDetector.resetViewControl();
+        }
+        else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d")) //Right
+        {
+            Move(false);
+            leftEnemyDetector.resetViewControl();
+        }
+/*
         if(isBladeAtDestination != 0)
         {
             if(isBladeAtDestination > 0)
@@ -108,7 +91,7 @@ public class CombatController : MonoBehaviour
             {
                 transform.position = Vector3.Lerp(transform.position, bladeLocationData[2], 0.5f);
             }
-        }
+        }*/
 
     }
 
@@ -119,15 +102,12 @@ public class CombatController : MonoBehaviour
             blade = bladeLeft;
             blade.SetActive(true);
             bladeRight.SetActive(false);
-            flipPositionLeft();
-
         }
         else //Right
         {
             blade = bladeRight;
             blade.SetActive(true);
             bladeLeft.SetActive(false);
-            flipPositionRight();
         }
 
     }
@@ -140,28 +120,18 @@ public class CombatController : MonoBehaviour
             bladeSR = blade.GetComponent<SpriteRenderer>();
             Vector2 bladePos = blade.GetComponent<Transform>().position;
             bladePos = new Vector2(bladePos.x, bladePos.y -5);
-            bladeSR.sprite = sprites[1];
+            bladeSR.sprite = stanceSprites[1];
         }
         else
         {
             
             bladeSR = blade.GetComponent<SpriteRenderer>();
             blade.GetComponent<Transform>().position = new Vector2(blade.GetComponent<Transform>().position.x, gameObject.transform.position.y -4);
-            bladeSR.sprite = sprites[0];
+            bladeSR.sprite = stanceSprites[0];
         }
     }
 
-   public void flipPositionLeft()
-   {
-       BladeExit.transform.position = new Vector2(panel.transform.position.x + 6.3f, panel.transform.position.y + 1);
-       BladeEntry.transform.position = new Vector2(panel.transform.position.x + 3, panel.transform.position.y + 1);
-   }
-
-   public void flipPositionRight()
-   {
-       BladeExit.transform.position = new Vector2(panel.transform.position.x - 9f, panel.transform.position.y + 1);
-       BladeEntry.transform.position = new Vector2(panel.transform.position.x - 5.7f, panel.transform.position.y + 1);
-   }
+   
 
 
 }

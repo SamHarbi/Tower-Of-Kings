@@ -10,6 +10,8 @@ TagManager:
   - EnemyBladeR
   - Enemy
   - EnemyBlade
+  - ArmRight
+  - ArmLeft
   layers:
   - Default
   - TransparentFX
