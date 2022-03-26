@@ -16,6 +16,8 @@ public class AIController : MonoBehaviour
     public GameObject Player;
     private Vector2 goalNode;
 
+    private int actionState;
+
 
     // Start is called before the first frame update
     async void Start()
@@ -26,14 +28,26 @@ public class AIController : MonoBehaviour
 
         tm.SetTileFlags(position, TileFlags.None);
 
+        actionState = 0; // Idle
+
         getGoalNode(new Vector2(3, -1));
     }
 
     // Update is called once per frame
     void Update()
     {
-        //setGoalNodeToPlayer();
+        setGoalNodeToPlayer();
         search();
+
+        if(actionState == 1)
+        {
+            gameObject.transform.position += new Vector3(-4f * Time.deltaTime, 0, 0); // move right
+        }
+        if(actionState == 2)
+        {
+            gameObject.transform.position += new Vector3(4f * Time.deltaTime, 0, 0); // move left
+        }
+        actionState = 0;
     }
 
     //Find the Tile closest corresponding to a goal cordinate
@@ -68,13 +82,37 @@ public class AIController : MonoBehaviour
 
     void search()
     {
+        float currPOS = getNodeOnGrid(gameObject.transform.position).x;
+
         if(getNodeOnGrid(gameObject.transform.position).x + 2 == goalNode.x)
         {
             print("At Goal");
             return;
         }
+        else if(getNodeOnGrid(gameObject.transform.position).x - 2 == goalNode.x)
+        {
+            print("At Goal");
+            return;
+        }
         
-        Vector2[] FrontierX = new Vector2[2];
+        if(goalNode.x > currPOS)
+        {
+            State_MoveRight();
+        }
+        else if(goalNode.x < currPOS)
+        {
+            State_MoveLeft();
+        }
         
+    }
+
+    void State_MoveRight()
+    {
+        actionState = 2;
+    }
+
+    void State_MoveLeft()
+    {
+        actionState = 1;
     }
 }

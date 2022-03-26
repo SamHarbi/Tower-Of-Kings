@@ -15,11 +15,6 @@ public class CombatController : MonoBehaviour
     public EnemyDetector leftEnemyDetector;
     public EnemyDetector rightEnemyDetector;
 
-    public GameObject BladeEntry;
-    public GameObject BladeExit;
-
-    public GameObject panel;
-
     
     // Start is called before the first frame update
     void Start()
@@ -59,7 +54,7 @@ public class CombatController : MonoBehaviour
            anim.SetTrigger("Attack");
         }
 
-        //Combat Stances - CHange UI and modify attack
+        //Combat Stances - Change UI and modify attack
         if (Input.GetAxis("Combat-Vertical") < 0 || Input.GetKey("up"))
         {
             MoveStance(1); //Upper Stance
@@ -73,12 +68,12 @@ public class CombatController : MonoBehaviour
         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a")) //Left
         {
             Move(true);
-            rightEnemyDetector.resetViewControl();
+            rightEnemyDetector.resetViewControl(); //Clear Enemy Sprite from opposite combat panel area 
         }
         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d")) //Right
         {
             Move(false);
-            leftEnemyDetector.resetViewControl();
+            leftEnemyDetector.resetViewControl(); //Clear Enemy Sprite from opposite combat panel area 
         }
 /*
         if(isBladeAtDestination != 0)
@@ -95,26 +90,29 @@ public class CombatController : MonoBehaviour
 
     }
 
+    //Basic Left & Right Movement
     void Move(bool mod)
     {
         if(mod == false) //Left
         {
-            blade = bladeLeft;
+            blade = bladeLeft; //Change Blades
+
             blade.SetActive(true);
             bladeRight.SetActive(false);
         }
         else //Right
         {
-            blade = bladeRight;
+            blade = bladeRight; //Change Blades
+
             blade.SetActive(true);
             bladeLeft.SetActive(false);
         }
-
     }
 
+    //Change Stances 
     void MoveStance(int axis)
     {
-        if(axis == 1)
+        if(axis == 1) // Upper Stance
         {
 
             bladeSR = blade.GetComponent<SpriteRenderer>();
@@ -122,7 +120,7 @@ public class CombatController : MonoBehaviour
             bladePos = new Vector2(bladePos.x, bladePos.y -5);
             bladeSR.sprite = stanceSprites[1];
         }
-        else
+        else //Lower Stance
         {
             
             bladeSR = blade.GetComponent<SpriteRenderer>();
