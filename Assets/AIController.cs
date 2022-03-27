@@ -23,6 +23,8 @@ public class AIController : MonoBehaviour
     private bool direction;
     private Animator anim;
 
+    private float distanceToPlayer;
+
 
     // Start is called before the first frame update
     async void Start()
@@ -40,6 +42,8 @@ public class AIController : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
 
         State_Idle();
+
+        setGoalModifiers();
 
         getGoalNode(new Vector2(3, -1));
     }
@@ -61,6 +65,11 @@ public class AIController : MonoBehaviour
             setDirection(false);
         }
         actionState = 0;
+    }
+
+    void setGoalModifiers()
+    {
+        distanceToPlayer = 3f;
     }
 
     void setDirection(bool newDirection)
@@ -102,38 +111,31 @@ public class AIController : MonoBehaviour
 
     void search()
     {
-        float currPOS = getNodeOnGrid(gameObject.transform.position).x;
+        float currPOS = gameObject.transform.position.x;
 
-        if(getNodeOnGrid(gameObject.transform.position).x + 2 == goalNode.x)
+        if(getNodeOnGrid(gameObject.transform.position).x == goalNode.x)
         {
             print("At Goal");
             State_Idle();
             return;
         }
-        else if(getNodeOnGrid(gameObject.transform.position).x - 2 == goalNode.x)
-        {
-            print("At Goal");
-            State_Idle();
-            return;
-        }
+        
         
         if(goalNode.x > currPOS)
         {
             State_MoveRight();
-            if(Mathf.Floor(goalNode.x) <= Mathf.Floor(currPOS))
-            {
-                State_Idle();
-            }
+            
         }
         else if(goalNode.x < currPOS)
         {
             State_MoveLeft();
-            if(Mathf.Floor(goalNode.x) >= Mathf.Floor(currPOS))
-            {
-                State_Idle();
-            }
+            
         }
         
+        if(Mathf.Abs(goalNode.x - currPOS) <= distanceToPlayer)
+        {
+            State_Idle();
+        }
     }
 
     void State_MoveRight()
@@ -152,5 +154,15 @@ public class AIController : MonoBehaviour
     {
          actionState = 0;
          anim.SetBool("Running", false);
+    }
+
+    void State_Attack()
+    {
+
+    }
+
+    void State_SetStance()
+    {
+        
     }
 }
