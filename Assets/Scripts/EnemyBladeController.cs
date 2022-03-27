@@ -5,16 +5,23 @@ using UnityEngine;
 public class EnemyBladeController : MonoBehaviour
 {
     
-    private bool locked;
-    public GameObject panel;
     public GameObject permParent;
-    public bool direction;
+    private bool direction;
+    private bool prevDirection;
 
     // Start is called before the first frame update
     void Start()
     {
         permParent = gameObject.transform.parent.gameObject;
-        switchDirection();
+        
+        if(permParent.GetComponent<SpriteRenderer>().flipX == true)
+        {
+            setDirection(false);
+        }
+        else
+        {
+            setDirection(true);
+        }
     }
 
     // Update is called once per frame
@@ -23,50 +30,31 @@ public class EnemyBladeController : MonoBehaviour
         
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    public void setDirection(bool newDirection)
     {
-        if(col.tag == "CombatEnter")
-        {
-            gameObject.transform.parent = panel.transform;
-            gameObject.transform.position = new Vector2(gameObject.transform.position.x, -5f);
-            locked = true;
-        }
-        
+        direction = newDirection;
+        prevDirection = direction;
+        activateDirection(direction);
     }
 
-    public void switchDirection()
+    public bool getDirection()
     {
-        if(direction == true)
+        return direction;
+    }
+
+    public void activateDirection(bool direction)
+    {
+        if(direction == false)
         {
-            direction = false;
-            permParent.GetComponent<SpriteRenderer>().flipX = true;
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
             gameObject.transform.position = new Vector2(permParent.transform.position.x + 5f, permParent.transform.position.y - 5f);
         }
         else
         {
-            direction = true;
-            permParent.GetComponent<SpriteRenderer>().flipX = false;
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
             gameObject.transform.position = new Vector2(permParent.transform.position.x - 5f, permParent.transform.position.y - 5f);
         }
     }
 
-    public void CombatExit()
-    {
-        gameObject.transform.parent = permParent.transform;
-        locked = false;
-
-        if(direction == false)
-        {
-            gameObject.transform.position = new Vector2(permParent.transform.position.x + 5f, permParent.transform.position.y - 5f);
-        }
-        else
-        {
-            gameObject.transform.position = new Vector2(permParent.transform.position.x - 5f, permParent.transform.position.y - 5f);
-        }
-        
-    }
-   
 
 }
