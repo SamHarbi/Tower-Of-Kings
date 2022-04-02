@@ -35,6 +35,11 @@ public class EnemyDetector : MonoBehaviour
         realDirection = newRealDirection;
     }
 
+    public bool getView()
+    {
+        return realDirection;
+    }
+
     //Erase Panel view - this is usually called when player direction is changed
     public void resetViewControl()
     {

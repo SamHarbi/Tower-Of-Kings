@@ -108,5 +108,14 @@ public class Player : MonoBehaviour
         transform.position += change;
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "AttackRange")
+        {
+            GetComponent<Rigidbody2D>().AddForce(transform.up * 100);
+            Debug.Log("ATTACK");
+        }
+    }
+
 
 }

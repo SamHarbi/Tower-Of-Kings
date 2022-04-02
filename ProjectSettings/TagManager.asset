@@ -12,6 +12,9 @@ TagManager:
   - EnemyBlade
   - ArmRight
   - ArmLeft
+  - Platform
+  - AttackRange
+  - Hitbox
   layers:
   - Default
   - TransparentFX

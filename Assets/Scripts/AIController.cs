@@ -8,6 +8,7 @@ public class AIController : MonoBehaviour
 {
     
     public GameObject path; //GameObject Path with Tilemap
+    public GameObject attackRange;
 
     public float speed;
     private Tilemap tm; //Tilemap Component
@@ -51,6 +52,9 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        anim.SetBool("Attack", false);
+        attackRange.SetActive(false);
+
         setGoalNodeToPlayer();
         search();
 
@@ -65,6 +69,7 @@ public class AIController : MonoBehaviour
             setDirection(false);
         }
         actionState = 0;
+
     }
 
     void setGoalModifiers()
@@ -134,6 +139,7 @@ public class AIController : MonoBehaviour
         
         if(Mathf.Abs(goalNode.x - currPOS) <= distanceToPlayer)
         {
+            State_Attack();
             State_Idle();
         }
     }
@@ -152,13 +158,17 @@ public class AIController : MonoBehaviour
 
     void State_Idle()
     {
+         Vector2 newGoal = new Vector2(goalNode.x + Random.Range(-8.0f, 8.0f), goalNode.y);
+         getGoalNode(newGoal);
+
          actionState = 0;
          anim.SetBool("Running", false);
     }
 
     void State_Attack()
     {
-
+        anim.SetBool("Attack", true);
+        attackRange.SetActive(true);
     }
 
     void State_SetStance()
