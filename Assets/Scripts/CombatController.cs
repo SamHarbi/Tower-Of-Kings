@@ -15,6 +15,8 @@ public class CombatController : MonoBehaviour
     public EnemyDetector leftEnemyDetector;
     public EnemyDetector rightEnemyDetector;
 
+    private int currStance;
+
     
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,8 @@ public class CombatController : MonoBehaviour
        
         //Assign Animator to anim
         anim = gameObject.GetComponent<Animator>();
+
+        currStance = 0;
 
 
         //OverlapStart = new Vector2(transform.position.x, transform.position.y - 3);
@@ -119,6 +123,7 @@ public class CombatController : MonoBehaviour
             Vector2 bladePos = blade.GetComponent<Transform>().position;
             bladePos = new Vector2(bladePos.x, bladePos.y -5);
             bladeSR.sprite = stanceSprites[1];
+            currStance = 0;
         }
         else //Lower Stance
         {
@@ -126,8 +131,11 @@ public class CombatController : MonoBehaviour
             bladeSR = blade.GetComponent<SpriteRenderer>();
             blade.GetComponent<Transform>().position = new Vector2(blade.GetComponent<Transform>().position.x, gameObject.transform.position.y -4);
             bladeSR.sprite = stanceSprites[0];
+            currStance = 1;
         }
     }
+
+    
 
    
 

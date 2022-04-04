@@ -15,6 +15,7 @@ TagManager:
   - Platform
   - AttackRange
   - Hitbox
+  - AnimationData
   layers:
   - Default
   - TransparentFX

@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
     private bool continousMovementLeft;
     private bool continousMovementRight;
 
+    private int health;
+    public GameObject[] Hearts;
+    private bool invincibility;
+    private float invincibilityTimer;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +37,25 @@ public class Player : MonoBehaviour
 
         RED = rightEnemyDetect.GetComponent<EnemyDetector>();
         LED = leftEnemyDetect.GetComponent<EnemyDetector>();
+
+        health = 3;
+        Hearts = new GameObject[7];
+
+        invincibility = false;
+        invincibilityTimer = 0;
+
+        for(int i=1; i<=6; i++)
+        {
+            Hearts[i] = GameObject.Find("heart" + i);
+            if(Hearts[i] != null && i <= health)
+            {
+                Hearts[i].SetActive(true);
+            }
+            else
+            {
+                Hearts[i].SetActive(false);
+            }
+        }
 
     }
 
@@ -89,6 +113,16 @@ public class Player : MonoBehaviour
             RB.gravityScale = 4.5f;
         }
 
+        if(invincibilityTimer > 0)
+        {
+            invincibilityTimer -= 1 * Time.deltaTime;
+            invincibility = true;
+        }
+        else
+        {
+            invincibility = false;
+        }
+
     }
 
     void Jump()
@@ -110,12 +144,32 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.tag == "AttackRange")
+        if(col.tag == "AttackRange" && invincibility == false)
         {
-            GetComponent<Rigidbody2D>().AddForce(transform.up * 100);
-            Debug.Log("ATTACK");
+            setHealth(health - 1);
         }
     }
 
+    public void setHealth(int newHealth)
+    {
+        health = newHealth;
+        invincibilityTimer = Time.deltaTime * 50;
+        for(int i=1; i<=6; i++)
+        {
+            if(Hearts[i] != null && i <= health)
+            {
+                Hearts[i].SetActive(true);
+            }
+            else
+            {
+                Hearts[i].SetActive(false);
+            }
+        }
 
+    }
+
+    public int getHealth()
+    {
+        return health;
+    }
 }
