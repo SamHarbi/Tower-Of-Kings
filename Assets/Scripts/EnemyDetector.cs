@@ -63,7 +63,6 @@ public class EnemyDetector : MonoBehaviour
             
             if(enemy.transform.GetComponent<EnemyBladeController>().getDirection() != realDirection) //Player and enemy face each other
             {
-                Debug.Log("Enemy Detected");
                 enemy.GetComponent<SpriteRenderer>().enabled = true; //Enable Enemies blade, allowing it to appear in combat panel
                 enabled = true;
             }

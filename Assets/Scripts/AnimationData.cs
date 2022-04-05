@@ -7,6 +7,7 @@ public class AnimationData : MonoBehaviour
     public int id;
     public Sprite[] frames;
     public int activeFrame;
+    public int lastFrame;
     private int prevActiveFrame;
     private float updates;
     public float Timing;
@@ -28,14 +29,12 @@ public class AnimationData : MonoBehaviour
 
         parent = newParent;
 
-        
-        
     }
 
     void Start()
     {
         prevActiveFrame = 99;
-        
+        lastFrame = frames.Length - 1;
         
     }
 
@@ -49,6 +48,12 @@ public class AnimationData : MonoBehaviour
 
     public void tickDown()
     {
+        if(Running == false)
+        {
+            activeFrame = 0;
+            return;
+        }
+        
         updates = updates - 1;
         if(updates <= 0)
         {

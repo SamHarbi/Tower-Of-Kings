@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public GameObject[] Hearts;
     private bool invincibility;
     private float invincibilityTimer;
+    private bool attacking;
     public GameObject[] AnimationSet;
     public GameObject LAS;
     public GameObject hitEffect;
@@ -64,6 +65,8 @@ public class Player : MonoBehaviour
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
         currAnim = 1;
         enableAnimation(0);
+
+        attacking = false;
         
 
     }
@@ -109,7 +112,11 @@ public class Player : MonoBehaviour
         else if(health > 0)
         {
             //anim.SetBool("Running", false);
+            
+            
+            
             enableAnimation(0);
+            
         }
 
         //Movement Logic - Jumping
@@ -140,6 +147,28 @@ public class Player : MonoBehaviour
             hitEffect.GetComponent<SpriteRenderer>().enabled = false;
         }
 
+        //Combat Logic - Attacking
+        if (Input.GetButtonDown("Fire1"))
+        {
+           if(currAnim == 1)
+           {
+               enableAnimation(2);
+               attacking = true;
+               StartCoroutine(AttackTimer());
+           }
+           else if(currAnim == 0)
+           {
+               enableAnimation(3);
+               attacking = true;
+               StartCoroutine(AttackTimer());
+           }
+        }
+
+        if(getAnimationProgress() == true)
+        {
+            attacking = false;
+        }
+
     }
 
     void Jump()
@@ -152,12 +181,33 @@ public class Player : MonoBehaviour
 
     void enableAnimation(int num)
     {
-        AnimationSet[num].GetComponent<AnimationData>().Running = true;
-        if(num != currAnim)
+        if(attacking == true)
         {
+            AnimationSet[num +2].GetComponent<AnimationData>().Running = true;
+            if(num+2 != currAnim)
+            {
+                AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
+                currAnim = num+2;
+            }
+        }
+        else
+        {
+            AnimationSet[num].GetComponent<AnimationData>().Running = true;
+            if(num != currAnim)
+            {
             AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
             currAnim = num;
+            }
         }
+    }
+
+    private bool getAnimationProgress()
+    {
+        if(AnimationSet[2].GetComponent<AnimationData>().activeFrame == AnimationSet[2].GetComponent<AnimationData>().lastFrame)
+        {
+            return true;
+        }
+        return false;
     }
 
     void Move(float mod)
@@ -166,8 +216,12 @@ public class Player : MonoBehaviour
         {
             Vector3 change;
             //anim.SetBool("Running", true);
+            //anim.SetBool("Running", false);
+            
+            
             enableAnimation(1);
-
+            
+            
             change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
             transform.position += change;
         }
@@ -201,13 +255,21 @@ public class Player : MonoBehaviour
         {
             enableAnimation(4);
         }
-
-        
-
     }
 
     public int getHealth()
     {
         return health;
+    }
+
+    void Attack()
+    {
+
+    }
+
+    IEnumerator AttackTimer()
+    {
+        yield return new WaitForSeconds(0.3f);
+        attacking = false;
     }
 }

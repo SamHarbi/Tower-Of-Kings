@@ -175,4 +175,12 @@ public class AIController : MonoBehaviour
     {
         
     }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "PlayerAttackRange")
+        {
+            Destroy(gameObject);
+        }
+    }
 }
