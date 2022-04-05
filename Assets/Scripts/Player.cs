@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private float invincibilityTimer;
     public GameObject[] AnimationSet;
     public GameObject LAS;
+    public GameObject hitEffect;
 
 
     // Start is called before the first frame update
@@ -70,6 +71,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(health <= 0)
+        {
+            return;
+        }
+        
         //Movement Logic - Walking Left and Right
         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
         {
@@ -100,7 +106,7 @@ public class Player : MonoBehaviour
             continousMovementLeft = false;
             continousMovementRight = true;
         }
-        else
+        else if(health > 0)
         {
             //anim.SetBool("Running", false);
             enableAnimation(0);
@@ -126,10 +132,12 @@ public class Player : MonoBehaviour
         {
             invincibilityTimer -= 1 * Time.deltaTime;
             invincibility = true;
+            hitEffect.GetComponent<SpriteRenderer>().enabled = true;
         }
         else
         {
             invincibility = false;
+            hitEffect.GetComponent<SpriteRenderer>().enabled = false;
         }
 
     }
@@ -154,12 +162,15 @@ public class Player : MonoBehaviour
 
     void Move(float mod)
     {
-        Vector3 change;
-        //anim.SetBool("Running", true);
-        enableAnimation(1);
+        if(health > 0)
+        {
+            Vector3 change;
+            //anim.SetBool("Running", true);
+            enableAnimation(1);
 
-        change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
-        transform.position += change;
+            change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
+            transform.position += change;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -185,6 +196,13 @@ public class Player : MonoBehaviour
                 Hearts[i].SetActive(false);
             }
         }
+
+        if(health <= 0)
+        {
+            enableAnimation(4);
+        }
+
+        
 
     }
 

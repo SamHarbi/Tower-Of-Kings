@@ -12,6 +12,7 @@ public class AnimationData : MonoBehaviour
     public float Timing;
     public GameObject parent;
     public bool Running;
+    public bool nonloop;
     
     public void init(int newId, Sprite[] newFrames, float newTiming, GameObject newParent)
     {
@@ -27,13 +28,15 @@ public class AnimationData : MonoBehaviour
 
         parent = newParent;
 
-        Running = false;
+        
+        
     }
 
     void Start()
     {
         prevActiveFrame = 99;
-        Running = false;
+        
+        
     }
 
     void Update()
@@ -51,6 +54,12 @@ public class AnimationData : MonoBehaviour
         {
             updates = Timing;
             activeFrame = (activeFrame + 1) % frames.Length;
+        }
+        if(activeFrame + 1 == frames.Length && nonloop == true)
+        {
+            updates = Timing;
+            activeFrame = frames.Length - 1;
+            Running = false;
         }
     }
 
