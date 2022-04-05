@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     public GameObject[] AnimationSet;
     public GameObject LAS;
     public GameObject hitEffect;
+    public GameObject Cam;
 
 
     // Start is called before the first frame update
@@ -274,6 +275,7 @@ public class Player : MonoBehaviour
         {
             enableAnimation(5);
             beingHit = true;
+            StartCoroutine(Cam.GetComponent<CameraShake>().CamShake(0.1f, 0.2f));
         }
     }
 

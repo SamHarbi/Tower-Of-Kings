@@ -1372,7 +1372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &579890467
 Transform:
   m_ObjectHideFlags: 0
@@ -10424,6 +10424,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1500672312 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 529800064821645757, guid: 29b0a383c45af4242b968bb3a6c9bae7, type: 3}
+  m_PrefabInstance: {fileID: 529800064514255297}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1500672315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500672312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dea24f0d53154b43a3086d00500a053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1504062652
 GameObject:
   m_ObjectHideFlags: 0
@@ -15412,6 +15429,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 529800064874233803, guid: 29b0a383c45af4242b968bb3a6c9bae7, type: 3}
+      propertyPath: Cam
+      value: 
+      objectReference: {fileID: 1500672312}
     - target: {fileID: 529800064874233803, guid: 29b0a383c45af4242b968bb3a6c9bae7, type: 3}
       propertyPath: LAS
       value: 
