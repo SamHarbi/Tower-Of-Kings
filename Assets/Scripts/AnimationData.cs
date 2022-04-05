@@ -11,6 +11,7 @@ public class AnimationData : MonoBehaviour
     private float updates;
     public float Timing;
     public GameObject parent;
+    public bool Running;
     
     public void init(int newId, Sprite[] newFrames, float newTiming, GameObject newParent)
     {
@@ -25,11 +26,19 @@ public class AnimationData : MonoBehaviour
         prevActiveFrame = 0;
 
         parent = newParent;
+
+        Running = false;
+    }
+
+    void Start()
+    {
+        prevActiveFrame = 99;
+        Running = false;
     }
 
     void Update()
     {
-        if(activeFrame != prevActiveFrame)
+        if(activeFrame != prevActiveFrame && Running == true)
         {
             UpdateFrame();
         }
@@ -43,7 +52,6 @@ public class AnimationData : MonoBehaviour
             updates = Timing;
             activeFrame = (activeFrame + 1) % frames.Length;
         }
-        Debug.Log("Ticked Down"); 
     }
 
     public void UpdateFrame()

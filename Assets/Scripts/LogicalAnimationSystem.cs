@@ -45,17 +45,49 @@ public class LogicalAnimationSystem : MonoBehaviour
     {
         for(int i=0; i<Animations.Count; i++)
         {
-            Animations[i].GetComponent<AnimationData>().tickDown();
+            AnimationData[] AD = Animations[i].GetComponents<AnimationData>();
+            for(int j=0; j<AD.Length; j++)
+            {
+                AD[j].tickDown();
+            }
         }
+    }
+
+    //Currently no use
+    public void setActiveAnim(int num, GameObject parent)
+    {
+        AnimationData[] AD = parent.GetComponents<AnimationData>();
+        for(int i=0; i<AD.Length; i++)
+        {
+            AD[i].Running = false;
+        }
+        AD[num].Running = true;
     }
 
     //Animation Update, runs every tick
     IEnumerator AnimationUpdate()
     {
         yield return new WaitForSeconds(Tick);
-        Debug.Log("Courountine Ended");
         updateFrames();
         StartCoroutine(AnimationUpdate());
+    }
+
+    public GameObject[] getAnimationDataArray(GameObject GO)
+    {
+        GameObject[] AnimData = new GameObject[GO.transform.childCount]; //Some array spaces will be null
+        int iterator = 0;
+
+        for(int i=0; i<GO.transform.childCount; i++)
+        {
+            Transform tempChild = GO.transform.GetChild(i);
+            if(tempChild.tag == "AnimationData")
+            {
+                AnimData[iterator] = tempChild.gameObject;
+                iterator++;
+            }
+        }
+
+        return AnimData;
     }
 
 

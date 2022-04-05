@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer SR;
     private Rigidbody2D RB;
+    private int currAnim;
 
     public GameObject leftEnemyDetect;
     public GameObject rightEnemyDetect;
@@ -23,6 +24,8 @@ public class Player : MonoBehaviour
     public GameObject[] Hearts;
     private bool invincibility;
     private float invincibilityTimer;
+    public GameObject[] AnimationSet;
+    public GameObject LAS;
 
 
     // Start is called before the first frame update
@@ -56,6 +59,11 @@ public class Player : MonoBehaviour
                 Hearts[i].SetActive(false);
             }
         }
+
+        AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
+        currAnim = 1;
+        enableAnimation(0);
+        
 
     }
 
@@ -94,7 +102,8 @@ public class Player : MonoBehaviour
         }
         else
         {
-            anim.SetBool("Running", false);
+            //anim.SetBool("Running", false);
+            enableAnimation(0);
         }
 
         //Movement Logic - Jumping
@@ -133,10 +142,21 @@ public class Player : MonoBehaviour
         }
     }
 
+    void enableAnimation(int num)
+    {
+        AnimationSet[num].GetComponent<AnimationData>().Running = true;
+        if(num != currAnim)
+        {
+            AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
+            currAnim = num;
+        }
+    }
+
     void Move(float mod)
     {
         Vector3 change;
-        anim.SetBool("Running", true);
+        //anim.SetBool("Running", true);
+        enableAnimation(1);
 
         change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
         transform.position += change;
