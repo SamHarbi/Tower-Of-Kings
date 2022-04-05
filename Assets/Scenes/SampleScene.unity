@@ -224,9 +224,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9c2e30044c538b24ca6368e5c861f4fa, type: 3}
   - {fileID: 21300000, guid: ed725aceb9f04424d89692f9cc4559bf, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 7
   parent: {fileID: 34885429}
-  Running: 0
+  Running: 1
   nonloop: 0
 --- !u!1 &43132630
 GameObject:
@@ -1128,6 +1129,61 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &424866047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 424866048}
+  - component: {fileID: 424866049}
+  m_Layer: 0
+  m_Name: 'HitPlayerAnim '
+  m_TagString: AnimationData
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &424866048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424866047}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 137474395}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &424866049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424866047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f60e19eccb67a094fb61510833053e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 5
+  frames:
+  - {fileID: 21300000, guid: 71ff005eacfc2184ab0269cd8546c2b5, type: 3}
+  - {fileID: 21300000, guid: f5378d88b7df4a14c83b9421e9eb7074, type: 3}
+  - {fileID: 21300000, guid: f5378d88b7df4a14c83b9421e9eb7074, type: 3}
+  - {fileID: 21300000, guid: 71ff005eacfc2184ab0269cd8546c2b5, type: 3}
+  activeFrame: 0
+  lastFrame: 0
+  Timing: 4
+  parent: {fileID: 137474394}
+  Running: 0
+  nonloop: 0
 --- !u!1 &509968758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,6 +1233,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 000f5903f42ac4047b7d0f66af120100, type: 3}
   - {fileID: 21300000, guid: 7caf3288e9e9f354f9f4f734ba41086f, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 7
   parent: {fileID: 1691107720}
   Running: 1
@@ -1756,7 +1813,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715725676}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1783,6 +1840,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7f2a9400108a71940879c01ec8209bda, type: 3}
   - {fileID: 21300000, guid: 89512ff48a79b4f44b55e20c66a34a87, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 6
   parent: {fileID: 137474394}
   Running: 0
@@ -2261,6 +2319,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 89512ff48a79b4f44b55e20c66a34a87, type: 3}
   - {fileID: 21300000, guid: 89512ff48a79b4f44b55e20c66a34a87, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 6
   parent: {fileID: 137474394}
   Running: 0
@@ -3064,6 +3123,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 094bc18824aed9a4081640932e76548a, type: 3}
   - {fileID: 21300000, guid: 5f70170a3be19484694d68a77e6833d0, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 13
   parent: {fileID: 137474394}
   Running: 0
@@ -3117,6 +3177,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2fba1bd44862de84aba928ee42c6b81b, type: 3}
   - {fileID: 21300000, guid: 11604c58bf44cb349877d89a33ee707d, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 7
   parent: {fileID: 137474394}
   Running: 0
@@ -11065,6 +11126,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f5378d88b7df4a14c83b9421e9eb7074, type: 3}
   - {fileID: 21300000, guid: 2145a689878e0d04583876728c2f2f50, type: 3}
   activeFrame: 0
+  lastFrame: 0
   Timing: 15
   parent: {fileID: 137474394}
   Running: 0
@@ -11107,6 +11169,7 @@ MonoBehaviour:
   - {fileID: 849678481}
   - {fileID: 1811649871}
   - {fileID: 509968758}
+  - {fileID: 424866047}
   Tick: 0.01
 --- !u!4 &1824082085
 Transform:

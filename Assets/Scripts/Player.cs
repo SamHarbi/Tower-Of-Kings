@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     private bool invincibility;
     private float invincibilityTimer;
     private bool attacking;
+    private bool beingHit;
     public GameObject[] AnimationSet;
     public GameObject LAS;
     public GameObject hitEffect;
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour
         enableAnimation(0);
 
         attacking = false;
+        beingHit = false;
         
 
     }
@@ -164,9 +166,13 @@ public class Player : MonoBehaviour
            }
         }
 
-        if(getAnimationProgress() == true)
+        if(getAnimationProgress(2) == true)
         {
             attacking = false;
+        }
+        if(getAnimationProgress(5) == true)
+        {
+            beingHit = false;
         }
 
     }
@@ -181,13 +187,22 @@ public class Player : MonoBehaviour
 
     void enableAnimation(int num)
     {
-        if(attacking == true)
+        if(attacking == true && num < 3)
         {
             AnimationSet[num +2].GetComponent<AnimationData>().Running = true;
             if(num+2 != currAnim)
             {
                 AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
                 currAnim = num+2;
+            }
+        }
+        else if(beingHit == true)
+        {
+            AnimationSet[5].GetComponent<AnimationData>().Running = true;
+            if(5 != currAnim)
+            {
+                AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
+                currAnim = 5;
             }
         }
         else
@@ -201,9 +216,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    private bool getAnimationProgress()
+    private bool getAnimationProgress(int id)
     {
-        if(AnimationSet[2].GetComponent<AnimationData>().activeFrame == AnimationSet[2].GetComponent<AnimationData>().lastFrame)
+        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame == AnimationSet[id].GetComponent<AnimationData>().lastFrame)
         {
             return true;
         }
@@ -254,6 +269,11 @@ public class Player : MonoBehaviour
         if(health <= 0)
         {
             enableAnimation(4);
+        }
+        else
+        {
+            enableAnimation(5);
+            beingHit = true;
         }
     }
 

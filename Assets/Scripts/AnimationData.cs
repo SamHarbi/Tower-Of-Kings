@@ -48,7 +48,7 @@ public class AnimationData : MonoBehaviour
 
     public void tickDown()
     {
-        if(Running == false)
+        if(Running == false && nonloop == false)
         {
             activeFrame = 0;
             return;
