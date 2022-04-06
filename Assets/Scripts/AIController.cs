@@ -25,10 +25,14 @@ public class AIController : MonoBehaviour
     private Animator anim;
 
     private float distanceToPlayer;
+    public GameObject[] AnimationSet;
+    public GameObject LAS;
+    private int currAnim;
+    private bool deathAnim;
 
 
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
         tm = path.GetComponent<Tilemap>();
         area = tm.cellBounds;
@@ -47,11 +51,29 @@ public class AIController : MonoBehaviour
         setGoalModifiers();
 
         getGoalNode(new Vector2(3, -1));
+
+        deathAnim = false;
+
+    }
+
+    void Awake()
+    {
+        LAS = GameObject.FindWithTag("LAS");
+        AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
+
+        currAnim = 1;
+        enableAnimation(0);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(deathAnim == true)
+        {
+            return;
+        }
+        
+        
         anim.SetBool("Attack", false);
         attackRange.SetActive(false);
 
@@ -69,6 +91,15 @@ public class AIController : MonoBehaviour
             setDirection(false);
         }
         actionState = 0;
+
+        if(getAnimationProgress(2) == true)
+        {
+            attackRange.SetActive(true);
+        }
+        else
+        {
+            attackRange.SetActive(false);
+        }
 
     }
 
@@ -140,20 +171,22 @@ public class AIController : MonoBehaviour
         if(Mathf.Abs(goalNode.x - currPOS) <= distanceToPlayer)
         {
             State_Attack();
-            State_Idle();
+            //State_Idle();
         }
     }
 
     void State_MoveRight()
     {
         actionState = 2;
-        anim.SetBool("Running", true);
+        //anim.SetBool("Running", true);
+        enableAnimation(1);
     }
 
     void State_MoveLeft()
     {
         actionState = 1;
-        anim.SetBool("Running", true);
+        //anim.SetBool("Running", true);
+        enableAnimation(1);
     }
 
     void State_Idle()
@@ -162,13 +195,15 @@ public class AIController : MonoBehaviour
          getGoalNode(newGoal);
 
          actionState = 0;
-         anim.SetBool("Running", false);
+         //anim.SetBool("Running", false);
+         enableAnimation(0);
     }
 
     void State_Attack()
     {
-        anim.SetBool("Attack", true);
+        //anim.SetBool("Attack", true);
         attackRange.SetActive(true);
+        enableAnimation(2);
     }
 
     void State_SetStance()
@@ -180,7 +215,34 @@ public class AIController : MonoBehaviour
     {
         if(col.tag == "PlayerAttackRange")
         {
-            Destroy(gameObject);
+            enableAnimation(3);
+            deathAnim = true;
+            StartCoroutine(deathTimer());
         }
+    }
+
+    IEnumerator deathTimer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        gameObject.SetActive(false);
+    }
+
+    void enableAnimation(int num)
+    {
+        AnimationSet[num].GetComponent<AnimationData>().Running = true;
+        if(num != currAnim)
+        {
+            AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
+            currAnim = num;
+        }
+    }
+
+    private bool getAnimationProgress(int id)
+    {
+        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > 3 && AnimationSet[id].GetComponent<AnimationData>().activeFrame < 9)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -13,7 +13,13 @@ public class LogicalAnimationSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        List<GameObject> Animations = new List<GameObject>();
+        Animations = new List<GameObject>();
+        GameObject[] toaddAnimations = GameObject.FindGameObjectsWithTag("AnimationData");
+
+        for(int i=0; i<toaddAnimations.Length; i++)
+        {
+            Animations.Add(toaddAnimations[i]);
+        }
 
         StartCoroutine(AnimationUpdate()); //Start Animation Update loop
     }

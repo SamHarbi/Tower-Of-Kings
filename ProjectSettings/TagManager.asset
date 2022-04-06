@@ -17,6 +17,7 @@ TagManager:
   - Hitbox
   - AnimationData
   - PlayerAttackRange
+  - LAS
   layers:
   - Default
   - TransparentFX

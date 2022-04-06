@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     public GameObject LAS;
     public GameObject hitEffect;
     public GameObject Cam;
+    private GameObject attackRange;
 
 
     // Start is called before the first frame update
@@ -70,6 +71,9 @@ public class Player : MonoBehaviour
 
         attacking = false;
         beingHit = false;
+
+        attackRange = GameObject.FindWithTag("PlayerAttackRange");
+        attackRange.SetActive(false);
         
 
     }
@@ -291,7 +295,9 @@ public class Player : MonoBehaviour
 
     IEnumerator AttackTimer()
     {
+        attackRange.SetActive(true);
         yield return new WaitForSeconds(0.3f);
+        attackRange.SetActive(false);
         attacking = false;
     }
 }
