@@ -30,6 +30,11 @@ public class LogicalAnimationSystem : MonoBehaviour
         
     }
 
+    public void addLateAnimation(GameObject AD)
+    {
+        Animations.Add(AD);
+    }
+
     //Create a new Animation through Code
     public void newAnimation(int newId, Sprite[] newFrames, float newTiming, GameObject parent)
     {

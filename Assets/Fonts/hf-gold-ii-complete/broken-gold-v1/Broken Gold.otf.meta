@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: d8f2e50485c12cc4fb882cc69d902276
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Broken Gold
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 00b3970a4be4ee34194f59e2bfaea05f, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

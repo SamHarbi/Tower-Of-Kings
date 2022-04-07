@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     public GameObject hitEffect;
     public GameObject Cam;
     private GameObject attackRange;
+    public GameObject Fade;
 
 
     // Start is called before the first frame update
@@ -274,6 +275,7 @@ public class Player : MonoBehaviour
         if(health <= 0)
         {
             enableAnimation(4);
+            Fade.GetComponent<GameOver>().StartFade();
         }
         else
         {
