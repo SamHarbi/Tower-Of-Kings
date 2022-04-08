@@ -226,7 +226,7 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if(RB.velocity.y == 0)
+        if(Mathf.Approximately(RB.velocity.y, 0f))
         {
             GetComponent<Rigidbody2D>().AddForce(transform.up * 1000);
         }
@@ -302,7 +302,10 @@ public class Player : MonoBehaviour
     {
         if(col.tag == "AttackRange" && invincibility == false && DashTimeout == false)
         {
+            invincibility = true;
+            invincibilityTimer = Time.deltaTime * 100;
             setHealth(health - 1);
+            return;
         }
 
         checkDash(col);
@@ -333,7 +336,6 @@ public class Player : MonoBehaviour
     public void setHealth(int newHealth)
     {
         health = newHealth;
-        invincibilityTimer = Time.deltaTime * 100;
         for(int i=1; i<=6; i++)
         {
             if(Hearts[i] != null && i <= health)
