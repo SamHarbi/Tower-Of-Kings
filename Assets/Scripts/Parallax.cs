@@ -28,7 +28,7 @@ public class Parallax : MonoBehaviour
             {
                 gameObject.transform.position = new Vector2(gameObject.transform.position.x - moveMod, gameObject.transform.position.y);
             }
-            else if(playersCurrPos.x < playersLastPos.x)
+            else if(playersCurrPos.x < playersLastPos.x) 
             {
                 gameObject.transform.position = new Vector2(gameObject.transform.position.x + moveMod, gameObject.transform.position.y);
             }

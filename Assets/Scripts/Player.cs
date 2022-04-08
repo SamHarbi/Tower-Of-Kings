@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public GameObject[] Hearts;
     private bool invincibility;
     private float invincibilityTimer;
+    private float dashInvincibilityTimer;
     private bool attacking;
     private bool beingHit;
     public GameObject[] AnimationSet;
@@ -32,6 +33,7 @@ public class Player : MonoBehaviour
     public GameObject Cam;
     private GameObject attackRange;
     public GameObject Fade;
+    private bool DashTimeout;
 
 
     // Start is called before the first frame update
@@ -75,6 +77,8 @@ public class Player : MonoBehaviour
 
         attackRange = GameObject.FindWithTag("PlayerAttackRange");
         attackRange.SetActive(false);
+
+        DashTimeout = false;
         
 
     }
@@ -84,6 +88,7 @@ public class Player : MonoBehaviour
     {
         if(health <= 0)
         {
+            Fade.GetComponent<GameOver>().StartFade();
             return;
         }
         
@@ -97,6 +102,11 @@ public class Player : MonoBehaviour
             {
                 LED.setView(true, false);
                 RED.setView(false, false);
+            }
+
+            if(Input.GetButton("Dash"))
+            {
+                Dash(-1000f);
             }
 
             continousMovementLeft = true;
@@ -114,10 +124,15 @@ public class Player : MonoBehaviour
                 RED.setView(true, true);
             }
 
+            if(Input.GetButton("Dash"))
+            {
+                Dash(1000f);
+            }
+
             continousMovementLeft = false;
             continousMovementRight = true;
         }
-        else if(health > 0)
+        else
         {
             //anim.SetBool("Running", false);
             
@@ -155,6 +170,14 @@ public class Player : MonoBehaviour
             hitEffect.GetComponent<SpriteRenderer>().enabled = false;
         }
 
+        if(dashInvincibilityTimer > 0)
+        {
+            dashInvincibilityTimer -= 1 * Time.deltaTime;
+            invincibility = true;
+
+        }
+        
+
         //Combat Logic - Attacking
         if (Input.GetButtonDown("Fire1"))
         {
@@ -183,6 +206,24 @@ public class Player : MonoBehaviour
 
     }
 
+    void Dash(float mod)
+    {
+        if(DashTimeout == false)
+        {
+            RB.AddForce(transform.right * mod);
+            DashTimeout = true;
+            enableAnimation(6);
+            StartCoroutine(DashTimeoutTimer());
+        }
+    }
+
+    IEnumerator DashTimeoutTimer()
+    {
+        dashInvincibilityTimer = Time.deltaTime * 120;
+        yield return new WaitForSeconds(1.5f);
+        DashTimeout = false;
+    }
+
     void Jump()
     {
         if(RB.velocity.y == 0)
@@ -209,6 +250,15 @@ public class Player : MonoBehaviour
             {
                 AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
                 currAnim = 5;
+            }
+        }
+        else if(dashInvincibilityTimer > 0)
+        {
+            AnimationSet[6].GetComponent<AnimationData>().Running = true;
+            if(6 != currAnim)
+            {
+            AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
+            currAnim = 6;
             }
         }
         else
@@ -250,16 +300,40 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.tag == "AttackRange" && invincibility == false)
+        if(col.tag == "AttackRange" && invincibility == false && DashTimeout == false)
         {
             setHealth(health - 1);
+        }
+
+        checkDash(col);
+
+    }
+
+    void OnTriggerStay2D(Collider2D col)
+    {
+       checkDash(col);
+    }
+
+    void checkDash(Collider2D col)
+    {
+        if(DashTimeout == true)
+        {
+            if(col.gameObject.tag == "Enemy")
+            {
+                Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>());
+            }
+        }
+        else
+        {
+             Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), gameObject.GetComponent<Collider2D>(), false);
+             DashTimeout = false;
         }
     }
 
     public void setHealth(int newHealth)
     {
         health = newHealth;
-        invincibilityTimer = Time.deltaTime * 50;
+        invincibilityTimer = Time.deltaTime * 100;
         for(int i=1; i<=6; i++)
         {
             if(Hearts[i] != null && i <= health)
