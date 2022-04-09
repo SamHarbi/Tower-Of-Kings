@@ -170,11 +170,9 @@ public class Player : MonoBehaviour
             hitEffect.GetComponent<SpriteRenderer>().enabled = false;
         }
 
-        if(dashInvincibilityTimer > 0)
+        if(DashTimeout)
         {
-            dashInvincibilityTimer -= 1 * Time.deltaTime;
             invincibility = true;
-
         }
         
 
@@ -219,8 +217,7 @@ public class Player : MonoBehaviour
 
     IEnumerator DashTimeoutTimer()
     {
-        dashInvincibilityTimer = Time.deltaTime * 120;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.8f);
         DashTimeout = false;
     }
 
@@ -252,7 +249,7 @@ public class Player : MonoBehaviour
                 currAnim = 5;
             }
         }
-        else if(dashInvincibilityTimer > 0)
+        else if(DashTimeout)
         {
             AnimationSet[6].GetComponent<AnimationData>().Running = true;
             if(6 != currAnim)
