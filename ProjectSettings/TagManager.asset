@@ -18,6 +18,7 @@ TagManager:
   - AnimationData
   - PlayerAttackRange
   - LAS
+  - RoomCheck
   layers:
   - Default
   - TransparentFX

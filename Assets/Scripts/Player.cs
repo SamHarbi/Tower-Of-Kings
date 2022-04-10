@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
 
     public GameObject leftEnemyDetect;
     public GameObject rightEnemyDetect;
+    private bool direction;
 
     private EnemyDetector RED;
     private EnemyDetector LED;
@@ -31,7 +32,8 @@ public class Player : MonoBehaviour
     public GameObject LAS;
     public GameObject hitEffect;
     public GameObject Cam;
-    private GameObject attackRange;
+    public GameObject attackRangeLeft;
+    public GameObject attackRangeRight;
     public GameObject Fade;
     private bool DashTimeout;
 
@@ -75,10 +77,13 @@ public class Player : MonoBehaviour
         attacking = false;
         beingHit = false;
 
-        attackRange = GameObject.FindWithTag("PlayerAttackRange");
-        attackRange.SetActive(false);
+        //attackRange = GameObject.FindWithTag("PlayerAttackRange");
+        attackRangeLeft.SetActive(false);
+        attackRangeRight.SetActive(false);
 
         DashTimeout = false;
+
+        direction = false;
         
 
     }
@@ -112,6 +117,8 @@ public class Player : MonoBehaviour
             continousMovementLeft = true;
             continousMovementRight = false;
 
+            direction = false;
+
         }
         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
         {
@@ -131,6 +138,8 @@ public class Player : MonoBehaviour
 
             continousMovementLeft = false;
             continousMovementRight = true;
+
+            direction = true;
         }
         else
         {
@@ -181,15 +190,21 @@ public class Player : MonoBehaviour
         {
            if(currAnim == 1)
            {
-               enableAnimation(2);
-               attacking = true;
-               StartCoroutine(AttackTimer());
+               if(attacking == false)
+               {
+                   enableAnimation(2);
+                   attacking = true;
+                   StartCoroutine(AttackTimer());
+               }
            }
            else if(currAnim == 0)
            {
-               enableAnimation(3);
-               attacking = true;
-               StartCoroutine(AttackTimer());
+               if(attacking == false)
+               {
+                   enableAnimation(3);
+                   attacking = true;
+                   StartCoroutine(AttackTimer());
+               }
            }
         }
 
@@ -370,9 +385,28 @@ public class Player : MonoBehaviour
 
     IEnumerator AttackTimer()
     {
-        attackRange.SetActive(true);
+        if(direction == false)
+        {
+            attackRangeLeft.SetActive(true);
+            attackRangeRight.SetActive(false);
+        }
+        else
+        {
+            attackRangeRight.SetActive(true);
+            attackRangeLeft.SetActive(false);
+        }
+        
         yield return new WaitForSeconds(0.3f);
-        attackRange.SetActive(false);
+        
+        if(direction == false)
+        {
+            attackRangeLeft.SetActive(false);
+        }
+        else
+        {
+            attackRangeRight.SetActive(false);
+        }
+
         attacking = false;
     }
 }

@@ -78,7 +78,7 @@ public class AIController : MonoBehaviour
         attackRange.SetActive(false);
 
         setGoalNodeToPlayer();
-        search();
+        search(15f);
 
         if(actionState == 1)
         {
@@ -145,24 +145,27 @@ public class AIController : MonoBehaviour
         return convertedNode;
     }
 
-    void search()
+    void search(float maxDistance)
     {
         float currPOS = gameObject.transform.position.x;
 
-        if(getNodeOnGrid(gameObject.transform.position).x == goalNode.x)
+        if(Mathf.Approximately(goalNode.x, currPOS) || Mathf.Abs(goalNode.x - currPOS) > maxDistance)
         {
-            print("At Goal");
             State_Idle();
             return;
         }
+
         
-        
-        if(goalNode.x > currPOS)
+        if(goalNode.y > gameObject.transform.position.y + 8 || goalNode.y < gameObject.transform.position.y - 8)
+        {
+            State_Idle();
+        }
+        else if(goalNode.x >= currPOS)
         {
             State_MoveRight();
             
         }
-        else if(goalNode.x < currPOS)
+        else if(goalNode.x <= currPOS)
         {
             State_MoveLeft();
             
@@ -197,6 +200,7 @@ public class AIController : MonoBehaviour
          actionState = 0;
          //anim.SetBool("Running", false);
          enableAnimation(0);
+
     }
 
     void State_Attack()
