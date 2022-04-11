@@ -29,6 +29,14 @@ public class AIController : MonoBehaviour
     public GameObject LAS;
     private int currAnim;
     private bool deathAnim;
+    public bool Boss;
+    private float BossHealth;
+    public GameObject hitBoss;
+    private int startDamageFrame;
+    private int endDamageFrame;
+    public GameObject bossWave;
+    private bool bossWaveStarted;
+ 
 
 
     // Start is called before the first frame update
@@ -44,7 +52,7 @@ public class AIController : MonoBehaviour
 
         direction = gameObject.GetComponent<SpriteRenderer>().flipX;
 
-        anim = gameObject.GetComponent<Animator>();
+        //anim = gameObject.GetComponent<Animator>();
 
         State_Idle();
 
@@ -54,13 +62,29 @@ public class AIController : MonoBehaviour
 
         deathAnim = false;
 
+        if(Boss == false)
+        {
+            startDamageFrame = 3;
+            endDamageFrame = 9;
+        }
+        else
+        {
+            startDamageFrame = 8;
+            endDamageFrame = 9;
+        }
+
+        bossWaveStarted = false;
+
+
     }
 
     void Awake()
     {
+        //Get Array of Animations from Central Animation System LAS
         LAS = GameObject.FindWithTag("LAS");
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
 
+        //Start Idle Animation
         currAnim = 1;
         enableAnimation(0);
     }
@@ -70,35 +94,63 @@ public class AIController : MonoBehaviour
     {
         if(deathAnim == true)
         {
-            return;
+            return; //Ensure no other code runs during the death Animation
         }
         
-        
-        anim.SetBool("Attack", false);
+        //Reset Attacking
+        //anim.SetBool("Attack", false); 
         attackRange.SetActive(false);
 
+        //Find Player as long as they are within a 15 units distance
         setGoalNodeToPlayer();
         search(15f);
 
+        //Based on actionState, move left or right
         if(actionState == 1)
         {
             gameObject.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0); // move right
-            setDirection(true);
+            if(Boss == false)
+            {
+                setDirection(true);
+            }
         }
         if(actionState == 2)
         {
             gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0); // move left
-            setDirection(false);
+            if(Boss == false)
+            {
+                setDirection(false);
+            }
         }
-        actionState = 0;
+        
+        actionState = 0; //Reset actionState
 
+        //If an Attack Animation is playing, ensure that damage can be done by this enemy to Player
         if(getAnimationProgress(2) == true)
         {
-            attackRange.SetActive(true);
+            if(Boss == false)
+            {
+                attackRange.SetActive(true);
+            }
+            else
+            {
+                if(bossWaveStarted == false)
+                {
+                    Instantiate(bossWave, gameObject.transform.position, Quaternion.identity);
+                    bossWaveStarted = true;
+                }
+            }
         }
         else
         {
-            attackRange.SetActive(false);
+            if(Boss == false)
+            {
+                attackRange.SetActive(false);
+            }
+            else
+            {
+                bossWaveStarted = false;
+            }
         }
 
     }
@@ -112,15 +164,15 @@ public class AIController : MonoBehaviour
     {
         direction = newDirection;
         gameObject.GetComponent<SpriteRenderer>().flipX = direction;
-        gameObject.transform.GetChild(0).gameObject.GetComponent<EnemyBladeController>().setDirection(!direction);
+        //gameObject.transform.GetChild(0).gameObject.GetComponent<EnemyBladeController>().setDirection(!direction);
     }
 
     //Find the Tile closest corresponding to a goal cordinate
     void getGoalNode(Vector2 goalCords)
     {
         Vector3Int goalCords3D = tm.WorldToCell(new Vector3(goalCords.x, goalCords.y, 0));
-        TileBase goal = tm.GetTile(goalCords3D);
-        tm.SetTile(goalCords3D, goalTile);
+        //TileBase goal = tm.GetTile(goalCords3D);
+        //tm.SetTile(goalCords3D, goalTile);
 
         goalNode = goalCords;
     }
@@ -145,83 +197,84 @@ public class AIController : MonoBehaviour
         return convertedNode;
     }
 
+    //Enter one of multiple States based on Input (Player Distance from this Enemy)
     void search(float maxDistance)
     {
-        float currPOS = gameObject.transform.position.x;
+        Vector3 currPOS = gameObject.transform.position; //Current position of Enemy
 
-        if(Mathf.Approximately(goalNode.x, currPOS) || Mathf.Abs(goalNode.x - currPOS) > maxDistance)
-        {
-            State_Idle();
-            return;
-        }
-
-        
-        if(goalNode.y > gameObject.transform.position.y + 8 || goalNode.y < gameObject.transform.position.y - 8)
+        //If Player is beyond max distance or is aprox at this Enemies Position
+        if(Mathf.Abs(goalNode.x - currPOS.x) <= 1 || Mathf.Abs(goalNode.x - currPOS.x) > maxDistance)
         {
             State_Idle();
         }
-        else if(goalNode.x >= currPOS)
+        else if(goalNode.y > gameObject.transform.position.y + maxDistance/2 || goalNode.y < gameObject.transform.position.y - maxDistance/2)
+        {
+            State_Idle(); //If Player is too far above or below this enemy
+        }
+        else if(goalNode.x > currPOS.x) //Player is to the right
         {
             State_MoveRight();
-            
         }
-        else if(goalNode.x <= currPOS)
+        else if(goalNode.x < currPOS.x) //Player is to the left
         {
             State_MoveLeft();
-            
         }
         
-        if(Mathf.Abs(goalNode.x - currPOS) <= distanceToPlayer)
+        if(Mathf.Abs(goalNode.x - currPOS.x) <= distanceToPlayer) //If Player close enough to attack based on goal mod 
         {
             State_Attack();
-            //State_Idle();
         }
     }
 
     void State_MoveRight()
     {
         actionState = 2;
-        //anim.SetBool("Running", true);
         enableAnimation(1);
     }
 
     void State_MoveLeft()
     {
         actionState = 1;
-        //anim.SetBool("Running", true);
         enableAnimation(1);
     }
 
     void State_Idle()
     {
-         Vector2 newGoal = new Vector2(goalNode.x + Random.Range(-8.0f, 8.0f), goalNode.y);
-         getGoalNode(newGoal);
-
          actionState = 0;
-         //anim.SetBool("Running", false);
          enableAnimation(0);
-
     }
 
     void State_Attack()
     {
-        //anim.SetBool("Attack", true);
         attackRange.SetActive(true);
         enableAnimation(2);
     }
 
     void State_SetStance()
     {
-        
+        //Unused - Legacy from Panel Centric Design
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if(col.tag == "PlayerAttackRange")
         {
-            enableAnimation(3);
-            deathAnim = true;
-            StartCoroutine(deathTimer());
+            if(Boss == false)
+            {
+                enableAnimation(3);
+                deathAnim = true;
+                StartCoroutine(deathTimer());
+            }
+            else
+            {
+                //enableAnimation(3);
+                //deathAnim = true;
+                //StartCoroutine(BossHitTimer());
+
+                BossHealth = BossHealth - 1;
+                Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
+                Instantiate(hitBoss, hitPos, Quaternion.identity);
+            }
         }
     }
 
@@ -231,8 +284,15 @@ public class AIController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    IEnumerator BossHitTimer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        deathAnim = false;
+    }
+
     void enableAnimation(int num)
     {
+        //Run set animation and deactivate current running Animation
         AnimationSet[num].GetComponent<AnimationData>().Running = true;
         if(num != currAnim)
         {
@@ -243,6 +303,7 @@ public class AIController : MonoBehaviour
 
     private bool getAnimationProgress(int id)
     {
+        //Check if certain frames are running / Attacking frames that should cause damage
         if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > 3 && AnimationSet[id].GetComponent<AnimationData>().activeFrame < 9)
         {
             return true;

@@ -14,13 +14,7 @@ public class LogicalAnimationSystem : MonoBehaviour
     void Start()
     {
         Animations = new List<GameObject>();
-        GameObject[] toaddAnimations = GameObject.FindGameObjectsWithTag("AnimationData");
-
-        for(int i=0; i<toaddAnimations.Length; i++)
-        {
-            Animations.Add(toaddAnimations[i]);
-        }
-
+        updateAnimationList();
         StartCoroutine(AnimationUpdate()); //Start Animation Update loop
     }
 
@@ -28,6 +22,16 @@ public class LogicalAnimationSystem : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void updateAnimationList()
+    {
+        GameObject[] toaddAnimations = GameObject.FindGameObjectsWithTag("AnimationData");
+
+        for(int i=0; i<toaddAnimations.Length; i++)
+        {
+            Animations.Add(toaddAnimations[i]);
+        }
     }
 
     public void addLateAnimation(GameObject AD)

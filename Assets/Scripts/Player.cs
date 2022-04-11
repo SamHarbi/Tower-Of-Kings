@@ -146,8 +146,11 @@ public class Player : MonoBehaviour
             //anim.SetBool("Running", false);
             
             
+            if(attacking == false)
+            {
+                enableAnimation(0);
+            }
             
-            enableAnimation(0);
             
         }
 
