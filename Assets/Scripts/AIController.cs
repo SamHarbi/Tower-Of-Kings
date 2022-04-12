@@ -36,6 +36,8 @@ public class AIController : MonoBehaviour
     private int endDamageFrame;
     public GameObject bossWave;
     private bool bossWaveStarted;
+    public GameObject bossWavePos;
+    public GameObject BossController;
  
 
 
@@ -56,7 +58,7 @@ public class AIController : MonoBehaviour
 
         State_Idle();
 
-        setGoalModifiers();
+        setGoalModifiers(3f);
 
         getGoalNode(new Vector2(3, -1));
 
@@ -74,6 +76,7 @@ public class AIController : MonoBehaviour
         }
 
         bossWaveStarted = false;
+        
 
 
     }
@@ -103,7 +106,14 @@ public class AIController : MonoBehaviour
 
         //Find Player as long as they are within a 15 units distance
         setGoalNodeToPlayer();
-        search(15f);
+        if(Boss == false)
+        {
+            search(15f);
+        }
+        else
+        {
+            search(60f);
+        }
 
         //Based on actionState, move left or right
         if(actionState == 1)
@@ -136,7 +146,7 @@ public class AIController : MonoBehaviour
             {
                 if(bossWaveStarted == false)
                 {
-                    Instantiate(bossWave, gameObject.transform.position, Quaternion.identity);
+                    Instantiate(bossWave, bossWavePos.transform.position, Quaternion.identity);
                     bossWaveStarted = true;
                 }
             }
@@ -155,9 +165,9 @@ public class AIController : MonoBehaviour
 
     }
 
-    void setGoalModifiers()
+    void setGoalModifiers(float newDistPlayer)
     {
-        distanceToPlayer = 3f;
+        distanceToPlayer = newDistPlayer;
     }
 
     void setDirection(bool newDirection)
@@ -267,13 +277,13 @@ public class AIController : MonoBehaviour
             }
             else
             {
-                //enableAnimation(3);
-                //deathAnim = true;
-                //StartCoroutine(BossHitTimer());
+                enableAnimation(3);
+                deathAnim = true;
+                StartCoroutine(BossHitTimer());
 
-                BossHealth = BossHealth - 1;
-                Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
-                Instantiate(hitBoss, hitPos, Quaternion.identity);
+                //BossHealth = BossHealth - 1;
+               //Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
+                //Instantiate(hitBoss, hitPos, Quaternion.identity);
             }
         }
     }

@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss1 : MonoBehaviour
+public class BossController : MonoBehaviour
 {
+    
+    public float bossHealth;
+
     // Start is called before the first frame update
     void Start()
     {
