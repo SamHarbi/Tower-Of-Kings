@@ -12,8 +12,11 @@ public class BossUIControl : MonoBehaviour
     public GameObject bossCam;
     public GameObject Canvas;
     public GameObject Gate;
+    public GameObject Gate2;
     public GameObject bossName;
     public GameObject dialogSystem;
+    public GameObject dialogSystemEnd;
+  
 
 
 
@@ -26,7 +29,22 @@ public class BossUIControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(dialogSystem.GetComponent<DialogSystem>().getDialogProgress())
+        {
+            Gate2.SetActive(false);
+        }
+
+        if (Input.GetAxis("Skip Cutscene") < 0 || Input.GetKey("q"))
+        {
+            if(dialogSystem.active)
+            {
+                dialogSystem.GetComponent<DialogSystem>().setTiming(0.01f, 0.1f);
+            }
+            if(dialogSystemEnd.active)
+            {
+                dialogSystemEnd.GetComponent<DialogSystem>().setTiming(0.01f, 0.1f);
+            }
+        }
     }
 
     public void startBossFight()
@@ -35,6 +53,7 @@ public class BossUIControl : MonoBehaviour
         bossCam.SetActive(true);
         Canvas.GetComponent<Canvas>().worldCamera = bossCam.GetComponent<Camera>();
         Gate.SetActive(true);
+        Gate2.SetActive(true);
         bossName.SetActive(true);
         StartCoroutine(bossTextFade());
             
@@ -44,6 +63,15 @@ public class BossUIControl : MonoBehaviour
             dialogSystem.GetComponent<DialogSystem>().StartDialog();
         }
 
+    }
+
+    public void endBossFight()
+    {
+        if(!dialogSystemEnd.active)
+        {
+            dialogSystemEnd.SetActive(true);
+            dialogSystemEnd.GetComponent<DialogSystem>().StartDialog();
+        }
     }
 
     IEnumerator bossTextFade()

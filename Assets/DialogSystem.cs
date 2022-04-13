@@ -16,8 +16,8 @@ public class DialogSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       interDialogTiming = 0.001f;
-       postDialogTiming = 0.1f;
+       interDialogTiming = 0.1f;
+       postDialogTiming = 1.2f;
 
        dialogProgress = false;
        
@@ -30,6 +30,12 @@ public class DialogSystem : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void setTiming(float newInter, float newPost)
+    {
+        interDialogTiming = newInter;
+        postDialogTiming = newPost;
     }
 
     public bool getDialogProgress()

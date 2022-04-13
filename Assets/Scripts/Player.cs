@@ -96,6 +96,8 @@ public class Player : MonoBehaviour
             Fade.GetComponent<GameOver>().StartFade();
             return;
         }
+
+        
         
         //Movement Logic - Walking Left and Right
         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))

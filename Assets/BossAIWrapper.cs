@@ -18,6 +18,9 @@ public class BossAIWrapper : MonoBehaviour
     public GameObject[] AnimationSet;
     public GameObject LAS;
 
+    public GameObject healthHider;
+    public GameObject deathParticle;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +30,7 @@ public class BossAIWrapper : MonoBehaviour
     IEnumerator LateStart()
     {
         yield return new WaitForSeconds(0.1f);
-        BossHealth = 100;
+        BossHealth = 10;
         Controller = Boss.GetComponent<AIController>();
         Controller.setDamageFrames(8, 9);
         Controller.setDirections(false, false);
@@ -85,8 +88,14 @@ public class BossAIWrapper : MonoBehaviour
                 Controller.enableAnimation(3);
                 StartCoroutine(Controller.BossHitTimer());
                 BossHealth = BossHealth - 1;
+                healthHider.transform.localScale = new Vector3(healthHider.transform.localScale.x+1, healthHider.transform.localScale.y, healthHider.transform.localScale.z);
+                healthHider.transform.position = new Vector3(healthHider.transform.position.x - 0.5f, healthHider.transform.position.y, healthHider.transform.position.z);
                 if(BossHealth <= 0)
                 {
+                    //On Death
+                    deathParticle.GetComponent<ParticleSystem>().Play();
+                    gameObject.GetComponent<Collider2D>().enabled = false;
+                    gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
                     gameObject.GetComponent<Rigidbody2D>().gravityScale = 10f;
                 }
                //Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
