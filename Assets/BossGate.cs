@@ -6,12 +6,7 @@ using UnityEngine.UI;
 public class BossGate : MonoBehaviour
 {
     
-    public GameObject mainCam;
-    public GameObject[] bossCams;
-    public GameObject Canvas;
-    public GameObject Gate;
-    public GameObject bossName;
-    public int bossID;
+    public GameObject BossUIControl;
 
     // Start is called before the first frame update
     void Start()
@@ -29,25 +24,9 @@ public class BossGate : MonoBehaviour
     {
         if(col.tag == "Player")
         {
-            mainCam.SetActive(false);
-            bossCams[bossID].SetActive(true);
-            Canvas.GetComponent<Canvas>().worldCamera = bossCams[bossID].GetComponent<Camera>();
-            Gate.SetActive(true);
-            bossName.SetActive(true);
-            StartCoroutine(bossTextFade());
+            BossUIControl.GetComponent<BossUIControl>().startBossFight();
+
         }
     }
 
-    IEnumerator bossTextFade()
-    {
-        while(!Mathf.Approximately(bossName.GetComponent<Text>().color.a, 0f))
-        {
-            yield return new WaitForSeconds(0.2f);
-            bossName.GetComponent<Text>().color = new Color(0.6705883f,0.2588235f,0.08235294f,  bossName.GetComponent<Text>().color.a - 0.05f);
-        }
-        
-        bossName.SetActive(false);
-        yield return null;
-        
-    }
 }

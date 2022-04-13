@@ -29,6 +29,14 @@ public class AIController : MonoBehaviour
     public GameObject LAS;
     private int currAnim;
     private bool deathAnim;
+    private bool left;
+    private bool right;
+    private float searchRange;
+    public bool wrapperOverride;
+    public GameObject wrapperClass;
+
+
+    //Boss wrapper - too delete
     public bool Boss;
     private float BossHealth;
     public GameObject hitBoss;
@@ -38,6 +46,8 @@ public class AIController : MonoBehaviour
     private bool bossWaveStarted;
     public GameObject bossWavePos;
     public GameObject BossController;
+    public GameObject BossDialog;
+
  
 
 
@@ -64,21 +74,39 @@ public class AIController : MonoBehaviour
 
         deathAnim = false;
 
-        if(Boss == false)
-        {
-            startDamageFrame = 3;
-            endDamageFrame = 9;
-        }
-        else
-        {
-            startDamageFrame = 8;
-            endDamageFrame = 9;
-        }
-
-        bossWaveStarted = false;
+        left = false;
+        right = true;
+        searchRange = 15f;
+        startDamageFrame = 3;
+        endDamageFrame = 9;
         
+    }
 
+    public void setDamageFrames(int newStart, int newEnd)
+    {
+        startDamageFrame = newStart;
+        endDamageFrame = newEnd;
+    }
 
+    public void setDirections(bool newLeft, bool newRight)
+    {
+        left = newLeft;
+        right = newRight;
+    }
+
+    public void setSearchRange(float newRange)
+    {
+        searchRange = newRange;
+    }
+
+    public void setDeathAnim(bool newAnimValue)
+    {
+        deathAnim = newAnimValue;
+    }
+
+    public bool getDeathAnim()
+    {
+        return deathAnim;
     }
 
     void Awake()
@@ -106,31 +134,23 @@ public class AIController : MonoBehaviour
 
         //Find Player as long as they are within a 15 units distance
         setGoalNodeToPlayer();
-        if(Boss == false)
+        if(wrapperOverride == false)
         {
-            search(15f);
+            search();
         }
-        else
-        {
-            search(60f);
-        }
-
+        
         //Based on actionState, move left or right
         if(actionState == 1)
         {
             gameObject.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0); // move right
-            if(Boss == false)
-            {
-                setDirection(true);
-            }
+            setDirection(right);
+            
         }
         if(actionState == 2)
         {
             gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0); // move left
-            if(Boss == false)
-            {
-                setDirection(false);
-            }
+            setDirection(left);
+            
         }
         
         actionState = 0; //Reset actionState
@@ -138,28 +158,16 @@ public class AIController : MonoBehaviour
         //If an Attack Animation is playing, ensure that damage can be done by this enemy to Player
         if(getAnimationProgress(2) == true)
         {
-            if(Boss == false)
+            if(wrapperOverride == false)
             {
                 attackRange.SetActive(true);
-            }
-            else
-            {
-                if(bossWaveStarted == false)
-                {
-                    Instantiate(bossWave, bossWavePos.transform.position, Quaternion.identity);
-                    bossWaveStarted = true;
-                }
             }
         }
         else
         {
-            if(Boss == false)
+            if(wrapperOverride == false)
             {
                 attackRange.SetActive(false);
-            }
-            else
-            {
-                bossWaveStarted = false;
             }
         }
 
@@ -208,16 +216,17 @@ public class AIController : MonoBehaviour
     }
 
     //Enter one of multiple States based on Input (Player Distance from this Enemy)
-    void search(float maxDistance)
+    public void search()
     {
+        
         Vector3 currPOS = gameObject.transform.position; //Current position of Enemy
 
         //If Player is beyond max distance or is aprox at this Enemies Position
-        if(Mathf.Abs(goalNode.x - currPOS.x) <= 1 || Mathf.Abs(goalNode.x - currPOS.x) > maxDistance)
+        if(Mathf.Abs(goalNode.x - currPOS.x) <= 1 || Mathf.Abs(goalNode.x - currPOS.x) > searchRange)
         {
             State_Idle();
         }
-        else if(goalNode.y > gameObject.transform.position.y + maxDistance/2 || goalNode.y < gameObject.transform.position.y - maxDistance/2)
+        else if(goalNode.y > gameObject.transform.position.y + searchRange/2 || goalNode.y < gameObject.transform.position.y - searchRange/2)
         {
             State_Idle(); //If Player is too far above or below this enemy
         }
@@ -248,7 +257,7 @@ public class AIController : MonoBehaviour
         enableAnimation(1);
     }
 
-    void State_Idle()
+    public void State_Idle()
     {
          actionState = 0;
          enableAnimation(0);
@@ -267,24 +276,16 @@ public class AIController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        if(wrapperOverride == true)
+        {
+            return;
+        }
+        
         if(col.tag == "PlayerAttackRange")
         {
-            if(Boss == false)
-            {
-                enableAnimation(3);
-                deathAnim = true;
-                StartCoroutine(deathTimer());
-            }
-            else
-            {
-                enableAnimation(3);
-                deathAnim = true;
-                StartCoroutine(BossHitTimer());
-
-                //BossHealth = BossHealth - 1;
-               //Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
-                //Instantiate(hitBoss, hitPos, Quaternion.identity);
-            }
+            enableAnimation(3);
+            deathAnim = true;
+            StartCoroutine(deathTimer());
         }
     }
 
@@ -294,13 +295,19 @@ public class AIController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    IEnumerator BossHitTimer()
+    public IEnumerator BossHitTimer()
     {
         yield return new WaitForSeconds(0.5f);
         deathAnim = false;
     }
 
-    void enableAnimation(int num)
+    IEnumerator BossDeathTimer()
+    {
+        yield return new WaitForSeconds(2.5f);
+        gameObject.SetActive(false);
+    }
+
+    public void enableAnimation(int num)
     {
         //Run set animation and deactivate current running Animation
         AnimationSet[num].GetComponent<AnimationData>().Running = true;
