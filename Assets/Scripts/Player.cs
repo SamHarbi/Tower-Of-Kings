@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
 
     private int health;
     public GameObject[] Hearts;
+    public GameObject[] Tokens;
     private bool invincibility;
     private float invincibilityTimer;
     private float dashInvincibilityTimer;
@@ -67,6 +68,11 @@ public class Player : MonoBehaviour
             else
             {
                 Hearts[i].SetActive(false);
+            }
+            
+            if(i<4)
+            {
+                Tokens[i-1].SetActive(false);
             }
         }
 
@@ -332,6 +338,11 @@ public class Player : MonoBehaviour
     void OnTriggerStay2D(Collider2D col)
     {
        checkDash(col);
+    }
+
+    public void addToken(int tokenID)
+    {
+        Tokens[tokenID].SetActive(true);
     }
 
     void checkDash(Collider2D col)

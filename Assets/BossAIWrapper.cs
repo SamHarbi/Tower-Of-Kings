@@ -20,6 +20,8 @@ public class BossAIWrapper : MonoBehaviour
 
     public GameObject healthHider;
     public GameObject deathParticle;
+    public GameObject bossUIControl;
+    public GameObject Player;
 
     // Start is called before the first frame update
     void Start()
@@ -97,6 +99,8 @@ public class BossAIWrapper : MonoBehaviour
                     gameObject.GetComponent<Collider2D>().enabled = false;
                     gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX;
                     gameObject.GetComponent<Rigidbody2D>().gravityScale = 10f;
+                    bossUIControl.GetComponent<BossUIControl>().endBossFight();
+                    Player.GetComponent<Player>().addToken(0);
                 }
                //Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
                 //Instantiate(hitBoss, hitPos, Quaternion.identity);

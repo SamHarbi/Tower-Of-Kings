@@ -7,11 +7,12 @@ public class BossGate : MonoBehaviour
 {
     
     public GameObject BossUIControl;
+    private bool exit;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        exit = false; //Is the player leaving the boss room
     }
 
     // Update is called once per frame
@@ -20,12 +21,21 @@ public class BossGate : MonoBehaviour
         
     }
 
+    public void SetExit(bool newExit)
+    {
+        exit = newExit;
+    }
+
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.tag == "Player")
+        if(col.tag == "Player" && exit == false)
         {
             BossUIControl.GetComponent<BossUIControl>().startBossFight();
 
+        }
+        else if(col.tag == "Player" && exit == true)
+        {
+            BossUIControl.GetComponent<BossUIControl>().resetUI();
         }
     }
 

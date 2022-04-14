@@ -16,6 +16,7 @@ public class BossUIControl : MonoBehaviour
     public GameObject bossName;
     public GameObject dialogSystem;
     public GameObject dialogSystemEnd;
+    public GameObject bossGate;
   
 
 
@@ -71,6 +72,10 @@ public class BossUIControl : MonoBehaviour
         {
             dialogSystemEnd.SetActive(true);
             dialogSystemEnd.GetComponent<DialogSystem>().StartDialog();
+            Gate.SetActive(false);
+            Gate2.SetActive(false);
+            bossGate.GetComponent<BossGate>().SetExit(true);
+            
         }
     }
 
@@ -90,5 +95,12 @@ public class BossUIControl : MonoBehaviour
     public bool getDialogProgress()
     {
         return dialogSystem.GetComponent<DialogSystem>().getDialogProgress();
+    }
+
+    public void resetUI()
+    {
+        mainCam.SetActive(true);
+        bossCam.SetActive(false);
+        Canvas.GetComponent<Canvas>().worldCamera = mainCam.GetComponent<Camera>();
     }
 }

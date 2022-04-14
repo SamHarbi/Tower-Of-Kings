@@ -45,6 +45,7 @@ public class DialogSystem : MonoBehaviour
 
     public void StartDialog()
     {
+        gameObject.SetActive(true);
         dialogText.text = "";
         if(currPage >= DialogRaw.Length)
         {
