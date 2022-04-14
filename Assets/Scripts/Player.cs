@@ -331,6 +331,12 @@ public class Player : MonoBehaviour
             return;
         }
 
+        if(col.tag == "InstantDeath")
+        {
+            setHealth(0);
+            return;
+        }
+
         checkDash(col);
 
     }

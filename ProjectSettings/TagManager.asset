@@ -19,6 +19,7 @@ TagManager:
   - PlayerAttackRange
   - LAS
   - RoomCheck
+  - InstantDeath
   layers:
   - Default
   - TransparentFX
