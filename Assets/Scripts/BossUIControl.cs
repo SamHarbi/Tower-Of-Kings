@@ -35,7 +35,7 @@ public class BossUIControl : MonoBehaviour
             Gate2.SetActive(false);
         }
 
-        if (Input.GetAxis("Skip Cutscene") < 0 || Input.GetKey("q"))
+        if (Input.GetButtonDown("Skip-Cutscene"))
         {
             if(dialogSystem.active)
             {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FallCutScene : MonoBehaviour
 {
+    public GameObject[] fallExit;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,9 +16,13 @@ public class FallCutScene : MonoBehaviour
     {
         
     }
-    IEnumerator Fall()
+
+    public void fallExitActivate()
     {
-        yield return new WaitForSeconds(0.3f);
-        gameObject.GetComponent<Rigidbody2D>().gravityScale = 4.5f;
+        for(int i=0; i<fallExit.Length; i++)
+        {
+            fallExit[i].GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        }
     }
+    
 }

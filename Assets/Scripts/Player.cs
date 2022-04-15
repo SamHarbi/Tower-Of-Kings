@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private int health;
     public GameObject[] Hearts;
     public GameObject[] Tokens;
+    public GameObject[] InventoryItems;
     private bool invincibility;
     private float invincibilityTimer;
     private float dashInvincibilityTimer;
@@ -90,6 +91,8 @@ public class Player : MonoBehaviour
         DashTimeout = false;
 
         direction = false;
+
+        InventoryItems = new GameObject[6];
         
 
     }
@@ -175,7 +178,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            RB.gravityScale = 4.5f;
+            RB.gravityScale = 4.0f;
         }
 
         if(invincibilityTimer > 0)
@@ -228,6 +231,22 @@ public class Player : MonoBehaviour
             beingHit = false;
         }
 
+    }
+
+    public bool CheckForItem(string searchTag)
+    {
+        for(int i=0; i<InventoryItems.Length; i++)
+        {
+            if(InventoryItems[i] != null)
+            {
+                if(InventoryItems[i].tag == searchTag)
+                {
+                    return true; //Found
+                }
+            }
+        }
+
+        return false; //Not Found
     }
 
     void Dash(float mod)
@@ -335,6 +354,12 @@ public class Player : MonoBehaviour
         {
             setHealth(0);
             return;
+        }
+
+        if(col.tag == "Pick")
+        {
+            InventoryItems[0] = col.gameObject;
+            col.gameObject.SetActive(false);
         }
 
         checkDash(col);

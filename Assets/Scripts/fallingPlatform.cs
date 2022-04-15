@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class fallingPlatform : MonoBehaviour
 {
+    public GameObject fallCutScene;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +29,7 @@ public class fallingPlatform : MonoBehaviour
     {
         yield return new WaitForSeconds(0.3f);
         gameObject.GetComponent<Rigidbody2D>().gravityScale = 4.5f;
+        fallCutScene.GetComponent<FallCutScene>().fallExitActivate();
     }
  
 }
