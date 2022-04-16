@@ -23,8 +23,9 @@ public class Player : MonoBehaviour
 
     private int health;
     public GameObject[] Hearts;
-    public GameObject[] Tokens;
-    public GameObject[] InventoryItems;
+    //public GameObject[] Tokens;
+    //public GameObject[] InventoryItems;
+    public GameObject InventorySet;
     private bool invincibility;
     private float invincibilityTimer;
     private float dashInvincibilityTimer;
@@ -72,10 +73,6 @@ public class Player : MonoBehaviour
                 Hearts[i].SetActive(false);
             }
             
-            if(i<4)
-            {
-                Tokens[i-1].SetActive(false);
-            }
         }
 
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
@@ -93,7 +90,7 @@ public class Player : MonoBehaviour
 
         direction = false;
 
-        InventoryItems = new GameObject[6];
+        //InventoryItems = new GameObject[6];
         
 
     }
@@ -113,9 +110,9 @@ public class Player : MonoBehaviour
             {
                 if(Input.GetKey("b"))
                 {
-                    for(int i=0; i<InventoryItems.Length; i++)
+                    for(int i=0; i<9; i++)
                     {
-                        InventoryItems[i] = gameObject;
+                        InventorySet.GetComponent<Inventory>().addItem(i);
                     }
                     Debug.Log("Debug Activated");
                 }
@@ -249,25 +246,14 @@ public class Player : MonoBehaviour
 
     }
 
-    public bool CheckForItem(string searchTag)
+    public bool CheckForItem(int searchTag)
     {
-        for(int i=0; i<InventoryItems.Length; i++)
-        {
-            if(InventoryItems[i] != null)
-            {
-                if(InventoryItems[i].tag == searchTag)
-                {
-                    return true; //Found
-                }
-            }
-        }
-
-        return false; //Not Found
+        return InventorySet.GetComponent<Inventory>().CheckForItem(searchTag);
     }
 
     void Dash(float mod)
     {
-        if(InventoryItems[1] == null)
+        if(InventorySet.GetComponent<Inventory>().CheckForItem(4))
         {
             return;
         }
@@ -379,13 +365,13 @@ public class Player : MonoBehaviour
 
         if(col.tag == "Pick")
         {
-            InventoryItems[0] = col.gameObject;
+            InventorySet.GetComponent<Inventory>().addItem(3);
             col.gameObject.SetActive(false);
         }
 
         if(col.tag == "Dash")
         {
-            InventoryItems[1] = col.gameObject;
+            InventorySet.GetComponent<Inventory>().addItem(4);
             col.gameObject.SetActive(false);
         }
 
@@ -400,7 +386,7 @@ public class Player : MonoBehaviour
 
     public void addToken(int tokenID)
     {
-        Tokens[tokenID].SetActive(true);
+        InventorySet.GetComponent<Inventory>().addItem(tokenID);
     }
 
     void checkDash(Collider2D col)

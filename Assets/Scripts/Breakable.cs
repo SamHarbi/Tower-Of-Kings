@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Breakable : MonoBehaviour
 {
-    private GameObject Player;
+    private GameObject Inventory;
     // Start is called before the first frame update
     void Start()
     {
-        Player = GameObject.FindWithTag("Player");
+        Inventory = GameObject.FindWithTag("Inventory");
     }
     
 
@@ -20,7 +20,7 @@ public class Breakable : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.tag == "PlayerAttackRange" && Player.GetComponent<Player>().CheckForItem("Pick"))
+        if(col.tag == "PlayerAttackRange" && Inventory.GetComponent<Inventory>().CheckForItem(3))
         {
             Destroy(gameObject);
         }

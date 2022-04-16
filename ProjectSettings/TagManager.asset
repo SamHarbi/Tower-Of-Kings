@@ -23,6 +23,7 @@ TagManager:
   - Pick
   - Break
   - Dash
+  - Inventory
   layers:
   - Default
   - TransparentFX

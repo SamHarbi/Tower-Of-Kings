@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
     public GameObject helpPanel;
     private bool pauseStatus;
     private int openPanelID;
-    private GameObject[] InventoryItems;
+    public GameObject[] InventoryItems;
 
     // Start is called before the first frame update
     void Start()
@@ -96,8 +96,13 @@ public class Inventory : MonoBehaviour
         InventoryItems[id].SetActive(true);
     }
 
-    public bool checkInventoryItem(int id)
+    public bool CheckForItem(int id)
     {
+        if(InventoryItems[id] == null)
+        {
+            return false;
+        }
+        
         if(InventoryItems[id].activeSelf)
         {
             return true;
