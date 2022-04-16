@@ -22,6 +22,7 @@ TagManager:
   - InstantDeath
   - Pick
   - Break
+  - Dash
   layers:
   - Default
   - TransparentFX

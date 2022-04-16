@@ -6,6 +6,8 @@ public class CameraShake : MonoBehaviour
 {
     //Code Heavily inspired by https://www.youtube.com/watch?v=9A9yj8KnM8c
     
+    Vector3 originalPos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,8 +22,7 @@ public class CameraShake : MonoBehaviour
 
     public IEnumerator CamShake(float magnitude, float duration)
     {
-        Vector3 originalPos = gameObject.transform.position;
-
+        originalPos = gameObject.transform.position;
         float elapsedTime = 0.0f;
 
         while(elapsedTime < duration)

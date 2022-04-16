@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     public GameObject LAS;
     public GameObject hitEffect;
     public GameObject Cam;
+    public GameObject[] BossCams; //Change cams when entering diff bosses else no screeen shake
     public GameObject attackRangeLeft;
     public GameObject attackRangeRight;
     public GameObject Fade;
@@ -104,6 +105,21 @@ public class Player : MonoBehaviour
         {
             Fade.GetComponent<GameOver>().StartFade();
             return;
+        }
+
+        if(Input.GetKey("d"))
+        {
+            if(Input.GetKey("e"))
+            {
+                if(Input.GetKey("b"))
+                {
+                    for(int i=0; i<InventoryItems.Length; i++)
+                    {
+                        InventoryItems[i] = gameObject;
+                    }
+                    Debug.Log("Debug Activated");
+                }
+            }
         }
 
         
@@ -251,6 +267,11 @@ public class Player : MonoBehaviour
 
     void Dash(float mod)
     {
+        if(InventoryItems[1] == null)
+        {
+            return;
+        }
+        
         if(DashTimeout == false)
         {
             RB.AddForce(transform.right * mod);
@@ -359,6 +380,12 @@ public class Player : MonoBehaviour
         if(col.tag == "Pick")
         {
             InventoryItems[0] = col.gameObject;
+            col.gameObject.SetActive(false);
+        }
+
+        if(col.tag == "Dash")
+        {
+            InventoryItems[1] = col.gameObject;
             col.gameObject.SetActive(false);
         }
 
