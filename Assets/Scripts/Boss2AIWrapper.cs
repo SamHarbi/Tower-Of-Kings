@@ -12,6 +12,7 @@ public class Boss2AIWrapper : MonoBehaviour
     public GameObject bossUIControl;
      public GameObject Inventory;
      public GameObject attackRange;
+     public GameObject healthBar;
 
     public GameObject[] AnimationSet;
     public GameObject LAS;
@@ -75,6 +76,9 @@ public class Boss2AIWrapper : MonoBehaviour
                     bossUIControl.GetComponent<BossUIControl>().endBossFight();
                     Inventory.GetComponent<Inventory>().addItem(1);
                     Controller.enabled = false;
+                    healthBar.SetActive(false);
+                    healthHider.SetActive(false);
+                    
                 }
         }
     }
