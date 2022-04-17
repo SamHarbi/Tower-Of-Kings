@@ -77,8 +77,8 @@ public class AIController : MonoBehaviour
         left = false;
         right = true;
         searchRange = 15f;
-        startDamageFrame = 3;
-        endDamageFrame = 9;
+        //startDamageFrame = 3;
+        //endDamageFrame = 9;
         
     }
 
@@ -318,7 +318,7 @@ public class AIController : MonoBehaviour
         }
     }
 
-    private bool getAnimationProgress(int id)
+    public bool getAnimationProgress(int id)
     {
         //Check if certain frames are running / Attacking frames that should cause damage
         if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > 3 && AnimationSet[id].GetComponent<AnimationData>().activeFrame < 9)

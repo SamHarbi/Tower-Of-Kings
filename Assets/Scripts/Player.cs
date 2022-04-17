@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private int speed;
+    public int speed;
     private int moveBuffer;
     private Animator anim;
     private SpriteRenderer SR;
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
             {
                 if(Input.GetKey("b"))
                 {
-                    for(int i=0; i<9; i++)
+                    for(int i=3; i<9; i++)
                     {
                         InventorySet.GetComponent<Inventory>().addItem(i);
                     }
@@ -253,7 +253,7 @@ public class Player : MonoBehaviour
 
     void Dash(float mod)
     {
-        if(InventorySet.GetComponent<Inventory>().CheckForItem(4))
+        if(!InventorySet.GetComponent<Inventory>().CheckForItem(4))
         {
             return;
         }

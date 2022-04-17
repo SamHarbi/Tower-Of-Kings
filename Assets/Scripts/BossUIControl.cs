@@ -84,7 +84,8 @@ public class BossUIControl : MonoBehaviour
         while(!Mathf.Approximately(bossName.GetComponent<Text>().color.a, 0f))
         {
             yield return new WaitForSeconds(0.2f);
-            bossName.GetComponent<Text>().color = new Color(0.6705883f,0.2588235f,0.08235294f,  bossName.GetComponent<Text>().color.a - 0.05f);
+            Color OriginalColor = bossName.GetComponent<Text>().color;
+            bossName.GetComponent<Text>().color = new Color(OriginalColor.r,OriginalColor.g,OriginalColor.b,  bossName.GetComponent<Text>().color.a - 0.05f);
         }
         
         bossName.SetActive(false);
