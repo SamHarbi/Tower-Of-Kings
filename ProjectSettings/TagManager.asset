@@ -24,6 +24,7 @@ TagManager:
   - Break
   - Dash
   - Inventory
+  - PowerWheel-Boss3
   layers:
   - Default
   - TransparentFX

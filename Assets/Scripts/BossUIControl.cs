@@ -39,11 +39,11 @@ public class BossUIControl : MonoBehaviour
         {
             if(dialogSystem.active)
             {
-                dialogSystem.GetComponent<DialogSystem>().setTiming(0.01f, 0.1f);
+                dialogSystem.GetComponent<DialogSystem>().setTiming(0.001f, 0.01f);
             }
             if(dialogSystemEnd.active)
             {
-                dialogSystemEnd.GetComponent<DialogSystem>().setTiming(0.01f, 0.1f);
+                dialogSystemEnd.GetComponent<DialogSystem>().setTiming(0.001f, 0.1f);
             }
         }
     }
