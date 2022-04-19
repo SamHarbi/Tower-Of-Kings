@@ -31,7 +31,7 @@ public class AIController : MonoBehaviour
     private bool deathAnim;
     private bool left;
     private bool right;
-    private float searchRange;
+    public float searchRange;
     public bool wrapperOverride;
     public GameObject wrapperClass;
 
