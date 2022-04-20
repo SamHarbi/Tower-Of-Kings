@@ -25,6 +25,9 @@ TagManager:
   - Dash
   - Inventory
   - PowerWheel-Boss3
+  - PowerGem-Boss3
+  - FireBall
+  - BulletBall
   layers:
   - Default
   - TransparentFX

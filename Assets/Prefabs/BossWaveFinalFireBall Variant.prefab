@@ -2796,7 +2796,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2071010437704670296, guid: 02a8742a3d63a3c4495c2d6811efce6b, type: 3}
       propertyPath: m_Name
-      value: BossWaveFinalFireBall
+      value: BossWaveFinalFireBall Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2071010437704670296, guid: 02a8742a3d63a3c4495c2d6811efce6b, type: 3}
+      propertyPath: m_TagString
+      value: FireBall
       objectReference: {fileID: 0}
     - target: {fileID: 2071010437704670303, guid: 02a8742a3d63a3c4495c2d6811efce6b, type: 3}
       propertyPath: m_RootOrder

@@ -76,10 +76,14 @@ public class BossUIControl : MonoBehaviour
         if(!dialogSystemEnd.active)
         {
             dialogSystemEnd.SetActive(true);
-            dialogSystemEnd.GetComponent<DialogSystem>().StartDialog();
             Gate.SetActive(false);
             Gate2.SetActive(false);
             bossGate.GetComponent<BossGate>().SetExit(true);
+            dialogSystemEnd.GetComponent<DialogSystem>().StartDialog();
+
+            StopCoroutine(downEffectCoroutine);
+            StopCoroutine(upEffectCoroutine);
+            StartCoroutine(bossEffectFadeUPWhite());
             
         }
     }
@@ -108,6 +112,7 @@ public class BossUIControl : MonoBehaviour
             }
         
         yield return null;
+
         
     }
 
@@ -118,6 +123,32 @@ public class BossUIControl : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
             Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
             effectOverlay.GetComponent<SpriteRenderer>().color = new Color(OriginalColor.r,OriginalColor.g,OriginalColor.b, effectOverlay.GetComponent<SpriteRenderer>().color.a - 0.01f);
+        }
+
+        yield return null;
+        
+    }
+
+    IEnumerator bossEffectFadeUPWhite()
+    {
+            while(true)
+            {
+                yield return new WaitForSeconds(0.2f);
+                Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
+                effectOverlay.GetComponent<SpriteRenderer>().color = new Color(1,1,1, effectOverlay.GetComponent<SpriteRenderer>().color.a + 0.05f);
+            }
+        //StartCoroutine(bossEffectFadeDOWNWhite());
+        yield return null;
+        
+    }
+
+    IEnumerator bossEffectFadeDOWNWhite()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
+            effectOverlay.GetComponent<SpriteRenderer>().color = new Color(1,1,1, effectOverlay.GetComponent<SpriteRenderer>().color.a - 0.05f);
         }
 
         yield return null;
