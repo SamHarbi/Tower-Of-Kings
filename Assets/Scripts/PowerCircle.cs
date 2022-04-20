@@ -37,7 +37,6 @@ public class PowerCircle : MonoBehaviour
     public void SpeedUP()
     {
         speeding = true;
-        Debug.Log("Showtime");
     }
 
     public void SpeedDown()

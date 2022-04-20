@@ -17,6 +17,9 @@ public class BossUIControl : MonoBehaviour
     public GameObject dialogSystem;
     public GameObject dialogSystemEnd;
     public GameObject bossGate;
+    public GameObject effectOverlay;
+    private IEnumerator upEffectCoroutine;
+    private IEnumerator downEffectCoroutine;
   
 
 
@@ -24,7 +27,9 @@ public class BossUIControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        upEffectCoroutine = bossEffectFadeUP();
+        downEffectCoroutine = bossEffectFadeDOWN();
+
     }
 
     // Update is called once per frame
@@ -91,6 +96,46 @@ public class BossUIControl : MonoBehaviour
         bossName.SetActive(false);
         yield return null;
         
+    }
+
+    IEnumerator bossEffectFadeUP()
+    {
+            while(true)
+            {
+                yield return new WaitForSeconds(0.2f);
+                Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
+                effectOverlay.GetComponent<SpriteRenderer>().color = new Color(OriginalColor.r,OriginalColor.g,OriginalColor.b, effectOverlay.GetComponent<SpriteRenderer>().color.a + 0.01f);
+            }
+        
+        yield return null;
+        
+    }
+
+    IEnumerator bossEffectFadeDOWN()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(0.2f);
+            Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
+            effectOverlay.GetComponent<SpriteRenderer>().color = new Color(OriginalColor.r,OriginalColor.g,OriginalColor.b, effectOverlay.GetComponent<SpriteRenderer>().color.a - 0.01f);
+        }
+
+        yield return null;
+        
+    }
+
+    public void FadeEffectStartUP()
+    {
+        StopCoroutine(downEffectCoroutine);
+        Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
+        effectOverlay.GetComponent<SpriteRenderer>().color = new Color(OriginalColor.r,OriginalColor.g,OriginalColor.b, 0.01f);
+        StartCoroutine(upEffectCoroutine);
+    }
+
+    public void FadeEffectStartDOWN()
+    {
+        StopCoroutine(upEffectCoroutine);
+        StartCoroutine(downEffectCoroutine);
     }
 
     public bool getDialogProgress()

@@ -11,6 +11,7 @@ public class Boss3AIWrapper : MonoBehaviour
     private int endDamageFrame;
     public GameObject bossWave;
     public GameObject bossFireWave;
+    public GameObject effectOverlay;
     public GameObject bossBulletWave;
     private bool bossWaveStarted;
     public GameObject bossWavePos;
@@ -30,6 +31,7 @@ public class Boss3AIWrapper : MonoBehaviour
     private float waveTimer;
     private int currWaveID;
     private int numOfWaves;
+    private bool firstWaveIter;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,8 @@ public class Boss3AIWrapper : MonoBehaviour
         currWaveID = 1;
         numOfWaves = 2;
         //waveTimer = 10f * Time.deltaTime;
+
+        firstWaveIter = true;
     }
 
     // Update is called once per frame
@@ -95,6 +99,7 @@ public class Boss3AIWrapper : MonoBehaviour
         if(waveTimer <= 0)
         {
             currWaveID = (currWaveID + 1) % numOfWaves;
+            firstWaveIter = true;
             Debug.Log(currWaveID);
 
             if(currWaveID == 0)
@@ -119,6 +124,11 @@ public class Boss3AIWrapper : MonoBehaviour
         {
             bossWave = bossBulletWave;
             bossWavePos = bulletPos;
+            if(firstWaveIter == true)
+            {
+                bossUIControl.GetComponent<BossUIControl>().FadeEffectStartDOWN();
+                firstWaveIter = false;
+            }
             Controller.search();
             //Debug.Log("Wave" + waveTimer);
             return;
@@ -127,6 +137,11 @@ public class Boss3AIWrapper : MonoBehaviour
         {
             Controller.enableAnimation(4);
             //Debug.Log("Alt Wave");
+            if(firstWaveIter == true)
+            {
+                bossUIControl.GetComponent<BossUIControl>().FadeEffectStartUP();
+                firstWaveIter = false;
+            }
             bossWave = bossFireWave;
             bossWavePos = fireBallPos;
             for(int i=0; i<powerWheels.Length; i++)
