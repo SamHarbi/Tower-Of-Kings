@@ -20,6 +20,8 @@ public class BossUIControl : MonoBehaviour
     public GameObject effectOverlay;
     private IEnumerator upEffectCoroutine;
     private IEnumerator downEffectCoroutine;
+    private float currAlpha;
+    private bool fadeDown;
   
 
 
@@ -29,6 +31,9 @@ public class BossUIControl : MonoBehaviour
     {
         upEffectCoroutine = bossEffectFadeUP();
         downEffectCoroutine = bossEffectFadeDOWN();
+
+        currAlpha = 0f;
+        fadeDown = false;
 
     }
 
@@ -83,7 +88,7 @@ public class BossUIControl : MonoBehaviour
 
             StopCoroutine(downEffectCoroutine);
             StopCoroutine(upEffectCoroutine);
-            StartCoroutine(bossEffectFadeUPWhite());
+            StartCoroutine(bossEffectFadeUPVertical());
             
         }
     }
@@ -129,28 +134,31 @@ public class BossUIControl : MonoBehaviour
         
     }
 
-    IEnumerator bossEffectFadeUPWhite()
+    IEnumerator bossEffectFadeUPVertical()
     {
+
             while(true)
             {
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.3f);
                 Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
                 effectOverlay.GetComponent<SpriteRenderer>().color = new Color(1,1,1, effectOverlay.GetComponent<SpriteRenderer>().color.a + 0.05f);
+                currAlpha += 0.05f;
+                if(Mathf.Approximately(currAlpha, 1.0f))
+                {
+                    while(true)
+                    {
+                        yield return new WaitForSeconds(0.3f);
+                        OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
+                        effectOverlay.GetComponent<SpriteRenderer>().color = new Color(1,1,1, effectOverlay.GetComponent<SpriteRenderer>().color.a - 0.05f);
+                        currAlpha -= 0.05f;
+                        if(currAlpha == 0)
+                        {
+                            yield return null;
+                        }
+                    }
+                }
             }
-        //StartCoroutine(bossEffectFadeDOWNWhite());
-        yield return null;
         
-    }
-
-    IEnumerator bossEffectFadeDOWNWhite()
-    {
-        while(true)
-        {
-            yield return new WaitForSeconds(0.2f);
-            Color OriginalColor = effectOverlay.GetComponent<SpriteRenderer>().color;
-            effectOverlay.GetComponent<SpriteRenderer>().color = new Color(1,1,1, effectOverlay.GetComponent<SpriteRenderer>().color.a - 0.05f);
-        }
-
         yield return null;
         
     }

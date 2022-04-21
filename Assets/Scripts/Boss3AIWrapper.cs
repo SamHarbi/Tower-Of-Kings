@@ -288,6 +288,8 @@ public class Boss3AIWrapper : MonoBehaviour
                     Inventory.GetComponent<Inventory>().addItem(2);
                     StartCoroutine(finalDeathScene());
 
+                    dead = true;
+
                     GameObject[] strayBullets = GameObject.FindGameObjectsWithTag("BulletBall");
                     GameObject[] strayFire = GameObject.FindGameObjectsWithTag("FireBall");
 

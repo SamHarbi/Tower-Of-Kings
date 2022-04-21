@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
         RED = rightEnemyDetect.GetComponent<EnemyDetector>();
         LED = leftEnemyDetect.GetComponent<EnemyDetector>();
 
-        health = 6;
+        health = 3;
         Hearts = new GameObject[7];
 
         invincibility = false;
