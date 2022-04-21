@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     public GameObject attackRangeRight;
     public GameObject Fade;
     private bool DashTimeout;
+    private bool onPlatform;
 
 
     // Start is called before the first frame update
@@ -91,6 +92,8 @@ public class Player : MonoBehaviour
         direction = false;
 
         //InventoryItems = new GameObject[6];
+
+        onPlatform = false;
         
 
     }
@@ -191,7 +194,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            RB.gravityScale = 4.0f;
+            RB.gravityScale = 3.8f;
         }
 
         if(invincibilityTimer > 0)
@@ -275,7 +278,7 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if(Mathf.Approximately(RB.velocity.y, 0f))
+        if(Mathf.Approximately(RB.velocity.y, 0f) || onPlatform == true)
         {
             GetComponent<Rigidbody2D>().AddForce(transform.up * 1000);
         }
@@ -377,6 +380,35 @@ public class Player : MonoBehaviour
 
         checkDash(col);
 
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        
+        if(collision.transform.tag == "MovingPlatform")
+        {
+            onPlatform = true;
+            int MovingPlatformdir = collision.transform.GetComponent<MovingPlatform>().dir;
+            gameObject.transform.position = new Vector2(gameObject.transform.position.x + MovingPlatformdir * Time.deltaTime, gameObject.transform.position.y);
+        }
+
+         if(collision.transform.tag == "Platform")
+         {
+            onPlatform = true;
+         }
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "Platform")
+        {
+            onPlatform = false;
+        }
+
+        if(collision.transform.tag == "MovingPlatform")
+        {
+            onPlatform = false;
+        }
     }
 
     void OnTriggerStay2D(Collider2D col)

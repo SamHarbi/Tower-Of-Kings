@@ -34,9 +34,10 @@ public class CameraShake : MonoBehaviour
 
             elapsedTime += Time.deltaTime;
 
-            yield return null;
         }
 
         transform.position = originalPos;
+
+        yield return null;
     }
 }

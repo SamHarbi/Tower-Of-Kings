@@ -28,6 +28,7 @@ TagManager:
   - PowerGem-Boss3
   - FireBall
   - BulletBall
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX

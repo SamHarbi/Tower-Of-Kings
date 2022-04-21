@@ -25,5 +25,10 @@ public class CameraColorEffects : MonoBehaviour
         {
             gameObject.GetComponent<Camera>().backgroundColor = lowerLevelColor;
         }
+
+        if(gameObject.transform.position.y > 143f)
+        {
+            gameObject.GetComponent<Camera>().backgroundColor = upperLevelColor;
+        }
     }
 }
