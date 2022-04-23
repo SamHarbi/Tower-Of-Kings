@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     public GameObject attackRangeLeft;
     public GameObject attackRangeRight;
     public GameObject Fade;
+    public GameObject FadeWin;
     private bool DashTimeout;
     private bool onPlatform;
     private bool King;
@@ -106,6 +107,7 @@ public class Player : MonoBehaviour
     {
         if(King == true)
         {
+            FadeWin.GetComponent<GameOver>().StartFade();
             return;
         }
         
@@ -405,6 +407,7 @@ public class Player : MonoBehaviour
         {
             enableAnimation(7);
             King = true;
+            FadeWin.GetComponent<GameOver>().StartFade();
         }
     }
 
