@@ -30,6 +30,7 @@ TagManager:
   - BulletBall
   - MovingPlatform
   - Crown
+  - SettingsButton
   layers:
   - Default
   - TransparentFX
