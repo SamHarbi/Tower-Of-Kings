@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     public GameObject Fade;
     private bool DashTimeout;
     private bool onPlatform;
+    private bool King;
 
 
     // Start is called before the first frame update
@@ -94,6 +95,8 @@ public class Player : MonoBehaviour
         //InventoryItems = new GameObject[6];
 
         onPlatform = false;
+
+        King = false;
         
 
     }
@@ -101,6 +104,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(King == true)
+        {
+            return;
+        }
+        
         if(health <= 0)
         {
             Fade.GetComponent<GameOver>().StartFade();
@@ -113,11 +121,20 @@ public class Player : MonoBehaviour
             {
                 if(Input.GetKey("b"))
                 {
-                    for(int i=3; i<9; i++)
+                    for(int i=3; i<5; i++)
                     {
                         InventorySet.GetComponent<Inventory>().addItem(i);
                     }
-                    Debug.Log("Debug Activated");
+                    Debug.Log("Debug Items Activated");
+                }
+
+                if(Input.GetKey("a"))
+                {
+                    for(int i=0; i<3; i++)
+                    {
+                        InventorySet.GetComponent<Inventory>().addItem(i);
+                    }
+                    Debug.Log("Debug Keys Activated");
                 }
             }
         }
@@ -380,6 +397,15 @@ public class Player : MonoBehaviour
 
         checkDash(col);
 
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.transform.tag == "Crown")
+        {
+            enableAnimation(7);
+            King = true;
+        }
     }
 
     void OnCollisionStay2D(Collision2D collision)
