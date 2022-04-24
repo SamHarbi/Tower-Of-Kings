@@ -54,6 +54,8 @@ public class AIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        path = GameObject.FindWithTag("Path"); 
+        Player = GameObject.FindWithTag("Player");
         tm = path.GetComponent<Tilemap>();
         area = tm.cellBounds;
         TileBase[] allTiles = tm.GetTilesBlock(area);

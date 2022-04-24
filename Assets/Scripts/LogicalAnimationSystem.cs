@@ -24,7 +24,7 @@ public class LogicalAnimationSystem : MonoBehaviour
         
     }
 
-    void updateAnimationList()
+    public void updateAnimationList()
     {
         GameObject[] toaddAnimations = GameObject.FindGameObjectsWithTag("AnimationData");
 
@@ -103,6 +103,12 @@ public class LogicalAnimationSystem : MonoBehaviour
         }
 
         return AnimData;
+    }
+
+    public void deleteObjectAll()
+    {
+        Animations.Clear();
+        Debug.Log("Animations Cleared");
     }
 
 

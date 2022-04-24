@@ -30,6 +30,10 @@ public class GameSaveSystem : MonoBehaviour
 {
     public GameObject Player;
     public GameObject Inventory;
+    public GameObject[] activeObjects;
+    public Vector3[] ObjectsLocation;
+    public GameObject enemyPrefab;
+    public GameObject AnimSystem;
 
     // Start is called before the first frame update
     void Start()
@@ -67,10 +71,21 @@ public class GameSaveSystem : MonoBehaviour
                         writer.Write(0);
                     }
                 }
+                
+                SaveObjectData();
+
+                writer.Write((int)ObjectsLocation.Length);
+
+                for(int i=0; i<ObjectsLocation.Length; i++)
+                {
+                    writer.Write((int)ObjectsLocation[i].x);
+                    writer.Write((int)ObjectsLocation[i].y);
+                }
             }
         }
 
         Debug.Log("Game Saved");
+        //LoadGame();
     }
 
     public void LoadGame()
@@ -105,11 +120,48 @@ public class GameSaveSystem : MonoBehaviour
                             }
                         }
                     }
+
+                    int loadedObjectsLocationLength = reader.ReadInt32();
+
+                    activeObjects = GameObject.FindGameObjectsWithTag("Enemy");
+
+                    AnimSystem.GetComponent<LogicalAnimationSystem>().deleteObjectAll();
+
+                    for(int i=0; i<activeObjects.Length; i++)
+                    {
+                        Destroy(activeObjects[i]);
+                    }
+                        
+                    for(int i=0; i<loadedObjectsLocationLength; i++)
+                    {
+                        int x = reader.ReadInt32();
+                        int y = reader.ReadInt32();
+
+                        Instantiate(enemyPrefab, new Vector3(x, y+1, 0), Quaternion.identity);
+                    }
+
+                    //AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList();
+                    Debug.Log("Game Loaded");
                 }
             }
         }
+    }
 
-        Debug.Log("Game Loaded");
+    void SaveObjectData()
+    {
+        activeObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        int arrayPoint = 0;
+        ObjectsLocation = new Vector3[activeObjects.Length];
+
+        for(int i=0; i<activeObjects.Length; i++)
+        {
+            if(activeObjects[i].active == true && activeObjects[i].GetComponent<AIController>().wrapperOverride == false)
+            {
+                ObjectsLocation[arrayPoint] = activeObjects[i].transform.position;
+                arrayPoint++;
+                //Destroy(activeObjects[i]);
+            }
+        }
     }
 
 }
