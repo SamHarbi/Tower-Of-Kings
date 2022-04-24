@@ -112,4 +112,16 @@ public class Inventory : MonoBehaviour
             return false;
         }
     }
+
+    public bool checkIfItemExists(int id)
+    {
+        if(InventoryItems[id] == null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

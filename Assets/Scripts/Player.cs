@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField]
+    public Vector3 PlayerPos; 
+    
+    
+    
     public int speed;
     private int moveBuffer;
     private Animator anim;
@@ -105,6 +110,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PlayerPos  = gameObject.transform.position;
+        
         if(Time.deltaTime == 0)
         {
             return;

@@ -14,6 +14,7 @@ public class CursorController : MonoBehaviour
     public Sprite clicked;
     public Sprite prevSprite;
     private bool buttonClicked;
+    public GameObject gameSave;
 
     // Start is called before the first frame update
     void Start()
@@ -76,5 +77,15 @@ public class CursorController : MonoBehaviour
         allButtons[mod].GetComponent<SpriteRenderer>().sprite = clicked;
         buttonClicked = true;
         timeOut = 50;
+
+        if(mod == 0)
+        {
+            gameSave.GetComponent<GameSaveSystem>().SaveGame();
+        }
+        else  if(mod == 1)
+        {
+            gameSave.GetComponent<GameSaveSystem>().LoadGame();
+        }
+        
     }
 }
