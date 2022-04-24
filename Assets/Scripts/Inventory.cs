@@ -10,6 +10,7 @@ public class Inventory : MonoBehaviour
     private bool pauseStatus;
     private int openPanelID;
     public GameObject[] InventoryItems;
+    public GameObject GameSave;
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +89,7 @@ public class Inventory : MonoBehaviour
            {
                Time.timeScale = 1;
                pauseStatus = false;
+               GameSave.GetComponent<GameSaveSystem>().UnPause();
            }
     }
 

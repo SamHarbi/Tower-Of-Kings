@@ -35,10 +35,14 @@ public class GameSaveSystem : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject AnimSystem;
 
+    private bool reLoadAnim;
+    private int loadedHealth;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        reLoadAnim = false;
+        loadedHealth = -1;
     }
 
     // Update is called once per frame
@@ -55,6 +59,9 @@ public class GameSaveSystem : MonoBehaviour
         {
             using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
             {
+                writer.Write(Player.GetComponent<Player>().getHealth());
+                Debug.Log(Player.GetComponent<Player>().getHealth());
+                
                 writer.Write((int)PlayerPos.x);
                 writer.Write((int)PlayerPos.y+1);
                 writer.Write((int)PlayerPos.z);
@@ -100,6 +107,9 @@ public class GameSaveSystem : MonoBehaviour
             {
                 using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
                 {
+                    loadedHealth = reader.ReadInt32();
+                    Debug.Log(loadedHealth);//test
+                    
                     LoadedPlayer_X = reader.ReadInt32();
                     LoadedPlayer_Y = reader.ReadInt32();
                     LoadedPlayer_Z = reader.ReadInt32();
@@ -141,6 +151,7 @@ public class GameSaveSystem : MonoBehaviour
                     }
 
                     //AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList();
+                    reLoadAnim = true;
                     Debug.Log("Game Loaded");
                 }
             }
@@ -161,6 +172,16 @@ public class GameSaveSystem : MonoBehaviour
                 arrayPoint++;
                 //Destroy(activeObjects[i]);
             }
+        }
+    }
+
+    public void UnPause()
+    {
+        if(reLoadAnim == true)
+        {
+            AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList();
+            reLoadAnim = false;
+            Player.GetComponent<Player>().setHealth(loadedHealth, false);
         }
     }
 

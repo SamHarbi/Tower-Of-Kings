@@ -5,6 +5,7 @@ using UnityEngine;
 public class Pause : MonoBehaviour
 {
     private bool pauseState;
+    public GameObject GameSave;
     
     //Inspired By https://gamedevbeginner.com/the-right-way-to-pause-the-game-in-unity/
     // Start is called before the first frame update
@@ -27,6 +28,7 @@ public class Pause : MonoBehaviour
            {
                Time.timeScale = 1;
                pauseState = false;
+               GameSave.GetComponent<GameSaveSystem>().UnPause();
            }
         }
     }

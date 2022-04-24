@@ -387,13 +387,13 @@ public class Player : MonoBehaviour
         {
             invincibility = true;
             invincibilityTimer = Time.deltaTime * 100;
-            setHealth(health - 1);
+            setHealth(health - 1, true);
             return;
         }
 
         if(col.tag == "InstantDeath")
         {
-            setHealth(0);
+            setHealth(0, false);
             return;
         }
 
@@ -478,7 +478,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void setHealth(int newHealth)
+    public void setHealth(int newHealth, bool shake)
     {
         health = newHealth;
         for(int i=1; i<=6; i++)
@@ -502,7 +502,10 @@ public class Player : MonoBehaviour
         {
             enableAnimation(5);
             beingHit = true;
-            StartCoroutine(Cam.GetComponent<CameraShake>().CamShake(0.1f, 0.2f));
+            if(shake == true)
+            {
+                StartCoroutine(Cam.GetComponent<CameraShake>().CamShake(0.1f, 0.2f));
+            }
         }
     }
 
