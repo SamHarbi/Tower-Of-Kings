@@ -8,9 +8,12 @@ public class CursorController : MonoBehaviour
     private float deltaTime;
     private float lastDeltaTime;
     public GameObject[] allButtons;
-    private int pointer;
+    public int pointer;
     public string tag;
     public int timeOut;
+    public Sprite clicked;
+    public Sprite prevSprite;
+    private bool buttonClicked;
 
     // Start is called before the first frame update
     void Start()
@@ -22,26 +25,38 @@ public class CursorController : MonoBehaviour
         deltaTime = Time.unscaledTime;
         lastDeltaTime = deltaTime;
         pointer = 0;
+        buttonClicked = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-         if(timeOut > 0)
+         if(timeOut > 1)
          {
              timeOut--;
              return;
          }
-         
-         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
+         else if(timeOut == 1 && buttonClicked == true)
          {
-            pointer = pointer - 1;
+              allButtons[pointer].GetComponent<SpriteRenderer>().sprite = prevSprite;
+              timeOut--;
+              buttonClicked = false;
+              return;
+         }
+         
+         /*if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
+         {
+            pointer = Mathf.Abs((pointer-1) % allButtons.Length);
+            Move(pointer);
+         }*/
+        if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
+         {
+            pointer = Mathf.Abs((pointer+1) % allButtons.Length);
             Move(pointer);
          }
-         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
+         else if(Input.GetButtonDown("Jump"))
          {
-            pointer = pointer + 1;
-            Move(pointer);
+             Select(pointer);
          }
          
          deltaTime = Time.unscaledTime - lastDeltaTime;
@@ -50,9 +65,16 @@ public class CursorController : MonoBehaviour
 
     void Move(int mod)
     {
-        mod = Mathf.Abs(mod % allButtons.Length);
         Vector3 change = new Vector3(allButtons[mod].transform.position.x +2, allButtons[mod].transform.position.y -1);
         gameObject.transform.position = change;
+        timeOut = 50;
+    }
+
+    void Select(int mod)
+    {
+        prevSprite = allButtons[mod].GetComponent<SpriteRenderer>().sprite;
+        allButtons[mod].GetComponent<SpriteRenderer>().sprite = clicked;
+        buttonClicked = true;
         timeOut = 50;
     }
 }
