@@ -27,7 +27,7 @@ public class GameOver : MonoBehaviour
     {
         if(endOfScreen == true && Input.anyKey)
         {
-            SceneManager.LoadScene("Main");
+            SceneManager.LoadScene("StartMenu");
         }
     }
 

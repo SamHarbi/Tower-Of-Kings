@@ -283,6 +283,13 @@ public class AIController : MonoBehaviour
         {
             return;
         }
+
+        if(wrapperOverride == false && col.tag == "Boots")
+        {
+            Vector3 colliderSize = GetComponent<BoxCollider2D>().size;
+            GetComponent<BoxCollider2D>().size = new Vector3(colliderSize.x, colliderSize.y - 1, colliderSize.z);
+            transform.localScale = new Vector3(1, 0.5f, 1);
+        }
         
         if(col.tag == "PlayerAttackRange")
         {

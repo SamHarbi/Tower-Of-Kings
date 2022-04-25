@@ -14,6 +14,7 @@ public class MenuCursorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MenuSettings.loadGame = false;
         allButtons = GameObject.FindGameObjectsWithTag(tag);
         pointer = 0;
         Move(0);

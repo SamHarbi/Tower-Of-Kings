@@ -33,6 +33,7 @@ TagManager:
   - SettingsButton
   - Path
   - Button
+  - Boots
   layers:
   - Default
   - TransparentFX
