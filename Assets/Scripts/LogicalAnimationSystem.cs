@@ -8,6 +8,7 @@ public class LogicalAnimationSystem : MonoBehaviour
     public GameObject animationPrefab; //Animation Data Prefab
     public List<GameObject> Animations; //List of all Animations in the Game
     public float Tick; //How long a single update is
+    private float timePassed;
 
 
     // Start is called before the first frame update
@@ -15,13 +16,20 @@ public class LogicalAnimationSystem : MonoBehaviour
     {
         Animations = new List<GameObject>();
         updateAnimationList();
-        StartCoroutine(AnimationUpdate()); //Start Animation Update loop
+        //StartCoroutine(AnimationUpdate()); //Start Animation Update loop
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(timePassed <= 0)
+        {
+            updateFrames();
+            //StartCoroutine(AnimationUpdate());
+            timePassed = Tick * Time.deltaTime;
+        }
         
+        timePassed = timePassed - (1 * Time.deltaTime);
     }
 
     public void updateAnimationList()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CursorController : MonoBehaviour
 {
@@ -82,9 +83,14 @@ public class CursorController : MonoBehaviour
         {
             gameSave.GetComponent<GameSaveSystem>().SaveGame();
         }
-        else  if(mod == 1)
+        else if(mod == 1)
         {
             gameSave.GetComponent<GameSaveSystem>().LoadGame();
+        }
+        else if(mod == 2)
+        {
+            MenuSettings.loadGame = true;
+            SceneManager.LoadScene("StartMenu");
         }
         
     }

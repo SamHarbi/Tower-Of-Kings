@@ -25,6 +25,7 @@ public class InitialLoadSetup : MonoBehaviour
     {
         loadingScreen.SetActive(true);
         //AnimSystem.GetComponent<LogicalAnimationSystem>().deleteObjectAll();
+        //Time.timeScale = 1;
         yield return new WaitForSeconds(1.0f);
         if(MenuSettings.loadGame == true)
         {
