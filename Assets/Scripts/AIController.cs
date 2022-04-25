@@ -268,6 +268,7 @@ public class AIController : MonoBehaviour
     void State_Attack()
     {
         attackRange.SetActive(true);
+        GetComponent<SoundFXManager>().Slash();
         enableAnimation(2);
     }
 
@@ -287,6 +288,7 @@ public class AIController : MonoBehaviour
         {
             enableAnimation(3);
             deathAnim = true;
+            GetComponent<SoundFXManager>().Hit();
             StartCoroutine(deathTimer());
         }
     }

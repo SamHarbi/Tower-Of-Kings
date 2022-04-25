@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     private bool DashTimeout;
     private bool onPlatform;
     private bool King;
+    public bool loading;
 
 
     // Start is called before the first frame update
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour
     {
         speed = 6;
         moveBuffer = 1;
+        loading = true;
 
         anim = gameObject.GetComponent<Animator>();
         SR = gameObject.GetComponent<SpriteRenderer>();
@@ -110,9 +112,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerPos  = gameObject.transform.position;
         
-        if(Time.deltaTime == 0)
+        PlayerPos  = gameObject.transform.position;
+
+        if(Time.deltaTime == 0 || loading == true)
         {
             return;
         }
@@ -159,6 +162,7 @@ public class Player : MonoBehaviour
         if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
         {
             Move(-1.0f);
+            GetComponent<SoundFXManager>().clothMove();
             SR.flipX = false;
 
             if(continousMovementLeft == false)
@@ -181,6 +185,7 @@ public class Player : MonoBehaviour
         else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
         {
             Move(1.0f);
+            GetComponent<SoundFXManager>().clothMove();
             SR.flipX = true;
 
             if(continousMovementRight == false)
@@ -256,6 +261,7 @@ public class Player : MonoBehaviour
                    enableAnimation(2);
                    attacking = true;
                    StartCoroutine(AttackTimer());
+                   GetComponent<SoundFXManager>().Slash();
                }
            }
            else if(currAnim == 0)
@@ -265,6 +271,7 @@ public class Player : MonoBehaviour
                    enableAnimation(3);
                    attacking = true;
                    StartCoroutine(AttackTimer());
+                   GetComponent<SoundFXManager>().Slash();
                }
            }
         }
@@ -277,7 +284,6 @@ public class Player : MonoBehaviour
         {
             beingHit = false;
         }
-
     }
 
     public bool CheckForItem(int searchTag)
@@ -298,6 +304,7 @@ public class Player : MonoBehaviour
             DashTimeout = true;
             enableAnimation(6);
             StartCoroutine(DashTimeoutTimer());
+            GetComponent<SoundFXManager>().Jump();
         }
     }
 
@@ -312,6 +319,7 @@ public class Player : MonoBehaviour
         if(Mathf.Approximately(RB.velocity.y, 0f) || onPlatform == true)
         {
             GetComponent<Rigidbody2D>().AddForce(transform.up * 1000);
+            GetComponent<SoundFXManager>().Jump();
         }
     }
 
@@ -383,11 +391,17 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+        if(loading == true)
+        {
+            return;
+        }
+        
         if(col.tag == "AttackRange" && invincibility == false && DashTimeout == false)
         {
             invincibility = true;
             invincibilityTimer = Time.deltaTime * 100;
             setHealth(health - 1, true);
+            GetComponent<SoundFXManager>().Hit();
             return;
         }
 
@@ -415,6 +429,11 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if(loading == true)
+        {
+            return;
+        }
+        
         if(collision.transform.tag == "Crown")
         {
             enableAnimation(7);
@@ -425,7 +444,11 @@ public class Player : MonoBehaviour
 
     void OnCollisionStay2D(Collision2D collision)
     {
-        
+        if(loading == true)
+        {
+            return;
+        }
+
         if(collision.transform.tag == "MovingPlatform")
         {
             onPlatform = true;
@@ -441,6 +464,11 @@ public class Player : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
+        if(loading == true)
+        {
+            return;
+        }
+        
         if(collision.transform.tag == "Platform")
         {
             onPlatform = false;
@@ -454,6 +482,11 @@ public class Player : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D col)
     {
+       if(loading == true)
+       {
+          return;
+       }
+
        checkDash(col);
     }
 

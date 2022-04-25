@@ -8,6 +8,7 @@ public class InitialLoadSetup : MonoBehaviour
     public GameObject gameSave;
     public GameObject AnimSystem;
     public GameObject loadingScreen;
+    public GameObject Player;
     
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class InitialLoadSetup : MonoBehaviour
     IEnumerator loadDelay()
     {
         loadingScreen.SetActive(true);
+        Player.GetComponent<Player>().loading = true;
         //AnimSystem.GetComponent<LogicalAnimationSystem>().deleteObjectAll();
         //Time.timeScale = 1;
         yield return new WaitForSeconds(1.0f);
@@ -43,6 +45,7 @@ public class InitialLoadSetup : MonoBehaviour
             AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList();
         }
         loadingScreen.SetActive(false);
+        Player.GetComponent<Player>().loading = false;
         yield return null;
     }
 }

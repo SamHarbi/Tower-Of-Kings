@@ -20,16 +20,16 @@ public class LogicalAnimationSystem : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(timePassed <= 0)
         {
             updateFrames();
             //StartCoroutine(AnimationUpdate());
-            timePassed = Tick * Time.deltaTime;
+            timePassed = Tick;
         }
         
-        timePassed = timePassed - (1 * Time.deltaTime);
+        timePassed = timePassed - (1);
     }
 
     public void updateAnimationList()
