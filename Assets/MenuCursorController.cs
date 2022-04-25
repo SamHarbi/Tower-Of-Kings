@@ -29,7 +29,7 @@ public class MenuCursorController : MonoBehaviour
              return;
          }
         
-        if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
+        if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d") || Input.GetKey("right"))
          {
             pointer = Mathf.Abs((pointer+1) % allButtons.Length);
             Move(pointer);

@@ -60,7 +60,7 @@ public class LogicalAnimationSystem : MonoBehaviour
     //Change Tick Through Code
     public void setAnimationTick(float newTick)
     {
-        Tick = newTick;
+        //Tick = newTick;
     }
 
     //Inform all AnimationData Objects that one Tick has passed

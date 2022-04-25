@@ -154,12 +154,10 @@ public class Player : MonoBehaviour
                     Debug.Log("Debug Keys Activated");
                 }
             }
-        }
-
-        
+        }  
         
         //Movement Logic - Walking Left and Right
-        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
+        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a") || Input.GetKey("left"))
         {
             Move(-1.0f);
             GetComponent<SoundFXManager>().clothMove();
@@ -179,10 +177,15 @@ public class Player : MonoBehaviour
             continousMovementLeft = true;
             continousMovementRight = false;
 
+            if(direction == true)
+            {
+                stopAttack();
+            }
+
             direction = false;
 
         }
-        else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
+        else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d") || Input.GetKey("right"))
         {
             Move(1.0f);
             GetComponent<SoundFXManager>().clothMove();
@@ -202,7 +205,14 @@ public class Player : MonoBehaviour
             continousMovementLeft = false;
             continousMovementRight = true;
 
+            if(direction == false)
+            {
+                stopAttack();
+            }
+
             direction = true;
+
+            
         }
         else
         {
@@ -252,7 +262,7 @@ public class Player : MonoBehaviour
         
 
         //Combat Logic - Attacking
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") || Input.GetKey("z"))
         {
            if(currAnim == 1)
            {
@@ -284,6 +294,14 @@ public class Player : MonoBehaviour
         {
             beingHit = false;
         }
+    }
+
+    public void stopAttack()
+    {
+        attackRangeLeft.SetActive(false);
+        attackRangeRight.SetActive(false);
+        attacking = false;
+        StopCoroutine(AttackTimer());
     }
 
     public bool CheckForItem(int searchTag)
