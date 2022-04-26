@@ -33,7 +33,7 @@ public class AnimationData : MonoBehaviour
 
     void Start()
     {
-        prevActiveFrame = 99;
+        prevActiveFrame = 9999;
         lastFrame = frames.Length - 1;
         
     }

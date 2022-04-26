@@ -243,7 +243,15 @@ public class AIController : MonoBehaviour
         
         if(Mathf.Abs(goalNode.x - currPOS.x) <= distanceToPlayer) //If Player close enough to attack based on goal mod 
         {
-            State_Attack();
+            if(Mathf.Abs(goalNode.y - currPOS.y) <= distanceToPlayer && wrapperOverride == false)
+            {
+                State_Attack();
+            }
+
+            if(wrapperOverride == true)
+            {
+                State_Attack();
+            }
         }
     }
 
@@ -268,10 +276,6 @@ public class AIController : MonoBehaviour
     void State_Attack()
     {
         attackRange.SetActive(true);
-        if(wrapperOverride == false)
-        {
-            GetComponent<SoundFXManager>().Slash();
-        }
         enableAnimation(2);
     }
 
@@ -337,6 +341,10 @@ public class AIController : MonoBehaviour
         //Check if certain frames are running / Attacking frames that should cause damage
         if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > 3 && AnimationSet[id].GetComponent<AnimationData>().activeFrame < 9)
         {
+            if(wrapperOverride == false)
+            {
+                GetComponent<SoundFXManager>().Slash();
+            }
             return true;
         }
         return false;
