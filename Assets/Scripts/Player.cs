@@ -179,7 +179,7 @@ public class Player : MonoBehaviour
 
             if(direction == true)
             {
-                stopAttack();
+                switchAttack(true);
             }
 
             direction = false;
@@ -207,7 +207,7 @@ public class Player : MonoBehaviour
 
             if(direction == false)
             {
-                stopAttack();
+                switchAttack(false);
             }
 
             direction = true;
@@ -296,12 +296,26 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void stopAttack()
+    public void switchAttack(bool dir)
     {
-        attackRangeLeft.SetActive(false);
-        attackRangeRight.SetActive(false);
-        attacking = false;
-        StopCoroutine(AttackTimer());
+        if(attacking == false)
+        {
+            return;
+        }
+        
+        if(dir == true)
+        {
+            attackRangeLeft.SetActive(true);
+            attackRangeRight.SetActive(false);
+        }
+        else
+        {
+            attackRangeLeft.SetActive(false);
+            attackRangeRight.SetActive(true);
+        }
+       
+        
+
     }
 
     public bool CheckForItem(int searchTag)
@@ -441,6 +455,12 @@ public class Player : MonoBehaviour
             col.gameObject.SetActive(false);
         }
 
+        if(col.tag == "Heart")
+        {
+            setHealth(health + 1, false);
+            col.gameObject.SetActive(false);
+        }
+
         checkDash(col);
 
     }
@@ -549,7 +569,7 @@ public class Player : MonoBehaviour
             enableAnimation(4);
             Fade.GetComponent<GameOver>().StartFade();
         }
-        else
+        else if(shake == true)
         {
             enableAnimation(5);
             beingHit = true;

@@ -268,7 +268,10 @@ public class AIController : MonoBehaviour
     void State_Attack()
     {
         attackRange.SetActive(true);
-        GetComponent<SoundFXManager>().Slash();
+        if(wrapperOverride == false)
+        {
+            GetComponent<SoundFXManager>().Slash();
+        }
         enableAnimation(2);
     }
 

@@ -12,9 +12,12 @@ public class CameraColorEffects : MonoBehaviour
     public AudioClip upperLevelTheme;
     public AudioClip lowerLevelTheme;
 
+    public AudioClip BossTheme;
+
     public GameObject AudioSourceTheme;
     private int currTheme;
     private bool fadeDone;
+    private bool BossFight;
     
     // Start is called before the first frame update
     void Start()
@@ -23,11 +26,17 @@ public class CameraColorEffects : MonoBehaviour
         AudioSourceTheme.GetComponent<AudioSource>().Play();
         currTheme = 0;
         fadeDone = false;
+        BossFight = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(BossFight == true)
+        {
+            return;
+        }
+        
         if(gameObject.transform.position.y >= 81f && gameObject.transform.position.y < 143f)
         {
             gameObject.GetComponent<Camera>().backgroundColor = midLevelColor;
@@ -62,6 +71,24 @@ public class CameraColorEffects : MonoBehaviour
             }
         } 
 
+    }
+
+    public void StartBossTheme()
+    {
+        if(BossFight == true)
+        {
+            return;
+        }
+        
+        AudioSourceTheme.GetComponent<AudioSource>().clip = BossTheme;
+        AudioSourceTheme.GetComponent<AudioSource>().Play();
+        BossFight = true;
+    }
+
+    public void EndBossTheme()
+    {
+        AudioSourceTheme.GetComponent<AudioSource>().Stop();
+        BossFight = false;
     }
 
     IEnumerator audioFade(float goal, float change)

@@ -28,9 +28,9 @@ public class Boss2AIWrapper : MonoBehaviour
     IEnumerator LateStart()
     {
         yield return new WaitForSeconds(0.1f);
-        BossHealth = 10;
+        BossHealth = 20;
         Controller = gameObject.GetComponent<AIController>();
-        Controller.setDamageFrames(4, 5);
+        Controller.setDamageFrames(6, 8);
         Controller.wrapperOverride = true;
         Boss = gameObject;
     }
@@ -68,8 +68,8 @@ public class Boss2AIWrapper : MonoBehaviour
                 Controller.enableAnimation(3);
                 StartCoroutine(Controller.BossHitTimer());
                 BossHealth = BossHealth - 1;
-                healthHider.transform.localScale = new Vector3(healthHider.transform.localScale.x+1, healthHider.transform.localScale.y, healthHider.transform.localScale.z);
-                healthHider.transform.position = new Vector3(healthHider.transform.position.x - 0.5f, healthHider.transform.position.y, healthHider.transform.position.z);
+                healthHider.transform.localScale = new Vector3(healthHider.transform.localScale.x+0.5f, healthHider.transform.localScale.y, healthHider.transform.localScale.z);
+                healthHider.transform.position = new Vector3(healthHider.transform.position.x - 0.25f, healthHider.transform.position.y, healthHider.transform.position.z);
                 if(BossHealth <= 0)
                 {
                     //On Death

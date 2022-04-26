@@ -18,10 +18,12 @@ public class BossUIControl : MonoBehaviour
     public GameObject dialogSystemEnd;
     public GameObject bossGate;
     public GameObject effectOverlay;
+    public GameObject ThemeAudio;
     private IEnumerator upEffectCoroutine;
     private IEnumerator downEffectCoroutine;
     private float currAlpha;
     private bool fadeDown;
+    private bool bossFightStarted;
   
 
 
@@ -34,6 +36,8 @@ public class BossUIControl : MonoBehaviour
 
         currAlpha = 0f;
         fadeDown = false;
+
+        bossFightStarted = false;
 
     }
 
@@ -60,6 +64,13 @@ public class BossUIControl : MonoBehaviour
 
     public void startBossFight()
     {
+        if(bossFightStarted == false)
+        {
+            Debug.Log("Theme Started");
+            ThemeAudio.GetComponent<CameraColorEffects>().StartBossTheme();
+            
+        }
+        
         mainCam.SetActive(false);
         bossCam.SetActive(true);
         Canvas.GetComponent<Canvas>().worldCamera = bossCam.GetComponent<Camera>();
@@ -72,7 +83,9 @@ public class BossUIControl : MonoBehaviour
         {
             dialogSystem.SetActive(true);
             dialogSystem.GetComponent<DialogSystem>().StartDialog();
+            ThemeAudio.GetComponent<CameraColorEffects>().StartBossTheme();
         }
+        
 
     }
 
@@ -90,6 +103,7 @@ public class BossUIControl : MonoBehaviour
             StopCoroutine(upEffectCoroutine);
             StartCoroutine(bossEffectFadeUPVertical());
             
+            ThemeAudio.GetComponent<CameraColorEffects>().EndBossTheme();
         }
     }
 
