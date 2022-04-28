@@ -6,61 +6,56 @@ using UnityEngine.Tilemaps;
 
 public class AIController : MonoBehaviour
 {
-    
-    public GameObject path; //GameObject Path with Tilemap
-    public GameObject attackRange;
+    //Legacy Search AI Variables - See Explanation below or in the Report
+    //public GameObject path; //GameObject Path with Tilemap
+    //private Tilemap tm; //Tilemap Component
+    //public BoundsInt area;
+    //public Vector3Int position;
+    //public Tile goalTile;
+    //public Tile regularTile;
 
-    public float speed;
-    private Tilemap tm; //Tilemap Component
-    public BoundsInt area;
-    public Vector3Int position;
-    public Tile goalTile;
-    public Tile regularTile;
-    public GameObject Player;
-    private Vector2 goalNode;
+    //Legacy Unity Animation
+    //private Animator anim;
 
-    private int actionState;
-
-    private bool direction;
-    private Animator anim;
-
-    private float distanceToPlayer;
-    public GameObject[] AnimationSet;
-    public GameObject LAS;
-    private int currAnim;
-    private bool deathAnim;
-    private bool left;
-    private bool right;
-    public float searchRange;
-    public bool wrapperOverride;
-    public GameObject wrapperClass;
-
-
-    //Boss wrapper - too delete
-    public bool Boss;
-    private float BossHealth;
-    public GameObject hitBoss;
-    private int startDamageFrame;
-    private int endDamageFrame;
-    public GameObject bossWave;
-    private bool bossWaveStarted;
-    public GameObject bossWavePos;
-    public GameObject BossController;
-    public GameObject BossDialog;
-
+    public GameObject attackRange; //GameObject with Collider that causes damage to Player on contact
+    public float speed; //Walking Speed
+    private GameObject Player;
+    private Vector2 goalNode; //The positional goal that enemies move towards
+    private int actionState; //ID of the state that is currently active
+    private bool direction; //Which direction the enemy is looking towards
+    private float distanceToPlayer; // How close the player should be for a different state to activate 
+    private GameObject[] AnimationSet; //All AnimationData Objects with animations that affect this Object
+    private GameObject LAS; //Logical Animation System
+    private int currAnim; //ID of currently running Animation
+    private bool deathAnim; //Is the death Animation running?
+    private bool left; //What bool value is left- makes code easier to read by setting a name to false
+    private bool right; //What bool value is right- makes code easier to read by setting a name to true
+    public float searchRange; //Maximum distance from object to search for Player 
+    public bool wrapperOverride; //TODO - redo
+    private int startDamageFrame; //At which frame of an animation damage is dealt 
+    private int endDamageFrame; //Last frame of an animation damage is dealt 
  
+     void Awake()
+    {
+        //Get Array of Animations from Central Animation System LAS
+        LAS = GameObject.FindWithTag("LAS");
+        AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
 
-
+        //Start Idle Animation
+        currAnim = 1;
+        enableAnimation(0);
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
-        path = GameObject.FindWithTag("Path"); 
+        //path = GameObject.FindWithTag("Path"); 
         Player = GameObject.FindWithTag("Player");
-        tm = path.GetComponent<Tilemap>();
-        area = tm.cellBounds;
-        TileBase[] allTiles = tm.GetTilesBlock(area);
+        //tm = path.GetComponent<Tilemap>();
+        //area = tm.cellBounds;
+        //TileBase[] allTiles = tm.GetTilesBlock(area);
 
-        tm.SetTileFlags(position, TileFlags.None);
+        //tm.SetTileFlags(position, TileFlags.None);
 
         actionState = 0; // Idle
 
@@ -72,15 +67,15 @@ public class AIController : MonoBehaviour
 
         setGoalModifiers(3f);
 
-        getGoalNode(new Vector2(3, -1));
+        goalNode = new Vector2(3, -1);
 
         deathAnim = false;
 
         left = false;
         right = true;
         searchRange = 15f;
-        //startDamageFrame = 3;
-        //endDamageFrame = 9;
+        startDamageFrame = 3;
+        endDamageFrame = 9;
         
     }
 
@@ -111,17 +106,6 @@ public class AIController : MonoBehaviour
         return deathAnim;
     }
 
-    void Awake()
-    {
-        //Get Array of Animations from Central Animation System LAS
-        LAS = GameObject.FindWithTag("LAS");
-        AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
-
-        //Start Idle Animation
-        currAnim = 1;
-        enableAnimation(0);
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -131,14 +115,14 @@ public class AIController : MonoBehaviour
         }
         
         //Reset Attacking
-        //anim.SetBool("Attack", false); 
+        //anim.SetBool("Attack", false); Legacy Animation using Unity's built in Animator
         attackRange.SetActive(false);
 
         //Find Player as long as they are within a 15 units distance
         setGoalNodeToPlayer();
         if(wrapperOverride == false)
         {
-            search();
+            search(); //Start Searching for the Player if not overridden by a Boss Wrapper
         }
         
         //Based on actionState, move left or right
@@ -146,13 +130,11 @@ public class AIController : MonoBehaviour
         {
             gameObject.transform.position += new Vector3(-1 * speed * Time.deltaTime, 0, 0); // move right
             setDirection(right);
-            
         }
         if(actionState == 2)
         {
             gameObject.transform.position += new Vector3(speed * Time.deltaTime, 0, 0); // move left
             setDirection(left);
-            
         }
         
         actionState = 0; //Reset actionState
@@ -187,16 +169,26 @@ public class AIController : MonoBehaviour
         //gameObject.transform.GetChild(0).gameObject.GetComponent<EnemyBladeController>().setDirection(!direction);
     }
 
+/*
+    ===========================================================================================================================================
+    This is legacy code for setting up and testing a AI search algorithm based on Unity's tiles and thier respective transforms as possible 
+    states that could be moved to by the AI. This is what I orginally wanted to do for my AI but due to time restrictions I had to do replace
+    the AI search with a simpler distance comparison. 
+
+    I keep this code here because I hope to expand the AI in the future with it. 
+
+*/
+/*
     //Find the Tile closest corresponding to a goal cordinate
     void getGoalNode(Vector2 goalCords)
     {
         Vector3Int goalCords3D = tm.WorldToCell(new Vector3(goalCords.x, goalCords.y, 0));
-        //TileBase goal = tm.GetTile(goalCords3D);
-        //tm.SetTile(goalCords3D, goalTile);
-
+        TileBase goal = tm.GetTile(goalCords3D);
+        tm.SetTile(goalCords3D, goalTile);
         goalNode = goalCords;
     }
 
+    //Changes goal colored tile to a rgular tile- useful for debugging to visually identify the goal node on screen
     void resetNode(Vector2 node)
     {
         Vector3Int goalCords3D = tm.WorldToCell(new Vector3(node.x, node.y, 0));
@@ -204,23 +196,21 @@ public class AIController : MonoBehaviour
         tm.SetTile(goalCords3D, regularTile);
     }
 
-    void setGoalNodeToPlayer()
-    {
-        resetNode(goalNode);
-        Vector2 playerPos = new Vector2(Player.transform.position.x, Player.transform.position.y);
-        getGoalNode(playerPos);
-    }
-
     Vector3 getNodeOnGrid(Vector2 node)
     {
         Vector3Int convertedNode = tm.WorldToCell(new Vector3(node.x, node.y, 0));
         return convertedNode;
     }
+    ===========================================================================================================================================
+*/
+    void setGoalNodeToPlayer()
+    {
+        goalNode = new Vector2(Player.transform.position.x, Player.transform.position.y);
+    }
 
     //Enter one of multiple States based on Input (Player Distance from this Enemy)
     public void search()
     {
-        
         Vector3 currPOS = gameObject.transform.position; //Current position of Enemy
 
         //If Player is beyond max distance or is aprox at this Enemies Position
@@ -291,11 +281,12 @@ public class AIController : MonoBehaviour
             return;
         }
 
+        //Squeezes the enemy when player jumps on thier heads, lot's of issues with this so it's deactivated
         if(wrapperOverride == false && col.tag == "Boots")
         {
             Vector3 colliderSize = GetComponent<BoxCollider2D>().size;
-            GetComponent<BoxCollider2D>().size = new Vector3(colliderSize.x, colliderSize.y - 1, colliderSize.z);
-            transform.localScale = new Vector3(1, 0.5f, 1);
+            GetComponent<BoxCollider2D>().size = new Vector3(colliderSize.x, colliderSize.y - 1, colliderSize.z); //Make Collider size smaller
+            transform.localScale = new Vector3(1, 0.5f, 1); //Make the visual enemy smaller
         }
         
         if(col.tag == "PlayerAttackRange")
@@ -307,12 +298,14 @@ public class AIController : MonoBehaviour
         }
     }
 
+    //Wait a set time before enemy is deactivated 
     IEnumerator deathTimer()
     {
+        //Destroy Collider here maybe TODO
         yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
     }
-
+/*
     public IEnumerator BossHitTimer()
     {
         yield return new WaitForSeconds(0.5f);
@@ -324,22 +317,24 @@ public class AIController : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         gameObject.SetActive(false);
     }
-
+*/
+    //Select an AnimationData Object to play
     public void enableAnimation(int num)
     {
         //Run set animation and deactivate current running Animation
         AnimationSet[num].GetComponent<AnimationData>().Running = true;
-        if(num != currAnim)
+        if(num != currAnim) //If another animation was previously running
         {
-            AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
+            AnimationSet[currAnim].GetComponent<AnimationData>().Running = false; //turn off previous running animation
             currAnim = num;
         }
     }
 
+    //Check if the current running animation is currently a within a certain range of frames
     public bool getAnimationProgress(int id)
     {
         //Check if certain frames are running / Attacking frames that should cause damage
-        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > 3 && AnimationSet[id].GetComponent<AnimationData>().activeFrame < 9)
+        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > startDamageFrame && AnimationSet[id].GetComponent<AnimationData>().activeFrame < endDamageFrame)
         {
             if(wrapperOverride == false)
             {

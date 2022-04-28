@@ -88,7 +88,7 @@ public class BossAIWrapper : MonoBehaviour
         {
                 Controller.setDeathAnim(true);
                 Controller.enableAnimation(3);
-                StartCoroutine(Controller.BossHitTimer());
+                StartCoroutine(BossHitTimer());
                 BossHealth = BossHealth - 1;
                 healthHider.transform.localScale = new Vector3(healthHider.transform.localScale.x+1, healthHider.transform.localScale.y, healthHider.transform.localScale.z);
                 healthHider.transform.position = new Vector3(healthHider.transform.position.x - 0.5f, healthHider.transform.position.y, healthHider.transform.position.z);
@@ -105,6 +105,18 @@ public class BossAIWrapper : MonoBehaviour
                //Vector3 hitPos = new Vector3(col.transform.position.x + 2, col.transform.position.y + 2, gameObject.transform.position.z);
                 //Instantiate(hitBoss, hitPos, Quaternion.identity);
         }
+    }
+
+    public IEnumerator BossHitTimer()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Controller.setDeathAnim(false);
+    }
+
+    IEnumerator BossDeathTimer()
+    {
+        yield return new WaitForSeconds(2.5f);
+        gameObject.SetActive(false);
     }
 
     private bool getAnimationProgress(int id)

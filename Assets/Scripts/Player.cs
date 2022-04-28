@@ -461,6 +461,8 @@ public class Player : MonoBehaviour
             col.gameObject.SetActive(false);
         }
 
+        
+
         checkDash(col);
 
     }
