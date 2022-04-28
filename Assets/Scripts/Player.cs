@@ -397,7 +397,7 @@ public class Player : MonoBehaviour
 
     private bool getAnimationProgress(int id)
     {
-        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame == AnimationSet[id].GetComponent<AnimationData>().lastFrame)
+        if(AnimationSet[id].GetComponent<AnimationData>().getActiveFrame() == AnimationSet[id].GetComponent<AnimationData>().getLastFrame())
         {
             return true;
         }

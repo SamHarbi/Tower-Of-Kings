@@ -5,8 +5,8 @@ using UnityEngine;
 public class AnimationData : MonoBehaviour
 {
     public Sprite[] frames; //Frames making the Animation
-    public int activeFrame; //Currently running frame
-    public int lastFrame; //Last frame in an Animation
+    private int activeFrame; //Currently running frame
+    private int lastFrame; //Last frame in an Animation
     private int prevActiveFrame; //Previous frame that was running
     private float updates; //How many ticks remain before frame is changed
     public float Timing; //How many ticks should a frame be active for
@@ -43,6 +43,16 @@ public class AnimationData : MonoBehaviour
         {
             UpdateFrame();
         }
+    }
+
+    public int getActiveFrame()
+    {
+        return activeFrame;
+    }
+
+    public int getLastFrame()
+    {
+        return  lastFrame;
     }
 
     //tickDown is called by Logical Animation System every time a set number of updates passes

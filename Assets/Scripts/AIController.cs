@@ -19,6 +19,7 @@ public class AIController : MonoBehaviour
 
     public GameObject attackRange; //GameObject with Collider that causes damage to Player on contact
     public float speed; //Walking Speed
+
     private GameObject Player;
     private Vector2 goalNode; //The positional goal that enemies move towards
     private int actionState; //ID of the state that is currently active
@@ -336,7 +337,7 @@ public class AIController : MonoBehaviour
     public bool getAnimationProgress(int id)
     {
         //Check if certain frames are running / Attacking frames that should cause damage
-        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > startDamageFrame && AnimationSet[id].GetComponent<AnimationData>().activeFrame < endDamageFrame)
+        if(AnimationSet[id].GetComponent<AnimationData>().getActiveFrame() > startDamageFrame && AnimationSet[id].GetComponent<AnimationData>().getActiveFrame() < endDamageFrame)
         {
             if(wrapperOverride == false)
             {

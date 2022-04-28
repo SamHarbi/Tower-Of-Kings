@@ -122,7 +122,7 @@ public class BossAIWrapper : MonoBehaviour
     private bool getAnimationProgress(int id)
     {
         //Check if certain frames are running / Attacking frames that should cause damage
-        if(AnimationSet[id].GetComponent<AnimationData>().activeFrame > 3 && AnimationSet[id].GetComponent<AnimationData>().activeFrame < 9)
+        if(AnimationSet[id].GetComponent<AnimationData>().getActiveFrame() > 3 && AnimationSet[id].GetComponent<AnimationData>().getActiveFrame() < 9)
         {
             return true;
         }
