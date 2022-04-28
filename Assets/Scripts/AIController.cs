@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 
 public class AIController : MonoBehaviour
 {
-    //Legacy Search AI Variables - See Explanation below or in the Report
+    //***Legacy Search AI Variables - See Explanation below or in the Report***
     //public GameObject path; //GameObject Path with Tilemap
     //private Tilemap tm; //Tilemap Component
     //public BoundsInt area;
@@ -14,7 +14,7 @@ public class AIController : MonoBehaviour
     //public Tile goalTile;
     //public Tile regularTile;
 
-    //Legacy Unity Animation
+    //***Legacy Unity Animation***
     //private Animator anim;
 
     public GameObject attackRange; //GameObject with Collider that causes damage to Player on contact
@@ -290,6 +290,7 @@ public class AIController : MonoBehaviour
             transform.localScale = new Vector3(1, 0.5f, 1); //Make the visual enemy smaller
         }
         
+        //If hit by Player
         if(col.tag == "PlayerAttackRange")
         {
             enableAnimation(3);

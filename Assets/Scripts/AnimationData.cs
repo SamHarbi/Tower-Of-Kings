@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class AnimationData : MonoBehaviour
 {
-    public int id;
-    public Sprite[] frames;
-    public int activeFrame;
-    public int lastFrame;
-    private int prevActiveFrame;
-    private float updates;
-    public float Timing;
-    public GameObject parent;
-    public bool Running;
-    public bool nonloop;
+    public Sprite[] frames; //Frames making the Animation
+    public int activeFrame; //Currently running frame
+    public int lastFrame; //Last frame in an Animation
+    private int prevActiveFrame; //Previous frame that was running
+    private float updates; //How many ticks remain before frame is changed
+    public float Timing; //How many ticks should a frame be active for
+    public GameObject parent; //GameObject to which animation is applied to
+    public bool Running; //Is the animation actively ticking down / running
+    public bool nonloop; //Should the animation stop on last frame and not loop
     
+    //Initializer for creating animations through code
     public void init(int newId, Sprite[] newFrames, float newTiming, GameObject newParent)
     {
-        id = newId;
         frames = new Sprite[newFrames.Length];
         for(int i=0; i<newFrames.Length; i++)
         {
@@ -28,24 +27,25 @@ public class AnimationData : MonoBehaviour
         prevActiveFrame = 0;
 
         parent = newParent;
-
     }
 
     void Start()
     {
+        //initialize frame values to enter loop
         prevActiveFrame = 9999;
         lastFrame = frames.Length - 1;
-        
     }
 
     void Update()
     {
+        //Active frame has been changed
         if(activeFrame != prevActiveFrame && Running == true)
         {
             UpdateFrame();
         }
     }
 
+    //tickDown is called by Logical Animation System every time a set number of updates passes
     public void tickDown()
     {
         if(Running == false && nonloop == false)
@@ -54,9 +54,11 @@ public class AnimationData : MonoBehaviour
             return;
         }
         
+        //Secondary clock, check how many ticks down have occured
         updates = updates - 1;
         if(updates <= 0)
         {
+            //reset counting and update frame
             updates = Timing;
             activeFrame = (activeFrame + 1) % frames.Length;
         }
@@ -64,7 +66,7 @@ public class AnimationData : MonoBehaviour
         {
             updates = Timing;
             activeFrame = frames.Length - 1;
-            Running = false;
+            Running = false; //stop running on last frame
         }
     }
 

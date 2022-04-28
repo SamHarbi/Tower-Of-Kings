@@ -10,18 +10,19 @@ public class Boss2AIWrapper : MonoBehaviour
     private GameObject Boss;
     public GameObject healthHider;
     public GameObject bossUIControl;
-     public GameObject Inventory;
-     public GameObject attackRange;
-     public GameObject healthBar;
-
+    public GameObject Inventory;
+    public GameObject attackRange;
+    public GameObject healthBar;
     public GameObject[] AnimationSet;
     public GameObject LAS;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Get Animation Data
         LAS = GameObject.FindWithTag("LAS");
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
+
         StartCoroutine(LateStart());
     }
 
@@ -29,6 +30,8 @@ public class Boss2AIWrapper : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         BossHealth = 20;
+
+        //
         Controller = gameObject.GetComponent<AIController>();
         Controller.setDamageFrames(6, 8);
         Controller.wrapperOverride = true;
