@@ -49,31 +49,32 @@ public class AIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Legacy Search AI Variables - See Explanation below or in the Report
         //path = GameObject.FindWithTag("Path"); 
-        Player = GameObject.FindWithTag("Player");
         //tm = path.GetComponent<Tilemap>();
         //area = tm.cellBounds;
         //TileBase[] allTiles = tm.GetTilesBlock(area);
-
         //tm.SetTileFlags(position, TileFlags.None);
 
-        actionState = 0; // Idle
-
-        direction = gameObject.GetComponent<SpriteRenderer>().flipX;
-
+        //Legacy Unity Animation
         //anim = gameObject.GetComponent<Animator>();
 
+
+        Player = GameObject.FindWithTag("Player");
+        
+        //Set to Idle
+        actionState = 0;
         State_Idle();
 
+        //Setup Goal to move towards
         setGoalModifiers(3f);
-
         goalNode = new Vector2(3, -1);
+        searchRange = 15f;
 
+        //Setup other variables
         deathAnim = false;
-
         left = false;
         right = true;
-        searchRange = 15f;
         startDamageFrame = 3;
         endDamageFrame = 9;
         
