@@ -17,11 +17,12 @@ public class Boss2AIWrapper : MonoBehaviour
     private GameObject[] AnimationSet; //All AnimationData Objects with animations that affect this Object
     private GameObject LAS; //Logical Animation System
     private GameObject Inventory; 
+    private bool dead;
     
     void Awake()
     {
         Controller = gameObject.GetComponent<AIController>();
-        Controller.WrappedAwake();
+        Controller.WrappedAwake(); //Pass on to wrapped
     }
 
     // Start is called before the first frame update
@@ -31,8 +32,10 @@ public class Boss2AIWrapper : MonoBehaviour
         LAS = GameObject.FindWithTag("LAS");
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
 
-        Controller.WrappedStart();
+        Controller.WrappedStart(); //Pass on to wrapped
         StartCoroutine(LateStart());
+
+        dead = false;
     }
 
     IEnumerator LateStart()
@@ -61,13 +64,13 @@ public class Boss2AIWrapper : MonoBehaviour
             attackRange.SetActive(false);
         }
 
-        Controller.WrappedUpdate();
+        Controller.WrappedUpdate(); //Pass on to wrapped
     }
 
     void search()
     {
         //If dialog is not done stay at idle state
-        if(BossDialog.GetComponent<DialogSystem>().getDialogProgress() == false)
+        if(BossDialog.GetComponent<DialogSystem>().getDialogProgress() == false || dead == true)
         {
             Controller.State_Idle();
             return;
@@ -101,7 +104,7 @@ public class Boss2AIWrapper : MonoBehaviour
                     Inventory.GetComponent<Inventory>().addItem(1); //Add key piece
 
                     Controller.State_Idle();
-                    Controller.enabled = false;
+                    dead = true;
                     
                 }
         }

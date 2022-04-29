@@ -41,13 +41,13 @@ public class Boss3AIWrapper : MonoBehaviour
     void Awake()
     {
         Controller = gameObject.GetComponent<AIController>();
-        Controller.WrappedAwake();
+        Controller.WrappedAwake(); //Pass on to wrapped
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        Controller.WrappedStart();
+        Controller.WrappedStart(); //Pass on to wrapped
         
         //Override values from wrapped AI Controller
         Controller.setDamageFrames(8, 9);
@@ -106,7 +106,7 @@ public class Boss3AIWrapper : MonoBehaviour
         }
 
         search();
-        Controller.WrappedUpdate();
+        Controller.WrappedUpdate(); //Pass on to wrapped
     }
 
     void search()
