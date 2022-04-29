@@ -42,6 +42,7 @@ public class GameOver : MonoBehaviour
         StartCoroutine(Fade());
     }
 
+    //Fade to black by setting alpha to 1 from 0
     IEnumerator Fade()
     {
         yield return new WaitForSeconds(0.6f);
@@ -54,40 +55,47 @@ public class GameOver : MonoBehaviour
     
     }
 
+    //Show GameOver after a delay
     IEnumerator ShowText()
     {
         yield return new WaitForSeconds(1.6f);
         tryAgainText.SetActive(true);
     }
 
+    //Show try again after a delay
     IEnumerator ShowPrompt()
     {
         yield return new WaitForSeconds(1.8f);
         tryAgainPrompt.SetActive(true);
-        StartCoroutine(FadeCyclePromptDown());
+        StartCoroutine(FadeCyclePromptDown()); //Enter recursive loop
         
     }
 
+    //Increase alpha - fade up
     IEnumerator FadeCyclePromptUp()
     {
         endOfScreen = true;
         tryAgainPrompt.GetComponent<Text>().color = new Color(1,1,1,  tryAgainPrompt.GetComponent<Text>().color.a + 1f);
         yield return new WaitForSeconds(0.6f);
-        StartCoroutine(FadeCyclePromptDown());
+        StartCoroutine(FadeCyclePromptDown()); //Fade back down
     }
 
+    //Decrease alpha - fade down
     IEnumerator FadeCyclePromptDown()
     {
         tryAgainPrompt.GetComponent<Text>().color = new Color(1,1,1,  tryAgainPrompt.GetComponent<Text>().color.a - 1f);
         yield return new WaitForSeconds(0.6f);
-        StartCoroutine(FadeCyclePromptUp());
+        StartCoroutine(FadeCyclePromptUp()); //Fade back up
     }
 
+    //Start Crown breaking animation
     public void BreakCrown()
     {
          Crown.SetActive(true);
          AnimationSystem.GetComponent<LogicalAnimationSystem>().addLateAnimation(Anim);
          Anim.GetComponent<AnimationData>().Running = true;
+
+         //Make text appear after a delay
          StartCoroutine(ShowText());
          StartCoroutine(ShowPrompt());
     }

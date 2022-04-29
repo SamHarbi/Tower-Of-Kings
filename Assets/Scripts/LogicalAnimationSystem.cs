@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class LogicalAnimationSystem : MonoBehaviour
 {
-    
+    //Singleton Pattern- There is only one LAS Instance in the game. Manages AnimationData Objects and Informs them when to update
+
     public GameObject animationPrefab; //Animation Data Prefab
     public List<GameObject> Animations; //List of all Animations in the Game
     public float Tick; //How long a single update is
+
     private float timePassed;
 
 
@@ -19,12 +21,11 @@ public class LogicalAnimationSystem : MonoBehaviour
         //StartCoroutine(AnimationUpdate()); //Start Animation Update loop
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if(timePassed <= 0)
         {
-            updateFrames();
+            updateFrames(); //Update frames once a certain number of updates (Tick) have passed
             //StartCoroutine(AnimationUpdate());
             timePassed = Tick;
         }
@@ -32,6 +33,7 @@ public class LogicalAnimationSystem : MonoBehaviour
         timePassed = timePassed - (1);
     }
 
+    //Create an Array with all AnimationData Items in scene
     public void updateAnimationList()
     {
         GameObject[] toaddAnimations = GameObject.FindGameObjectsWithTag("AnimationData");
@@ -42,6 +44,7 @@ public class LogicalAnimationSystem : MonoBehaviour
         }
     }
 
+    //Add an AnimationData Object after updateAnimationList() was ran
     public void addLateAnimation(GameObject AD)
     {
         Animations.Add(AD);
@@ -64,6 +67,7 @@ public class LogicalAnimationSystem : MonoBehaviour
     }
 
     //Inform all AnimationData Objects that one Tick has passed
+    //Observor Pattern - LAS informs all subscribed AnimationData objects (all have the same interface) that a Tick has passed
     private void updateFrames()
     {
         for(int i=0; i<Animations.Count; i++)

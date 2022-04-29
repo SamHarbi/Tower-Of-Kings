@@ -24,15 +24,17 @@ using UnityEngine;
     dotnet-bot (n.d.). BinaryReader Class (System.IO). [online] docs.microsoft.com. Available at: 
     https://docs.microsoft.com/en-us/dotnet/api/system.io.binaryreader?view=net-6.0 [Accessed 24 Apr. 2022].
 
+    This script handles saving and loading 
+
 */
 
 public class GameSaveSystem : MonoBehaviour
 {
-    public GameObject Player;
+    public GameObject Player; 
     public GameObject Inventory;
-    public GameObject[] activeObjects;
-    public Vector3[] ObjectsLocation;
-    public GameObject enemyPrefab;
+    public GameObject[] activeObjects; //Active enemies that have not been killed
+    public Vector3[] ObjectsLocation; //Enemy positions
+    public GameObject enemyPrefab; 
     public GameObject AnimSystem;
 
     private bool reLoadAnim;
@@ -45,27 +47,29 @@ public class GameSaveSystem : MonoBehaviour
         loadedHealth = -1;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SaveGame()
     {
         Vector3 PlayerPos = Player.transform.position;
         
+        //Open a BinaryWriter to a file 
         using (var stream = File.Open("GameSave.DontTouch", FileMode.Create))
         {
             using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
             {
+                //Write the player's health
                 writer.Write(Player.GetComponent<Player>().getHealth());
-                Debug.Log(Player.GetComponent<Player>().getHealth());
+
+                if (Debug.isDebugBuild)
+                {
+                    Debug.Log("Saved health of value: " + Player.GetComponent<Player>().getHealth());
+                }
                 
+                //Write Players position
                 writer.Write((int)PlayerPos.x);
                 writer.Write((int)PlayerPos.y+1);
                 writer.Write((int)PlayerPos.z);
 
+                //Write if every item is in Inventory or not at time of saving game
                 int itemNum = Inventory.GetComponent<Inventory>().InventoryItems.Length;
                 for(int i=0; i<itemNum; i++)
                 {
@@ -79,10 +83,13 @@ public class GameSaveSystem : MonoBehaviour
                     }
                 }
                 
+                //Save Enemy info
                 SaveObjectData();
 
+                //Write how many Enemies have been saved
                 writer.Write((int)ObjectsLocation.Length);
 
+                //Write Vector2 cords as int for every enemy
                 for(int i=0; i<ObjectsLocation.Length; i++)
                 {
                     writer.Write((int)ObjectsLocation[i].x);
@@ -91,33 +98,46 @@ public class GameSaveSystem : MonoBehaviour
             }
         }
 
-        Debug.Log("Game Saved");
+        if (Debug.isDebugBuild)
+        {
+            Debug.Log("Game Saved");
+        }
         //LoadGame();
     }
 
     public void LoadGame()
     {
+        //Ref's to player's position
         int LoadedPlayer_X;
         int LoadedPlayer_Y;
         int LoadedPlayer_Z;
         
+        //If file exists open a reading stream to it
         if (File.Exists("GameSave.DontTouch"))
         {
             using (var stream = File.Open("GameSave.DontTouch", FileMode.Open))
             {
                 using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
                 {
+                    //load health 
                     loadedHealth = reader.ReadInt32();
-                    Debug.Log(loadedHealth);//test
+                    Player.GetComponent<Player>().setHealth(loadedHealth, false);
+
+                    if (Debug.isDebugBuild)
+                    {
+                        Debug.Log("Loaded health of value: " + loadedHealth);
+                    }
                     
+                    //Load Player's position
                     LoadedPlayer_X = reader.ReadInt32();
                     LoadedPlayer_Y = reader.ReadInt32();
                     LoadedPlayer_Z = reader.ReadInt32();
 
+                    //Set Player's Position
                     Player.transform.position = new Vector3(LoadedPlayer_X, LoadedPlayer_Y, LoadedPlayer_Z);
 
+                    //load checks that state if each item in inventory was picked up or not
                     int itemNum = Inventory.GetComponent<Inventory>().InventoryItems.Length;
-                     
                     for(int i=0; i<itemNum; i++)
                     {
                         int itemState = reader.ReadInt32();
@@ -131,17 +151,20 @@ public class GameSaveSystem : MonoBehaviour
                         }
                     }
 
+                    //Number of enemies loaded
                     int loadedObjectsLocationLength = reader.ReadInt32();
 
-                    activeObjects = GameObject.FindGameObjectsWithTag("Enemy");
-
+                    //Wipe Animation System's AnimationData array's
                     AnimSystem.GetComponent<LogicalAnimationSystem>().deleteObjectAll();
 
+                    //Destroy each enemy in scene
+                    activeObjects = GameObject.FindGameObjectsWithTag("Enemy");
                     for(int i=0; i<activeObjects.Length; i++)
                     {
                         Destroy(activeObjects[i]);
                     }
-                        
+                    
+                    //Read each X,Y int pair and assign it as a position to newly created enemy
                     for(int i=0; i<loadedObjectsLocationLength; i++)
                     {
                         int x = reader.ReadInt32();
@@ -151,8 +174,11 @@ public class GameSaveSystem : MonoBehaviour
                     }
 
                     //AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList();
-                    reLoadAnim = true;
-                    Debug.Log("Game Loaded");
+                    reLoadAnim = true; //Animation System needs to be reloaded
+                    if (Debug.isDebugBuild)
+                    {
+                        Debug.Log("Game Loaded");
+                    }
                 }
             }
         }
@@ -160,10 +186,12 @@ public class GameSaveSystem : MonoBehaviour
 
     void SaveObjectData()
     {
+        //Find every enemy in scene and create a vector3 array for each
         activeObjects = GameObject.FindGameObjectsWithTag("Enemy");
         int arrayPoint = 0;
         ObjectsLocation = new Vector3[activeObjects.Length];
 
+        //Put only active enemies cordinates into vector3 array
         for(int i=0; i<activeObjects.Length; i++)
         {
             if(activeObjects[i].active == true && activeObjects[i].GetComponent<AIController>().wrapperOverride == false)
@@ -179,9 +207,9 @@ public class GameSaveSystem : MonoBehaviour
     {
         if(reLoadAnim == true)
         {
-            AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList();
+            //Update Animation list to remove null references
+            AnimSystem.GetComponent<LogicalAnimationSystem>().updateAnimationList(); //reload Animation system / remake array of all AnimationData in scene
             reLoadAnim = false;
-            Player.GetComponent<Player>().setHealth(loadedHealth, false);
         }
     }
 
