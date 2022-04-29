@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    public Vector3 PlayerPos; 
-    
-    
-    
-    public int speed;
+
+    //public Vector3 PlayerPos; //XYZ position of Player
+    public int speed; //Movement Speed
     private int moveBuffer;
     private Animator anim;
     private SpriteRenderer SR;
@@ -113,7 +110,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         
-        PlayerPos  = gameObject.transform.position;
+        //PlayerPos  = gameObject.transform.position;
 
         if(Time.deltaTime == 0 || loading == true)
         {

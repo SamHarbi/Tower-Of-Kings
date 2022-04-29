@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class Parallax : MonoBehaviour
 {
-
     public GameObject Player;
+    public float maxDist; 
+    public float moveMod; //How far to move per update
+
+    //Used to calulate how far the player moved
     private Vector2 playersLastPos;
     private Vector2 playersCurrPos;
-    private Vector2 origPos;
-    public float maxDist;
-    public float moveMod;
-    private float origMoveMod;
+
+    private Vector2 origPos; //Original Position of this object
+    private float origMoveMod; //How far should the background move
 
     // Start is called before the first frame update
     void Start()
     {
+        //Initialse Values
         playersCurrPos = Player.GetComponent<Transform>().position;
         playersLastPos = playersCurrPos;
         origPos = gameObject.transform.position;
@@ -25,8 +28,8 @@ public class Parallax : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playersCurrPos = Player.GetComponent<Transform>().position;
-        if(playersCurrPos != playersLastPos)
+        playersCurrPos = Player.GetComponent<Transform>().position; //Get Player's Current position
+        if(playersCurrPos != playersLastPos) //If player has moved
         {
             if(playersCurrPos.x > playersLastPos.x ) //Right
             {

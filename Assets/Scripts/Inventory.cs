@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
-    Singleton Pattern Class- Only one instance of Inventory Exists and it manages all items pickedup by player and displays it in a UI implementation
+    Singleton Pattern Class- Only one instance of Inventory Exists and it manages all items picked up by player and displays it in a UI implementation
 */
 
 public class Inventory : MonoBehaviour
@@ -16,11 +16,13 @@ public class Inventory : MonoBehaviour
 
     private bool pauseStatus; //Is game paused?
     private int openPanelID; //Which panel is open
+    private bool timeOut;
 
     // Start is called before the first frame update
     void Start()
     {
         openPanelID = 1; //Inventory Panel is open first
+        timeOut = false;
     }
 
     // Update is called once per frame
@@ -42,11 +44,17 @@ public class Inventory : MonoBehaviour
            }
         }
 
+        if(timeOut == true)
+        {
+            return; //ignore all input below
+        }
+
         //Open next panel
         if (Input.GetAxis("Dpad-Horizontal") > 0 && pauseStatus == true)
         {
             openPanelID++;
             scrollTabs();
+            StartCoroutine(delay()); 
         }
 
         //Open prev panel
@@ -54,7 +62,15 @@ public class Inventory : MonoBehaviour
         {
             openPanelID--;
             scrollTabs();
+            StartCoroutine(delay()); 
         }
+    }
+
+    IEnumerator delay()
+    {
+        timeOut = true;
+        yield return new WaitForSecondsRealtime(0.2f);
+        timeOut = false;
     }
 
     //Show a panel based on openPanelID

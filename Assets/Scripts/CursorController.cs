@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+    Controls menu cursor, which selects options and calls code for each options
+    This class would fit very well into a Strategy Pattern. With if(menu) being replaced by another strategy.
+*/
+
 public class CursorController : MonoBehaviour
 {
 
@@ -10,8 +15,10 @@ public class CursorController : MonoBehaviour
     public int pointer; //points to button
     public string tag; //tag that describes relevant buttons
     public Sprite clicked; //visual of clicked button
+    public Sprite[] menuClicked; //visual of clicked button
     public Sprite prevSprite; //sprite before button was clicked
     public GameObject gameSave; //game saving system
+    public bool menu; //Is this cursor part of main menu?
 
     private bool buttonClicked;
     private bool timeOut; //Is input timed out?
@@ -20,12 +27,25 @@ public class CursorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //get all buttons in relevant menu
-        allButtons = GameObject.FindGameObjectsWithTag(tag);
+        if(menu == false)
+        {
+            //get all buttons in relevant menu
+            allButtons = GameObject.FindGameObjectsWithTag(tag);
 
-        //point cursor to first item
-        pointer = 0;
-        Move(0);
+            //point cursor to first item
+            pointer = 0;
+            Move(0);
+        }
+        else
+        {
+            MenuSettings.loadGame = false; //reset value
+
+            //get all buttons in relevant menu
+            allButtons = GameObject.FindGameObjectsWithTag(tag);
+            pointer = 0;
+            Move(0);
+        }
+
         buttonClicked = false;
         timeOut = false;
     }
@@ -63,18 +83,35 @@ public class CursorController : MonoBehaviour
 
     void Move(int mod)
     {
-        Vector3 change = new Vector3(allButtons[mod].transform.position.x +2, allButtons[mod].transform.position.y -1);
-        gameObject.transform.position = change;
-        timeOut = true;
+        if(menu == false)
+        {
+            Vector3 change = new Vector3(allButtons[mod].transform.position.x +2, allButtons[mod].transform.position.y -1);
+            gameObject.transform.position = change;
+        }
+        else
+        {
+            Vector3 change = new Vector3(allButtons[mod].transform.position.x-3, allButtons[mod].transform.position.y);
+            gameObject.transform.position = change;
+        }
 
+        timeOut = true;
         startTime = Time.unscaledTime;
         StartCoroutine(delay()); 
+        
     }
 
     void Select(int mod)
     {
-        prevSprite = allButtons[mod].GetComponent<SpriteRenderer>().sprite;
-        allButtons[mod].GetComponent<SpriteRenderer>().sprite = clicked;
+        if(menu == false)
+        {
+            prevSprite = allButtons[mod].GetComponent<SpriteRenderer>().sprite;
+            allButtons[mod].GetComponent<SpriteRenderer>().sprite = clicked;
+        }
+        else
+        {
+            allButtons[mod].GetComponent<SpriteRenderer>().sprite = menuClicked[mod];
+        }
+        
         buttonClicked = true;
         timeOut = true;
 
@@ -83,11 +120,27 @@ public class CursorController : MonoBehaviour
 
         if(mod == 0)
         {
-            gameSave.GetComponent<GameSaveSystem>().SaveGame();
+            if(menu == false)
+            {
+                gameSave.GetComponent<GameSaveSystem>().SaveGame();
+            }
+            else
+            {
+                MenuSettings.loadGame = false;
+                SceneManager.LoadScene("Main");
+            }
         }
         else if(mod == 1)
         {
-            gameSave.GetComponent<GameSaveSystem>().LoadGame();
+            if(menu == false)
+            {
+                gameSave.GetComponent<GameSaveSystem>().LoadGame();
+            }
+            else
+            {
+                MenuSettings.loadGame = true;
+                SceneManager.LoadScene("Main");
+            }
         }
         else if(mod == 2)
         {

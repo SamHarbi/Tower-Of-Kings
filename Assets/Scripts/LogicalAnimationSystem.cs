@@ -63,11 +63,11 @@ public class LogicalAnimationSystem : MonoBehaviour
     //Change Tick Through Code
     public void setAnimationTick(float newTick)
     {
-        //Tick = newTick;
+        Tick = newTick;
     }
 
     //Inform all AnimationData Objects that one Tick has passed
-    //Observor Pattern - LAS informs all subscribed AnimationData objects (all have the same interface) that a Tick has passed
+    //Observor Pattern - LAS informs all subscribed AnimationData objects (all have the same interface tickDown()) that a Tick has passed
     private void updateFrames()
     {
         for(int i=0; i<Animations.Count; i++)
@@ -80,7 +80,7 @@ public class LogicalAnimationSystem : MonoBehaviour
         }
     }
 
-    //Currently no use
+    //Currently not used- Set one animation to run for a given gameObject
     public void setActiveAnim(int num, GameObject parent)
     {
         AnimationData[] AD = parent.GetComponents<AnimationData>();
@@ -99,6 +99,7 @@ public class LogicalAnimationSystem : MonoBehaviour
         StartCoroutine(AnimationUpdate());
     }
 
+    //Returns an array with all AnimtionData Objects that modify the method input GO GameObject
     public GameObject[] getAnimationDataArray(GameObject GO)
     {
         GameObject[] AnimData = new GameObject[GO.transform.childCount]; //Some array spaces will be null
@@ -117,6 +118,7 @@ public class LogicalAnimationSystem : MonoBehaviour
         return AnimData;
     }
 
+    //Deletes all AnimationData Objects in Animations Array
     public void deleteObjectAll()
     {
         Animations.Clear();
