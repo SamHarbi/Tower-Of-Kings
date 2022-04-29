@@ -30,12 +30,12 @@ public class BossGate : MonoBehaviour
     {
         if(col.tag == "Player" && exit == false)
         {
-            BossUIControl.GetComponent<BossUIControl>().startBossFight();
+            BossUIControl.GetComponent<BossUIControl>().startBossFight(); //On entry start fight
 
         }
         else if(col.tag == "Player" && exit == true)
         {
-            BossUIControl.GetComponent<BossUIControl>().resetUI();
+            BossUIControl.GetComponent<BossUIControl>().resetUI(); //On exit reset UI
         }
     }
 

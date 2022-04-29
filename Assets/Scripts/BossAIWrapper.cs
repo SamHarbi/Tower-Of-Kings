@@ -26,6 +26,10 @@ public class BossAIWrapper : MonoBehaviour
     {
         Controller = gameObject.GetComponent<AIController>();
         Controller.WrappedAwake(); //Pass on to wrapped
+
+        //Get Animation Data
+        LAS = GameObject.FindWithTag("LAS");
+        AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
     }
     
     // Start is called before the first frame update
@@ -39,10 +43,6 @@ public class BossAIWrapper : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         BossHealth = 10;
-
-        //Get Animation Data
-        LAS = GameObject.FindWithTag("LAS");
-        AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
 
         //Override values from wrapped AI Controller
         Controller.setDamageFrames(8, 9);

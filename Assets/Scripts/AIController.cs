@@ -64,7 +64,7 @@ public class AIController : MonoBehaviour
         enableAnimation(0);
     }
     
-    // Start is called before the first frame update
+    // Start is called before the first frame update by Wrapper
     public void WrappedStart()
     {
         //Legacy Search AI Variables - See Explanation below or in the Report
@@ -125,7 +125,7 @@ public class AIController : MonoBehaviour
         return deathAnim;
     }
 
-    // Update is called once per frame
+    // Update is called once per frame by Wrapper
     public void WrappedUpdate()
     {
         //Reset Attacking
