@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 8451738114264444366}
   - component: {fileID: 8451738114264444353}
   - component: {fileID: -2721406586485830164}
+  - component: {fileID: 7992846753637156593}
   m_Layer: 0
   m_Name: rouge (12)
   m_TagString: Enemy
@@ -299,27 +300,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6bb39c8cdcdece4d9d6f68e17fe5b16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  path: {fileID: 0}
   attackRange: {fileID: 8451738114942066880}
   speed: 3
-  area:
-    m_Position: {x: 0, y: 0, z: 0}
-    m_Size: {x: 0, y: 0, z: 0}
-  position: {x: 0, y: 0, z: 0}
-  goalTile: {fileID: 11400000, guid: b28f745603cd6424586d069bf955384b, type: 2}
-  regularTile: {fileID: 11400000, guid: edf6d38511c31834d9464419b67259b8, type: 2}
-  Player: {fileID: 0}
-  AnimationSet: []
-  LAS: {fileID: 0}
   searchRange: 0
   wrapperOverride: 0
-  wrapperClass: {fileID: 0}
-  Boss: 0
-  hitBoss: {fileID: 0}
-  bossWave: {fileID: 0}
-  bossWavePos: {fileID: 0}
-  BossController: {fileID: 0}
-  BossDialog: {fileID: 0}
 --- !u!114 &-2721406586485830164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,6 +330,18 @@ MonoBehaviour:
   hit:
   - {fileID: 8300000, guid: f312920a6fa263241bae74b7a286b20e, type: 3}
   - {fileID: 8300000, guid: f312920a6fa263241bae74b7a286b20e, type: 3}
+--- !u!114 &7992846753637156593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451738114264444352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d666f939d9ca61543b55cefe40eb99a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8451738114493348098
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,7 +385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60e19eccb67a094fb61510833053e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
   frames:
   - {fileID: 21300000, guid: 78aa5d5afb275c94f9ea8075396dbd65, type: 3}
   - {fileID: 21300000, guid: e881c82ff0608eb40be283806279d14b, type: 3}
@@ -401,8 +396,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 968b91695d38f704b99d9d3a9468f64e, type: 3}
   - {fileID: 21300000, guid: 968b91695d38f704b99d9d3a9468f64e, type: 3}
   - {fileID: 21300000, guid: a3304fe2d0528084fa4acf4511079d6b, type: 3}
-  activeFrame: 0
-  lastFrame: 0
   Timing: 15
   parent: {fileID: 8451738114264444352}
   Running: 0
@@ -450,13 +443,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60e19eccb67a094fb61510833053e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
   frames:
   - {fileID: 21300000, guid: 759771354d596c6498caff9ef64bc7e8, type: 3}
   - {fileID: 21300000, guid: 2b1c6661254515b47bcfa02149b7efab, type: 3}
   - {fileID: 21300000, guid: 2ccb8ebb2a1d8a54a9bd22063a173f9f, type: 3}
-  activeFrame: 0
-  lastFrame: 0
   Timing: 20
   parent: {fileID: 8451738114264444352}
   Running: 0
@@ -625,13 +615,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60e19eccb67a094fb61510833053e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
   frames:
   - {fileID: 21300000, guid: 3cf7af85984e4c2479473c652f6e77d0, type: 3}
   - {fileID: 21300000, guid: 045ca52a0eede764bb5224cac741764a, type: 3}
   - {fileID: 21300000, guid: ad086b570f548c14bbac6318bcc2a180, type: 3}
-  activeFrame: 0
-  lastFrame: 0
   Timing: 9
   parent: {fileID: 8451738114264444352}
   Running: 0
@@ -679,13 +666,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f60e19eccb67a094fb61510833053e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
   frames:
   - {fileID: 21300000, guid: a9a8a7d6c76c144478f9dcc3a59a2057, type: 3}
   - {fileID: 21300000, guid: 05c4c746ec4ee2d47b13a0268777f0f8, type: 3}
   - {fileID: 21300000, guid: 10139c61d519542448e60d9039ad4dd5, type: 3}
-  activeFrame: 0
-  lastFrame: 0
   Timing: 13
   parent: {fileID: 8451738114264444352}
   Running: 0

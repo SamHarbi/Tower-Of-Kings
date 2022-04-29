@@ -5,14 +5,16 @@ using UnityEngine;
 public class AnimationData : MonoBehaviour
 {
     public Sprite[] frames; //Frames making the Animation
-    private int activeFrame; //Currently running frame
-    private int lastFrame; //Last frame in an Animation
-    private int prevActiveFrame; //Previous frame that was running
-    private float updates; //How many ticks remain before frame is changed
     public float Timing; //How many ticks should a frame be active for
     public GameObject parent; //GameObject to which animation is applied to
     public bool Running; //Is the animation actively ticking down / running
     public bool nonloop; //Should the animation stop on last frame and not loop
+
+    
+    private int activeFrame; //Currently running frame
+    private int lastFrame; //Last frame in an Animation
+    private int prevActiveFrame; //Previous frame that was running
+    private float updates; //How many ticks remain before frame is changed
     
     //Initializer for creating animations through code
     public void init(int newId, Sprite[] newFrames, float newTiming, GameObject newParent)
@@ -56,6 +58,7 @@ public class AnimationData : MonoBehaviour
     }
 
     //tickDown is called by Logical Animation System every time a set number of updates passes
+    //Observor Pattern - LAS has a list of subscribers (AnimationData Objects) that it calls whenever a change happens (One Tick)
     public void tickDown()
     {
         if(Running == false && nonloop == false)

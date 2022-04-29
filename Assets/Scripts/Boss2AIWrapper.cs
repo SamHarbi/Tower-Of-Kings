@@ -2,19 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This class is a wrapper that wraps AIController, see that class or the report for more info on the pattern 
+*/
+
 public class Boss2AIWrapper : MonoBehaviour
 {
+    public GameObject BossDialog; //GameObject with Dialog Component for this Boss Battle
+    public GameObject bossUIControl; //Controls UI elements of Boss battle
+    public AIController Controller; //AI Controller that is being wrapped
+    public GameObject attackRange; //GameObject with Collider that causes damage to Player on contact
+    
     private float BossHealth;
-    public GameObject BossDialog;
-    public AIController Controller;
-    private GameObject Boss;
-    public GameObject healthHider;
-    public GameObject bossUIControl;
-    public GameObject Inventory;
-    public GameObject attackRange;
-    public GameObject healthBar;
-    public GameObject[] AnimationSet;
-    public GameObject LAS;
+    private GameObject[] AnimationSet; //All AnimationData Objects with animations that affect this Object
+    private GameObject LAS; //Logical Animation System
+    private GameObject Inventory; 
+    
+    void Awake()
+    {
+        Controller = gameObject.GetComponent<AIController>();
+        Controller.WrappedAwake();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +31,7 @@ public class Boss2AIWrapper : MonoBehaviour
         LAS = GameObject.FindWithTag("LAS");
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
 
+        Controller.WrappedStart();
         StartCoroutine(LateStart());
     }
 
@@ -30,12 +39,11 @@ public class Boss2AIWrapper : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         BossHealth = 20;
+        Inventory = GameObject.FindWithTag("Inventory");
 
-        //
-        Controller = gameObject.GetComponent<AIController>();
+        //Override values from wrapped AI Controller
         Controller.setDamageFrames(6, 8);
         Controller.wrapperOverride = true;
-        Boss = gameObject;
     }
 
     // Update is called once per frame
@@ -43,6 +51,7 @@ public class Boss2AIWrapper : MonoBehaviour
     {
         search();
 
+        //If an Attack Animation is playing, ensure that damage can be done by this enemy to Player
         if(getAnimationProgress(2) == true)
         {
             attackRange.SetActive(true);
@@ -51,53 +60,68 @@ public class Boss2AIWrapper : MonoBehaviour
         {
             attackRange.SetActive(false);
         }
+
+        Controller.WrappedUpdate();
     }
 
     void search()
     {
+        //If dialog is not done stay at idle state
         if(BossDialog.GetComponent<DialogSystem>().getDialogProgress() == false)
         {
             Controller.State_Idle();
             return;
         }
+
+        //else pass on to AIController
         Controller.search();
     }
 
+    //Completely replaces OnTriggerEnter2d Interface on AIController
     void OnTriggerEnter2D(Collider2D col)
     {
         if(col.tag == "PlayerAttackRange")
         {
+                //***On hit***
+                //Set temporary death animation to give a "stuned boss" visual
                 Controller.setDeathAnim(true);
                 Controller.enableAnimation(3);
                 StartCoroutine(BossHitTimer());
+
+                //Update Health value
                 BossHealth = BossHealth - 1;
-                healthHider.transform.localScale = new Vector3(healthHider.transform.localScale.x+0.5f, healthHider.transform.localScale.y, healthHider.transform.localScale.z);
-                healthHider.transform.position = new Vector3(healthHider.transform.position.x - 0.25f, healthHider.transform.position.y, healthHider.transform.position.z);
+
+                //Extend health hider to hide more of the health bar
+                bossUIControl.GetComponent<BossUIControl>().updateHealthBar(0.5f);
+
                 if(BossHealth <= 0)
                 {
-                    //On Death
+                    //***On Death***
                     bossUIControl.GetComponent<BossUIControl>().endBossFight();
-                    Inventory.GetComponent<Inventory>().addItem(1);
+                    Inventory.GetComponent<Inventory>().addItem(1); //Add key piece
+
+                    Controller.State_Idle();
                     Controller.enabled = false;
-                    healthBar.SetActive(false);
-                    healthHider.SetActive(false);
                     
                 }
         }
     }
 
+    //Resets death state to stop stunned effect on boss
     public IEnumerator BossHitTimer()
     {
         yield return new WaitForSeconds(0.5f);
         Controller.setDeathAnim(false);
     }
 
+    //Time delay before boss "dies" and is set to be inactive
     IEnumerator BossDeathTimer()
     {
         yield return new WaitForSeconds(2.5f);
         gameObject.SetActive(false);
     }
 
+    //Check if the current running animation is currently a within a certain range of frames
      public bool getAnimationProgress(int id)
     {
         //Check if certain frames are running / Attacking frames that should cause damage

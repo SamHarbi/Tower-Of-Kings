@@ -3,6 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/*
+
+This class implements a State Machine structure, based on what state currently is active as recorded in actionstate variable. Behaviour in the Update method is modified for one frame
+Only one state can be active at a time and every state loops back to State_Idle on update, before the search method decides on what state should be set before the next Update based on 
+input information on the state of the world (Distance to Player). 
+
+This structure has been particulary useful when working on the search algorithm, regardless of how search is implemented- it doesn't affect the states. All that search
+has to do is decide when to call which state. 
+
+========================================================================================================================================================================================
+
+This class also further is part of a Decorator pattern and is wrapped by other wrapper classes to extend it's functionality while appearing exactly the same to the client (which is 
+in this case Unity). The wrapper provides the same interface as this class (Start, Update, OnTriggerEnter2d) but does something to extend functionality before passing it on to this class. 
+In the case of OnTriggerEnter2d, BossWrappers do not pass on requests so it can be considered as a Chain of Responsibility pattern only in that case. 
+
+*/
+
 
 public class AIController : MonoBehaviour
 {
@@ -19,6 +36,8 @@ public class AIController : MonoBehaviour
 
     public GameObject attackRange; //GameObject with Collider that causes damage to Player on contact
     public float speed; //Walking Speed
+    public float searchRange; //Maximum distance from object to search for Player 
+    public bool wrapperOverride; //If this is true, then there is a wrapper class that overtakes some functionality 
 
     private GameObject Player;
     private Vector2 goalNode; //The positional goal that enemies move towards
@@ -31,12 +50,10 @@ public class AIController : MonoBehaviour
     private bool deathAnim; //Is the death Animation running?
     private bool left; //What bool value is left- makes code easier to read by setting a name to false
     private bool right; //What bool value is right- makes code easier to read by setting a name to true
-    public float searchRange; //Maximum distance from object to search for Player 
-    public bool wrapperOverride; //TODO - redo
     private int startDamageFrame; //At which frame of an animation damage is dealt 
     private int endDamageFrame; //Last frame of an animation damage is dealt 
  
-     void Awake()
+    public void WrappedAwake()
     {
         //Get Array of Animations from Central Animation System LAS
         LAS = GameObject.FindWithTag("LAS");
@@ -48,7 +65,7 @@ public class AIController : MonoBehaviour
     }
     
     // Start is called before the first frame update
-    void Start()
+    public void WrappedStart()
     {
         //Legacy Search AI Variables - See Explanation below or in the Report
         //path = GameObject.FindWithTag("Path"); 
@@ -109,16 +126,16 @@ public class AIController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void WrappedUpdate()
     {
+        //Reset Attacking
+        //anim.SetBool("Attack", false); Legacy Animation using Unity's built in Animator
+        attackRange.SetActive(false);
+        
         if(deathAnim == true)
         {
             return; //Ensure no other code runs during the death Animation
         }
-        
-        //Reset Attacking
-        //anim.SetBool("Attack", false); Legacy Animation using Unity's built in Animator
-        attackRange.SetActive(false);
 
         //Find Player as long as they are within a 15 units distance
         setGoalNodeToPlayer();
@@ -190,7 +207,7 @@ public class AIController : MonoBehaviour
         goalNode = goalCords;
     }
 
-    //Changes goal colored tile to a rgular tile- useful for debugging to visually identify the goal node on screen
+    //Changes goal colored tile to a regular tile- useful for debugging to visually identify the goal node on screen
     void resetNode(Vector2 node)
     {
         Vector3Int goalCords3D = tm.WorldToCell(new Vector3(node.x, node.y, 0));
@@ -271,18 +288,15 @@ public class AIController : MonoBehaviour
         enableAnimation(2);
     }
 
+/*
     void State_SetStance()
     {
         //Unused - Legacy from Panel Centric Design
     }
-
-    void OnTriggerEnter2D(Collider2D col)
+*/
+    public void WrappedOnTriggerEnter2D(Collider2D col)
     {
-        if(wrapperOverride == true)
-        {
-            return;
-        }
-
+        
         //Squeezes the enemy when player jumps on thier heads, lot's of issues with this so it's deactivated
         if(wrapperOverride == false && col.tag == "Boots")
         {
@@ -308,19 +322,7 @@ public class AIController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
     }
-/*
-    public IEnumerator BossHitTimer()
-    {
-        yield return new WaitForSeconds(0.5f);
-        deathAnim = false;
-    }
 
-    IEnumerator BossDeathTimer()
-    {
-        yield return new WaitForSeconds(2.5f);
-        gameObject.SetActive(false);
-    }
-*/
     //Select an AnimationData Object to play
     public void enableAnimation(int num)
     {

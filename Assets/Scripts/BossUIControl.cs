@@ -11,6 +11,8 @@ public class BossUIControl : MonoBehaviour
     public GameObject mainCam;
     public GameObject bossCam;
     public GameObject Canvas;
+    public GameObject healthHider; //GameObject that is scaled to hide health bar giving the illusion of health going down
+    public GameObject healthBar;
     public GameObject Gate;
     public GameObject Gate2;
     public GameObject bossName;
@@ -104,6 +106,9 @@ public class BossUIControl : MonoBehaviour
             StartCoroutine(bossEffectFadeUPVertical());
             
             ThemeAudio.GetComponent<CameraColorEffects>().EndBossTheme();
+
+            healthBar.SetActive(false);
+            healthHider.SetActive(false);
         }
     }
 
@@ -201,5 +206,12 @@ public class BossUIControl : MonoBehaviour
         mainCam.SetActive(true);
         bossCam.SetActive(false);
         Canvas.GetComponent<Canvas>().worldCamera = mainCam.GetComponent<Camera>();
+    }
+
+    public void updateHealthBar(float mod)
+    {
+        //Extend health hider to hide more of the health bar- This gives the illusion of health going down in the health bar that is otherwise a static image
+        healthHider.transform.localScale = new Vector3(healthHider.transform.localScale.x+mod, healthHider.transform.localScale.y, healthHider.transform.localScale.z);
+        healthHider.transform.position = new Vector3(healthHider.transform.position.x - (mod/2), healthHider.transform.position.y, healthHider.transform.position.z);
     }
 }

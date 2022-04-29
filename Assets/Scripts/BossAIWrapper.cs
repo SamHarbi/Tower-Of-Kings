@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This class is a wrapper that wraps AIController, see that class or the report for more info on the pattern 
+*/
+
 public class BossAIWrapper : MonoBehaviour
 {
 
