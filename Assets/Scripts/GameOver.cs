@@ -4,20 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/*
+    Gameover Cutscene, returns to menu
+*/
+
 public class GameOver : MonoBehaviour
 {
     
-    public GameObject Anim;
-    public GameObject Crown;
-    public GameObject AnimationSystem;
-    public GameObject tryAgainText;
-    public GameObject tryAgainPrompt;
-    private bool breaking;
+    public GameObject Anim; //AnimationData with animation
+    public GameObject Crown; //Crown Gameobject Visual
+    public GameObject AnimationSystem; //Logical Animation System
+    public GameObject tryAgainText; //Text informing that player has lost
+    public GameObject tryAgainPrompt; //prompt with further instructions
+    private bool breaking; //Is animation running?
     private bool endOfScreen;
     
     // Start is called before the first frame update
     void Start()
     {
+        //Set initial values
         breaking = false;
         endOfScreen = false;
     }
@@ -25,9 +30,10 @@ public class GameOver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(endOfScreen == true && Input.anyKey)
+        //If animations have finished and all text has been shown
+        if(endOfScreen == true && Input.anyKey) //if any key is further pressed 
         {
-            SceneManager.LoadScene("StartMenu");
+            SceneManager.LoadScene("StartMenu"); //Go to start menu
         }
     }
 
@@ -40,7 +46,6 @@ public class GameOver : MonoBehaviour
     {
         yield return new WaitForSeconds(0.6f);
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0,0,0,  gameObject.GetComponent<SpriteRenderer>().color.a + 0.05f);
-        //Code inspired by https://answers.unity.com/questions/1429656/how-can-i-check-if-the-alpha-color-or-the-material.html
         if(Mathf.Approximately(gameObject.GetComponent<SpriteRenderer>().color.a, 1.0f))
         {
             BreakCrown();

@@ -2,20 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Makes a GameObject with a RigidBody fall/collapse when fallExitActivate is called
+    Used to open an exit to other levels from lowerlevel
+*/
+
 public class FallCutScene : MonoBehaviour
 {
     public GameObject[] fallExit;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void fallExitActivate()
     {

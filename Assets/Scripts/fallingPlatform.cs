@@ -2,21 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Makes a GameObject with a RigidBody fall when a player enters trigger
+    Used to collapse an area of the floor dropping the player to the lower levels
+*/
+
 public class fallingPlatform : MonoBehaviour
 {
     public GameObject fallCutScene;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+ 
     void OnTriggerEnter2D(Collider2D col)
     {
         if(col.tag == "Player")

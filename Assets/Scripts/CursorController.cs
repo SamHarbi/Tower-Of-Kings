@@ -5,17 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class CursorController : MonoBehaviour
 {
-    
-    private float deltaTime; //How much time has passed
-    private float lastDeltaTime;
-    public GameObject[] allButtons;
-    public int pointer;
-    public string tag;
-    public int timeOut; //Time for how long should input be ignored
-    public Sprite clicked;
-    public Sprite prevSprite;
+
+    public GameObject[] allButtons; //relevant buttons in menu
+    public int pointer; //points to button
+    public string tag; //tag that describes relevant buttons
+    public Sprite clicked; //visual of clicked button
+    public Sprite prevSprite; //sprite before button was clicked
+    public GameObject gameSave; //game saving system
+
     private bool buttonClicked;
-    public GameObject gameSave;
+    private bool timeOut; //Is input timed out?
+    private float startTime;
 
     // Start is called before the first frame update
     void Start()
@@ -27,35 +27,30 @@ public class CursorController : MonoBehaviour
         pointer = 0;
         Move(0);
         buttonClicked = false;
-        
-        //Calculate own deltaTime based on how much time has passed since game started
-        deltaTime = Time.unscaledTime;
-        lastDeltaTime = deltaTime;
+        timeOut = false;
     }
 
     // Update is called once per frame
     void Update()
     {
          //ignore input if
-         if(timeOut > 1)
+         if(timeOut == true)
          {
-             timeOut--; //countdown
              return;
          }
-         else if(timeOut == 1 && buttonClicked == true)
+         else if(timeOut == false && buttonClicked == true)
          {
               allButtons[pointer].GetComponent<SpriteRenderer>().sprite = prevSprite;
-              timeOut--;
               buttonClicked = false;
               return;
          }
          
-         /*if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a"))
-         {
-            pointer = Mathf.Abs((pointer-1) % allButtons.Length);
+        if (Input.GetAxis("Dpad-Vertical") < 0 || Input.GetKey("a"))
+        {
+            pointer = Mathf.Abs((pointer-1)) % allButtons.Length;
             Move(pointer);
-         }*/
-        if(Input.GetAxis("Dpad-Vertical") > 0 || Input.GetKey("d"))
+        }
+        else if(Input.GetAxis("Dpad-Vertical") > 0 || Input.GetKey("d"))
          {
             pointer = Mathf.Abs((pointer+1) % allButtons.Length);
             Move(pointer);
@@ -64,16 +59,16 @@ public class CursorController : MonoBehaviour
          {
              Select(pointer);
          }
-         
-         deltaTime = Time.unscaledTime - lastDeltaTime;
-         lastDeltaTime = Time.unscaledTime;
     }
 
     void Move(int mod)
     {
         Vector3 change = new Vector3(allButtons[mod].transform.position.x +2, allButtons[mod].transform.position.y -1);
         gameObject.transform.position = change;
-        timeOut = 50;
+        timeOut = true;
+
+        startTime = Time.unscaledTime;
+        StartCoroutine(delay()); 
     }
 
     void Select(int mod)
@@ -81,7 +76,10 @@ public class CursorController : MonoBehaviour
         prevSprite = allButtons[mod].GetComponent<SpriteRenderer>().sprite;
         allButtons[mod].GetComponent<SpriteRenderer>().sprite = clicked;
         buttonClicked = true;
-        timeOut = 50;
+        timeOut = true;
+
+        startTime = Time.unscaledTime;
+        StartCoroutine(delay()); 
 
         if(mod == 0)
         {
@@ -98,4 +96,11 @@ public class CursorController : MonoBehaviour
         }
         
     }
+
+    IEnumerator delay()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        timeOut = false;
+    }
+    
 }
