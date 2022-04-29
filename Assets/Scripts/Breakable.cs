@@ -5,19 +5,14 @@ using UnityEngine;
 public class Breakable : MonoBehaviour
 {
     private GameObject Inventory;
+    
     // Start is called before the first frame update
     void Start()
     {
         Inventory = GameObject.FindWithTag("Inventory");
     }
     
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //If Object is hit by player who has a pickaxe item in thier Inventory
     void OnTriggerEnter2D(Collider2D col)
     {
         if(col.tag == "PlayerAttackRange" && Inventory.GetComponent<Inventory>().CheckForItem(3))

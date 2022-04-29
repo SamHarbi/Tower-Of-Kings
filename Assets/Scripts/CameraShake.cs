@@ -8,34 +8,26 @@ public class CameraShake : MonoBehaviour
     
     Vector3 originalPos;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public IEnumerator CamShake(float magnitude, float duration)
     {
+        //Get original camera position
         originalPos = gameObject.transform.position;
         float elapsedTime = 0.0f;
 
+        //While shaking
         while(elapsedTime < duration)
         {
             float x = Random.Range(-1.0f, 1.0f) * magnitude;
             float y = Random.Range(-1.0f, 1.0f) * magnitude;
 
+            //set camera to a random offset positon calculated from magintude
             transform.position = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);
 
             elapsedTime += Time.deltaTime;
 
         }
 
+        //return back to original positions
         transform.position = originalPos;
 
         yield return null;

@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 public class CursorController : MonoBehaviour
 {
     
-    private float deltaTime;
+    private float deltaTime; //How much time has passed
     private float lastDeltaTime;
     public GameObject[] allButtons;
     public int pointer;
     public string tag;
-    public int timeOut;
+    public int timeOut; //Time for how long should input be ignored
     public Sprite clicked;
     public Sprite prevSprite;
     private bool buttonClicked;
@@ -20,22 +20,26 @@ public class CursorController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //get all buttons in relevant menu
         allButtons = GameObject.FindGameObjectsWithTag(tag);
+
+        //point cursor to first item
         pointer = 0;
         Move(0);
+        buttonClicked = false;
         
+        //Calculate own deltaTime based on how much time has passed since game started
         deltaTime = Time.unscaledTime;
         lastDeltaTime = deltaTime;
-        pointer = 0;
-        buttonClicked = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+         //ignore input if
          if(timeOut > 1)
          {
-             timeOut--;
+             timeOut--; //countdown
              return;
          }
          else if(timeOut == 1 && buttonClicked == true)
@@ -51,7 +55,7 @@ public class CursorController : MonoBehaviour
             pointer = Mathf.Abs((pointer-1) % allButtons.Length);
             Move(pointer);
          }*/
-        if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d"))
+        if(Input.GetAxis("Dpad-Vertical") > 0 || Input.GetKey("d"))
          {
             pointer = Mathf.Abs((pointer+1) % allButtons.Length);
             Move(pointer);

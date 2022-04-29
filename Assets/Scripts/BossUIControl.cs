@@ -79,7 +79,7 @@ public class BossUIControl : MonoBehaviour
             Debug.Log("Theme Started");
         }
 
-        ThemeAudio.GetComponent<CameraColorEffects>().StartBossTheme();
+        ThemeAudio.GetComponent<CameraLevelEffects>().StartBossTheme();
         
         //Change Camera's
         mainCam.SetActive(false);
@@ -125,7 +125,7 @@ public class BossUIControl : MonoBehaviour
             StartCoroutine(bossEffectFadeUPVertical());
             
             //Stop Music
-            ThemeAudio.GetComponent<CameraColorEffects>().EndBossTheme();
+            ThemeAudio.GetComponent<CameraLevelEffects>().EndBossTheme();
 
             //Hide healthbar
             healthBar.SetActive(false);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CrownTransfer : MonoBehaviour
 {
-    private int currAnim;
+    private int currAnim; //Currently running animation
     public GameObject[] AnimationSet;
     public GameObject LAS;
 
@@ -12,14 +12,9 @@ public class CrownTransfer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Get Animation Data
         LAS = GameObject.FindWithTag("LAS");
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnCollisionEnter2D(Collision2D collision)
