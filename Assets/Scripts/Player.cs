@@ -5,69 +5,68 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
-    //public Vector3 PlayerPos; //XYZ position of Player
     public int speed; //Movement Speed
-    private int moveBuffer;
-    private Animator anim;
-    private SpriteRenderer SR;
-    private Rigidbody2D RB;
-    private int currAnim;
-
-    public GameObject leftEnemyDetect;
-    public GameObject rightEnemyDetect;
-    private bool direction;
-
-    private EnemyDetector RED;
-    private EnemyDetector LED;
-
-    private bool continousMovementLeft;
-    private bool continousMovementRight;
-
-    private int health;
-    public GameObject[] Hearts;
+    public GameObject[] Hearts; //UI hearts representing Player Health
     //public GameObject[] Tokens;
     //public GameObject[] InventoryItems;
-    public GameObject InventorySet;
-    private bool invincibility;
-    private float invincibilityTimer;
-    private float dashInvincibilityTimer;
-    private bool attacking;
-    private bool beingHit;
-    public GameObject[] AnimationSet;
-    public GameObject LAS;
-    public GameObject hitEffect;
-    public GameObject Cam;
-    public GameObject[] BossCams; //Change cams when entering diff bosses else no screeen shake
+    public GameObject InventorySet; //Inventory
+    public GameObject[] AnimationSet; //Array of AnimationData that pertains to Player
+    public GameObject LAS; //Logical Animation System
+    public GameObject hitEffect; //GameObject that shows a visual overlay when Player is hit
+    public GameObject Cam; //Main Camera
+    public GameObject[] BossCams; //Change cams when entering boss areas else no screen shake
     public GameObject attackRangeLeft;
     public GameObject attackRangeRight;
-    public GameObject Fade;
-    public GameObject FadeWin;
-    private bool DashTimeout;
-    private bool onPlatform;
-    private bool King;
-    public bool loading;
+    public GameObject Fade; //Fade to black cutscene when player loses 
+    public GameObject FadeWin; //Fade to black cutscene when player wins
+    public bool loading; //Is the game loading?
+
+    private bool DashTimeout; //Delay before Player can dash again
+    private bool onPlatform; //Is Player on a moving platform?
+    private bool King; //Has the player won the game?
+    private bool invincibility; //Can Player take damage?
+    private float invincibilityTimer; //How much time is left for player invincibility
+    private bool attacking; //Is player attacking?
+    private bool beingHit; //Is player being hit
+    private bool direction;
+    private int health; 
+    private SpriteRenderer SR;
+    private Rigidbody2D RB;
+    private int currAnim; //Currently running Animation
+
+    // private Animator anim; Legacy Unity built-in Animation
+
+    /* legacy panel centric attack variables
+    public GameObject leftEnemyDetect;
+    public GameObject rightEnemyDetect;
+    private EnemyDetector RED;
+    private EnemyDetector LED;
+    */
 
 
     // Start is called before the first frame update
     void Start()
     {
+        //Initialise Values
         speed = 6;
-        moveBuffer = 1;
         loading = true;
-
-        anim = gameObject.GetComponent<Animator>();
         SR = gameObject.GetComponent<SpriteRenderer>();
         RB = gameObject.GetComponent<Rigidbody2D>();
-
-        RED = rightEnemyDetect.GetComponent<EnemyDetector>();
-        LED = leftEnemyDetect.GetComponent<EnemyDetector>();
-
         health = 300;
         Hearts = new GameObject[7];
-
         invincibility = false;
         invincibilityTimer = 0;
+        attacking = false;
+        beingHit = false;
+        attackRangeLeft.SetActive(false);
+        attackRangeRight.SetActive(false);
+        DashTimeout = false;
+        direction = false;
+        onPlatform = false;
+        King = false;
+        //anim = gameObject.GetComponent<Animator>(); Legacy Unity built-in Animation
 
+        //Based on health value, activate a number of hearts that corresponds to health
         for(int i=1; i<=6; i++)
         {
             Hearts[i] = GameObject.Find("heart" + i);
@@ -82,58 +81,43 @@ public class Player : MonoBehaviour
             
         }
 
+        //Initilase Animations and set to idle animation
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
         currAnim = 1;
         enableAnimation(0);
-
-        attacking = false;
-        beingHit = false;
-
-        //attackRange = GameObject.FindWithTag("PlayerAttackRange");
-        attackRangeLeft.SetActive(false);
-        attackRangeRight.SetActive(false);
-
-        DashTimeout = false;
-
-        direction = false;
-
-        //InventoryItems = new GameObject[6];
-
-        onPlatform = false;
-
-        King = false;
         
-
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        //PlayerPos  = gameObject.transform.position;
+        //Stop executing any other update code if one of the following
 
-        if(Time.deltaTime == 0 || loading == true)
+        if(Time.deltaTime == 0 || loading == true) //If Game is paused or loading
         {
             return;
         }
-        
-        if(King == true)
+
+        if(King == true) //If the game has been won
         {
             FadeWin.GetComponent<GameOver>().StartFade();
             return;
         }
         
-        if(health <= 0)
+        if(health <= 0) //If Dead
         {
             Fade.GetComponent<GameOver>().StartFade();
             return;
         }
 
+
+        //Cheat Inputs for debugging
         if(Input.GetKey("d"))
         {
             if(Input.GetKey("e"))
             {
-                if(Input.GetKey("b"))
+                if(Input.GetKey("b")) //Adds every item to players Inventory
                 {
                     for(int i=3; i<5; i++)
                     {
@@ -142,7 +126,7 @@ public class Player : MonoBehaviour
                     Debug.Log("Debug Items Activated");
                 }
 
-                if(Input.GetKey("a"))
+                if(Input.GetKey("a")) //Adds every key item to players Inventory
                 {
                     for(int i=0; i<3; i++)
                     {
@@ -150,30 +134,32 @@ public class Player : MonoBehaviour
                     }
                     Debug.Log("Debug Keys Activated");
                 }
+
+                if(Input.GetKey("h")) //Lot's of health
+                {
+                    health = 999;
+                }
+
+                if(Input.GetKey("s")) //Faster Movement
+                {
+                    speed = 15;
+                }
             }
         }  
         
         //Movement Logic - Walking Left and Right
-        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a") || Input.GetKey("left"))
+        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("a") || Input.GetKey("left")) //Input corresponding to left
         {
             Move(-1.0f);
             GetComponent<SoundFXManager>().clothMove();
             SR.flipX = false;
 
-            if(continousMovementLeft == false)
-            {
-                LED.setView(true, false);
-                RED.setView(false, false);
-            }
-
-            if(Input.GetButton("Dash"))
+            if(Input.GetButton("Dash")) //Dash input key pressed in tandem with moving keys
             {
                 Dash(-1000f);
             }
 
-            continousMovementLeft = true;
-            continousMovementRight = false;
-
+            //If direction of movement was previously opposite 
             if(direction == true)
             {
                 switchAttack(true);
@@ -182,26 +168,18 @@ public class Player : MonoBehaviour
             direction = false;
 
         }
-        else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d") || Input.GetKey("right"))
+        else if(Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("d") || Input.GetKey("right")) //Input corresponding to right
         {
             Move(1.0f);
             GetComponent<SoundFXManager>().clothMove();
             SR.flipX = true;
 
-            if(continousMovementRight == false)
-            {
-                LED.setView(false, true);
-                RED.setView(true, true);
-            }
-
-            if(Input.GetButton("Dash"))
+            if(Input.GetButton("Dash")) //Dash input key pressed in tandem with moving keys
             {
                 Dash(1000f);
             }
 
-            continousMovementLeft = false;
-            continousMovementRight = true;
-
+            //If direction of movement was previously opposite 
             if(direction == false)
             {
                 switchAttack(false);
@@ -209,18 +187,16 @@ public class Player : MonoBehaviour
 
             direction = true;
 
-            
         }
-        else
+        else //No moving keys being clicked
         {
-            //anim.SetBool("Running", false);
+            //anim.SetBool("Running", false); Legacy Unity built in Animation
             
-            
+            //Not attacking
             if(attacking == false)
             {
-                enableAnimation(0);
+                enableAnimation(0); //Idle Animation
             }
-            
             
         }
 
@@ -231,13 +207,13 @@ public class Player : MonoBehaviour
         }
 
         //Gravity Logic - Heavy Fall and light jump
-        if(RB.velocity.y < 0.1)
+        if(RB.velocity.y < 0.1) //If falling
         {
-            RB.gravityScale = 8;
+            RB.gravityScale = 8; //High Gravity
         }
-        else
+        else //If not falling
         {
-            RB.gravityScale = 3.8f;
+            RB.gravityScale = 3.8f; //Low Gravity
         }
 
         if(invincibilityTimer > 0)
