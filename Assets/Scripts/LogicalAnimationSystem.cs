@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class LogicalAnimationSystem : MonoBehaviour
 {
-    //Singleton Pattern- There is only one LAS Instance in the game. Manages AnimationData Objects and Informs them when to update
+    //Singleton Pattern- There can only one LAS Instance in the game. Manages AnimationData Objects and Informs them when to update
+    public static LogicalAnimationSystem LAS;
+
 
     public GameObject animationPrefab; //Animation Data Prefab
     public List<GameObject> Animations; //List of all Animations in the Game
@@ -12,6 +14,18 @@ public class LogicalAnimationSystem : MonoBehaviour
 
     private float timePassed;
 
+    private void Awake() 
+    { 
+        //If there is another LAS Instance, delete this one
+        if (LAS != null && LAS != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            LAS = this; 
+        } 
+    }
 
     // Start is called before the first frame update
     void Start()

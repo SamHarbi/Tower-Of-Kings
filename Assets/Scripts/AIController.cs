@@ -5,9 +5,9 @@ using UnityEngine.Tilemaps;
 
 /*
 
-This class implements a State Machine structure, based on what state currently is active as recorded in actionstate variable. Behaviour in the Update method is modified for one frame
-Only one state can be active at a time and every state loops back to State_Idle on update, before the search method decides on what state should be set before the next Update based on 
-input information on the state of the world (Distance to Player). 
+This class implements a State Machine structure, based on what state currently is active as recorded in actionstate variable. Only one state can be active at a time and every 
+state loops back to State_Idle on update, before the search method decides on what state should be set before the next Update based on input information on the state of the 
+world (Distance to Player). 
 
 This structure has been particulary useful when working on the search algorithm, regardless of how search is implemented- it doesn't affect the states. All that search
 has to do is decide when to call which state. 
