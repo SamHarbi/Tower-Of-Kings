@@ -35,6 +35,7 @@ TagManager:
   - Button
   - Boots
   - Heart
+  - throneDoor
   layers:
   - Default
   - TransparentFX

@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
     private SpriteRenderer SR;
     private Rigidbody2D RB;
     private int currAnim; //Currently running Animation
+    private bool loseAudioStarted;
 
     // private Animator anim; Legacy Unity built-in Animation
 
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour
         loading = true;
         SR = gameObject.GetComponent<SpriteRenderer>();
         RB = gameObject.GetComponent<Rigidbody2D>();
+        Cam = GameObject.FindWithTag("MainCamera");
         health = 3;
         Hearts = new GameObject[7];
         invincibility = false;
@@ -67,6 +69,7 @@ public class Player : MonoBehaviour
         direction = false;
         onPlatform = false;
         King = false;
+        loseAudioStarted = false;
         //anim = gameObject.GetComponent<Animator>(); Legacy Unity built-in Animation
 
         //Based on health value, activate a number of hearts that corresponds to health
@@ -104,13 +107,19 @@ public class Player : MonoBehaviour
 
         if(King == true) //If the game has been won
         {
-            FadeWin.GetComponent<GameOver>().StartFade();
+            FadeWin.GetComponent<GameOver>().StartFade(); //Victory fade
             return;
         }
         
         if(health <= 0) //If Dead
         {
-            Fade.GetComponent<GameOver>().StartFade();
+            Fade.GetComponent<GameOver>().StartFade(); //GameOver fade
+            if(loseAudioStarted == false)
+            {
+                GetComponent<SoundFXManager>().Lose(); 
+                Cam.GetComponent<CameraLevelEffects>().EndBossTheme();
+                loseAudioStarted = true;
+            }
             return;
         }
 
@@ -431,6 +440,7 @@ public class Player : MonoBehaviour
         {
             enableAnimation(7);
             King = true;
+            Cam.GetComponent<CameraLevelEffects>().EndBossTheme();
             GetComponent<SoundFXManager>().Win();
             FadeWin.GetComponent<GameOver>().StartFade();
         }
@@ -476,6 +486,11 @@ public class Player : MonoBehaviour
         {
             setHealth(health + 1, false);
             col.gameObject.SetActive(false);
+            GetComponent<SoundFXManager>().Pickup();
+        }
+
+        if(col.tag == "throneDoor")
+        {
             GetComponent<SoundFXManager>().Pickup();
         }
 
@@ -581,9 +596,7 @@ public class Player : MonoBehaviour
         if(health <= 0) //no more health, start gameover cutscene
         {
             enableAnimation(4);
-            GetComponent<SoundFXManager>().Lose();
             Fade.GetComponent<GameOver>().StartFade();
-            GetComponent<SoundFXManager>().Lose();
         }
         else if(shake == true) //Shake cam if needed, this is used if player was hit by an enemy instead of new health being loaded, cannot shake on death
         {

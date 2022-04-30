@@ -25,7 +25,7 @@ public class BossUIControl : MonoBehaviour
     private IEnumerator upEffectCoroutine; //ref to coroutine to allow stopping it's execution
     private IEnumerator downEffectCoroutine; //ref to coroutine to allow stopping it's execution
     private float currAlpha; //current alpha color value of overlay
-    private bool fadeDown;
+    //private bool fadeDown;
     private bool bossFightStarted;
 
     // Start is called before the first frame update
@@ -37,7 +37,7 @@ public class BossUIControl : MonoBehaviour
 
         //Not fading down 
         currAlpha = 0f;
-        fadeDown = false;
+        //fadeDown = false;
 
         bossFightStarted = false;
 
@@ -55,11 +55,11 @@ public class BossUIControl : MonoBehaviour
         //If dialog is skipped, change timing of dialog much faster essentially skipping it
         if (Input.GetButtonDown("Skip-Cutscene")) //On input corresponding to Skip-Cutscene
         {
-            if(dialogSystem.active)
+            if(dialogSystem.activeSelf)
             {
                 dialogSystem.GetComponent<DialogSystem>().setTiming(0.001f, 0.01f);
             }
-            if(dialogSystemEnd.active)
+            if(dialogSystemEnd.activeSelf)
             {
                 dialogSystemEnd.GetComponent<DialogSystem>().setTiming(0.001f, 0.1f);
             }
@@ -95,7 +95,7 @@ public class BossUIControl : MonoBehaviour
         StartCoroutine(bossTextFade());
             
         //Start Dialog
-        if(!dialogSystem.active)
+        if(!dialogSystem.activeSelf)
         {
             dialogSystem.SetActive(true);
             dialogSystem.GetComponent<DialogSystem>().StartDialog();
@@ -106,7 +106,7 @@ public class BossUIControl : MonoBehaviour
     //Called to clean up post Boss Fight
     public void endBossFight()
     {
-        if(!dialogSystemEnd.active)
+        if(!dialogSystemEnd.activeSelf)
         {
             //Play the end dialog
             dialogSystemEnd.SetActive(true);

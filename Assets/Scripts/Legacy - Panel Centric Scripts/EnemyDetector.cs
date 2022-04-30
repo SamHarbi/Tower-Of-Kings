@@ -11,7 +11,7 @@ public class EnemyDetector : MonoBehaviour
     public GameObject panel;
     public GameObject blade;
     public GameObject enemy;
-    private bool enabled;
+    //private bool enabled;
     
     // Start is called before the first frame update
     void Start()

@@ -16,14 +16,14 @@ public class GameOver : MonoBehaviour
     public GameObject AnimationSystem; //Logical Animation System
     public GameObject tryAgainText; //Text informing that player has lost
     public GameObject tryAgainPrompt; //prompt with further instructions
-    private bool breaking; //Is animation running?
+    //private bool breaking; //Is animation running?
     private bool endOfScreen;
     
     // Start is called before the first frame update
     void Start()
     {
         //Set initial values
-        breaking = false;
+        //breaking = false;
         endOfScreen = false;
     }
 

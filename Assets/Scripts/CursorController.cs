@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 /*
     Controls menu cursor, which selects options and calls code for each options
-    This class would fit very well into a Strategy Pattern. With if(menu) being replaced by another strategy.
+    This class would fit very well into a Strategy Pattern. With if(menu) being replaced by another strategy. 
 */
 
 public class CursorController : MonoBehaviour
@@ -13,7 +13,7 @@ public class CursorController : MonoBehaviour
 
     public GameObject[] allButtons; //relevant buttons in menu
     public int pointer; //points to button
-    public string tag; //tag that describes relevant buttons
+    public string buttonTag; //tag that describes relevant buttons
     public Sprite clicked; //visual of clicked button
     public Sprite[] menuClicked; //visual of clicked button
     public Sprite prevSprite; //sprite before button was clicked
@@ -30,7 +30,7 @@ public class CursorController : MonoBehaviour
         if(menu == false)
         {
             //get all buttons in relevant menu
-            allButtons = GameObject.FindGameObjectsWithTag(tag);
+            allButtons = GameObject.FindGameObjectsWithTag(buttonTag);
 
             //point cursor to first item
             pointer = 0;
@@ -41,7 +41,7 @@ public class CursorController : MonoBehaviour
             MenuSettings.loadGame = false; //reset value
 
             //get all buttons in relevant menu
-            allButtons = GameObject.FindGameObjectsWithTag(tag);
+            //allButtons = GameObject.FindGameObjectsWithTag(buttonTag);
             pointer = 0;
             Move(0);
         }
@@ -60,6 +60,7 @@ public class CursorController : MonoBehaviour
          }
          else if(timeOut == false && buttonClicked == true)
          {
+              //Change button to a clicked visual
               allButtons[pointer].GetComponent<SpriteRenderer>().sprite = prevSprite;
               buttonClicked = false;
               return;
@@ -67,7 +68,11 @@ public class CursorController : MonoBehaviour
          
         if (Input.GetAxis("Dpad-Vertical") < 0 || Input.GetKey("a"))
         {
-            pointer = Mathf.Abs((pointer-1)) % allButtons.Length;
+            pointer = pointer-1;
+            if(pointer < 0) //handle negative pointers
+            {
+                pointer = allButtons.Length-1; //loop back
+            }
             Move(pointer);
         }
         else if(Input.GetAxis("Dpad-Vertical") > 0 || Input.GetKey("d"))
@@ -81,6 +86,7 @@ public class CursorController : MonoBehaviour
          }
     }
 
+    //Move the cursor to point at button mod
     void Move(int mod)
     {
         if(menu == false)
@@ -96,10 +102,11 @@ public class CursorController : MonoBehaviour
 
         timeOut = true;
         startTime = Time.unscaledTime;
-        StartCoroutine(delay()); 
+        StartCoroutine(delay()); //Delay before another action can be taken 
         
     }
 
+    //Logic for what happens when button is selected, mod dictates two alternative strategies
     void Select(int mod)
     {
         if(menu == false)
@@ -144,8 +151,15 @@ public class CursorController : MonoBehaviour
         }
         else if(mod == 2)
         {
-            MenuSettings.loadGame = true;
-            SceneManager.LoadScene("StartMenu");
+            if(menu == false)
+            {
+                MenuSettings.loadGame = true;
+                SceneManager.LoadScene("StartMenu");
+            }
+            else
+            {
+                Application.Quit(); 
+            }
         }
         
     }

@@ -21,7 +21,7 @@ public class CameraLevelEffects : MonoBehaviour
 
     public GameObject AudioSourceTheme; //reference to Object that has Audio Component
     private int currTheme; //Currently playing music theme
-    private bool fadeDone; //Has a sound fully faded in?
+    //private bool fadeDone; //Has a sound fully faded in?
     private bool BossFight; //Is a boss fight happening?
     
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class CameraLevelEffects : MonoBehaviour
         AudioSourceTheme.GetComponent<AudioSource>().clip = midLevelTheme; //Since the Player starts on the middle floors 
         AudioSourceTheme.GetComponent<AudioSource>().Play();
         currTheme = 0;
-        fadeDone = false;
+        //fadeDone = false;
         BossFight = false;
     }
 
@@ -113,14 +113,14 @@ public class CameraLevelEffects : MonoBehaviour
     IEnumerator audioFade(float goal, float change)
     {
         //AudioSourceTheme.GetComponent<AudioSource>().Play();
-        fadeDone = false;
+        //fadeDone = false;
 
         while(AudioSourceTheme.GetComponent<AudioSource>().volume != goal)
         {
             AudioSourceTheme.GetComponent<AudioSource>().volume = AudioSourceTheme.GetComponent<AudioSource>().volume + change;
             if(AudioSourceTheme.GetComponent<AudioSource>().volume != goal)
             {
-                fadeDone = true;
+                //fadeDone = true;
             }
             yield return new WaitForSeconds(0.5f);
         }
