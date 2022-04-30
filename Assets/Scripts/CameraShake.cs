@@ -8,6 +8,11 @@ public class CameraShake : MonoBehaviour
     
     Vector3 originalPos;
 
+    public void startShake(float magnitude, float duration)
+    {
+        StartCoroutine(CamShake(magnitude, duration * Time.deltaTime));
+    }
+
     public IEnumerator CamShake(float magnitude, float duration)
     {
         //Get original camera position
@@ -19,6 +24,8 @@ public class CameraShake : MonoBehaviour
         {
             float x = Random.Range(-1.0f, 1.0f) * magnitude;
             float y = Random.Range(-1.0f, 1.0f) * magnitude;
+
+            yield return new WaitForSeconds(0.05f);
 
             //set camera to a random offset positon calculated from magintude
             transform.position = new Vector3(originalPos.x + x, originalPos.y + y, originalPos.z);

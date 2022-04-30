@@ -4,6 +4,7 @@ using UnityEngine;
 
 /*
     This class is a wrapper that wraps AIController, see that class or the report for more info on the pattern 
+    Most basic wrapper, passes interface to wrapee without adding any extra functionality
 */
 
 public class regularEnemyAIWrapper : MonoBehaviour

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Player class - Translates User's Input into action in game through a controllable player character
+*/
+
 public class Player : MonoBehaviour
 {
 
@@ -14,7 +18,6 @@ public class Player : MonoBehaviour
     public GameObject LAS; //Logical Animation System
     public GameObject hitEffect; //GameObject that shows a visual overlay when Player is hit
     public GameObject Cam; //Main Camera
-    public GameObject[] BossCams; //Change cams when entering boss areas else no screen shake
     public GameObject attackRangeLeft;
     public GameObject attackRangeRight;
     public GameObject Fade; //Fade to black cutscene when player loses 
@@ -22,7 +25,7 @@ public class Player : MonoBehaviour
     public bool loading; //Is the game loading?
 
     private bool DashTimeout; //Delay before Player can dash again
-    private bool onPlatform; //Is Player on a moving platform?
+    private bool onPlatform; //Is Player on a platform?
     private bool King; //Has the player won the game?
     private bool invincibility; //Can Player take damage?
     private float invincibilityTimer; //How much time is left for player invincibility
@@ -52,7 +55,7 @@ public class Player : MonoBehaviour
         loading = true;
         SR = gameObject.GetComponent<SpriteRenderer>();
         RB = gameObject.GetComponent<Rigidbody2D>();
-        health = 300;
+        health = 3;
         Hearts = new GameObject[7];
         invincibility = false;
         invincibilityTimer = 0;
@@ -138,11 +141,13 @@ public class Player : MonoBehaviour
                 if(Input.GetKey("h")) //Lot's of health
                 {
                     health = 999;
+                    Debug.Log("Debug Health Activated");
                 }
 
                 if(Input.GetKey("s")) //Faster Movement
                 {
                     speed = 15;
+                    Debug.Log("Debug Speed Activated");
                 }
             }
         }  
@@ -216,42 +221,46 @@ public class Player : MonoBehaviour
             RB.gravityScale = 3.8f; //Low Gravity
         }
 
+        //If InvincibilityTimer was set, then Player was hit
         if(invincibilityTimer > 0)
         {
+            //Count down
             invincibilityTimer -= 1 * Time.deltaTime;
             invincibility = true;
+
+            //Show hit effect
             hitEffect.GetComponent<SpriteRenderer>().enabled = true;
         }
-        else
+        else //Invincibility timed out
         {
             invincibility = false;
-            hitEffect.GetComponent<SpriteRenderer>().enabled = false;
+            hitEffect.GetComponent<SpriteRenderer>().enabled = false; //hide hit effect
         }
 
+        //Cannot get hit / Invincibility during dashing
         if(DashTimeout)
         {
             invincibility = true;
         }
         
-
         //Combat Logic - Attacking
         if (Input.GetButtonDown("Fire1") || Input.GetKey("z"))
         {
-           if(currAnim == 1)
+           if(currAnim == 1) //If Moving while attacking
            {
                if(attacking == false)
                {
-                   enableAnimation(2);
+                   enableAnimation(2); //Move + Attack Animation
                    attacking = true;
                    StartCoroutine(AttackTimer());
                    GetComponent<SoundFXManager>().Slash();
                }
            }
-           else if(currAnim == 0)
+           else if(currAnim == 0) //If Idle while attacking
            {
                if(attacking == false)
                {
-                   enableAnimation(3);
+                   enableAnimation(3); //Idle + Attack Animation
                    attacking = true;
                    StartCoroutine(AttackTimer());
                    GetComponent<SoundFXManager>().Slash();
@@ -259,6 +268,7 @@ public class Player : MonoBehaviour
            }
         }
 
+        //When an animation ends that state should also ends
         if(getAnimationProgress(2) == true)
         {
             attacking = false;
@@ -269,6 +279,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //If directions are switched as Player attacks, ensure that only one attackRange is active throughout the attack
     public void switchAttack(bool dir)
     {
         if(attacking == false)
@@ -291,19 +302,21 @@ public class Player : MonoBehaviour
 
     }
 
+    //Check if Player has Inventory Item
     public bool CheckForItem(int searchTag)
     {
         return InventorySet.GetComponent<Inventory>().CheckForItem(searchTag);
     }
 
+    //Apply a Physics force to the player to quickly move across a space
     void Dash(float mod)
     {
         if(!InventorySet.GetComponent<Inventory>().CheckForItem(4))
         {
-            return;
+            return; //Player doesn't have Gem of Dashing in Inventory - Cannot dash
         }
         
-        if(DashTimeout == false)
+        if(DashTimeout == false) //If not dashing
         {
             RB.AddForce(transform.right * mod);
             DashTimeout = true;
@@ -313,26 +326,37 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Dash cooldown before can be activated again
     IEnumerator DashTimeoutTimer()
     {
         yield return new WaitForSeconds(0.8f);
         DashTimeout = false;
     }
 
+    //Apply Physics force to jump into the Air
     void Jump()
     {
-        if(Mathf.Approximately(RB.velocity.y, 0f) || onPlatform == true)
+        if(Mathf.Approximately(RB.velocity.y, 0f) || onPlatform == true) //Check if player is on the ground or on a platform 
         {
             GetComponent<Rigidbody2D>().AddForce(transform.up * 1000);
             GetComponent<SoundFXManager>().Jump();
         }
     }
 
+    //Picks an Animation to play based on Player's State.
     void enableAnimation(int num)
     {
-        if(attacking == true && num < 3)
+        if(attacking == true && num < 3)// If attacking while Idle or moving
         {
-            AnimationSet[num +2].GetComponent<AnimationData>().Running = true;
+            /*
+                Order of AnimationData is important as it allows less if statements to decide what animation to play by grouping together similar types 
+                In this case, an attack version of a running animation is always relatively +2 from the currently running animation.
+
+                This is not the best way to do this, but it is possible to do since there aren't that many states- otherwise a State Machine Pattern would be perfect here to
+                lower complexity
+            */
+
+            AnimationSet[num +2].GetComponent<AnimationData>().Running = true; //Play Animation that is a certain displacment from current state
             if(num+2 != currAnim)
             {
                 AnimationSet[currAnim].GetComponent<AnimationData>().Running = false;
@@ -357,7 +381,7 @@ public class Player : MonoBehaviour
             currAnim = 6;
             }
         }
-        else
+        else //Misc all other future and undefined above animations
         {
             AnimationSet[num].GetComponent<AnimationData>().Running = true;
             if(num != currAnim)
@@ -368,6 +392,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Has an animation of id finished
     private bool getAnimationProgress(int id)
     {
         if(AnimationSet[id].GetComponent<AnimationData>().getActiveFrame() == AnimationSet[id].GetComponent<AnimationData>().getLastFrame())
@@ -377,17 +402,17 @@ public class Player : MonoBehaviour
         return false;
     }
 
+    //Moves the player by changing it's transform position by a set amount mod calculated with speed and time
     void Move(float mod)
     {
-        if(health > 0)
+        if(health > 0) //Must be alive to move
         {
             Vector3 change;
-            //anim.SetBool("Running", true);
+
+            //anim.SetBool("Running", true); Legacy unity builtin animation
             //anim.SetBool("Running", false);
             
-            
             enableAnimation(1);
-            
             
             change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
             transform.position += change;
@@ -398,61 +423,64 @@ public class Player : MonoBehaviour
     {
         if(loading == true)
         {
-            return;
+            return; //Ignore all collisons while loading
         }
         
+        //Pick up Crown
+        if(col.transform.tag == "Crown") 
+        {
+            enableAnimation(7);
+            King = true;
+            GetComponent<SoundFXManager>().Win();
+            FadeWin.GetComponent<GameOver>().StartFade();
+        }
+        
+        //Takes a hit if not dashing ot invincible on coming into contact with an Active AttackRange
         if(col.tag == "AttackRange" && invincibility == false && DashTimeout == false)
         {
+            //Become invincible for a short time
             invincibility = true;
             invincibilityTimer = Time.deltaTime * 100;
+
+            //Subtract health
             setHealth(health - 1, true);
             GetComponent<SoundFXManager>().Hit();
             return;
         }
 
+        //Instantly lose game- used pits that lead off screen 
         if(col.tag == "InstantDeath")
         {
             setHealth(0, false);
             return;
         }
 
+        //Pick up Pick
         if(col.tag == "Pick")
         {
             InventorySet.GetComponent<Inventory>().addItem(3);
             col.gameObject.SetActive(false);
+            GetComponent<SoundFXManager>().Pickup();
         }
 
+        //Pick up Dash Gem
         if(col.tag == "Dash")
         {
             InventorySet.GetComponent<Inventory>().addItem(4);
             col.gameObject.SetActive(false);
+            GetComponent<SoundFXManager>().Pickup();
         }
 
+        //Pick up a heart
         if(col.tag == "Heart")
         {
             setHealth(health + 1, false);
             col.gameObject.SetActive(false);
+            GetComponent<SoundFXManager>().Pickup();
         }
-
-        
 
         checkDash(col);
 
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(loading == true)
-        {
-            return;
-        }
-        
-        if(collision.transform.tag == "Crown")
-        {
-            enableAnimation(7);
-            King = true;
-            FadeWin.GetComponent<GameOver>().StartFade();
-        }
     }
 
     void OnCollisionStay2D(Collision2D collision)
@@ -462,13 +490,17 @@ public class Player : MonoBehaviour
             return;
         }
 
+        //Player is standing on a moving platform
         if(collision.transform.tag == "MovingPlatform")
         {
             onPlatform = true;
+
+            //Move player in the same direction as the platform
             int MovingPlatformdir = collision.transform.GetComponent<MovingPlatform>().dir;
             gameObject.transform.position = new Vector2(gameObject.transform.position.x + MovingPlatformdir * Time.deltaTime, gameObject.transform.position.y);
         }
 
+        //If on a regular non-moving platform
          if(collision.transform.tag == "Platform")
          {
             onPlatform = true;
@@ -482,6 +514,8 @@ public class Player : MonoBehaviour
             return;
         }
         
+        //Reset OnPlatform 
+
         if(collision.transform.tag == "Platform")
         {
             onPlatform = false;
@@ -493,6 +527,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Avoid bugs with enemy colliders by always checking if dash should ignore colliders
     void OnTriggerStay2D(Collider2D col)
     {
        if(loading == true)
@@ -503,11 +538,13 @@ public class Player : MonoBehaviour
        checkDash(col);
     }
 
+    //Add item to Inventory
     public void addToken(int tokenID)
     {
         InventorySet.GetComponent<Inventory>().addItem(tokenID);
     }
 
+    //Ignore enemy colliders while dashing
     void checkDash(Collider2D col)
     {
         if(DashTimeout == true)
@@ -524,8 +561,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    //Change the Player's health
     public void setHealth(int newHealth, bool shake)
     {
+        //Change health and update heart visual
         health = newHealth;
         for(int i=1; i<=6; i++)
         {
@@ -539,18 +578,21 @@ public class Player : MonoBehaviour
             }
         }
 
-        if(health <= 0)
+        if(health <= 0) //no more health, start gameover cutscene
         {
             enableAnimation(4);
+            GetComponent<SoundFXManager>().Lose();
             Fade.GetComponent<GameOver>().StartFade();
+            GetComponent<SoundFXManager>().Lose();
         }
-        else if(shake == true)
+        else if(shake == true) //Shake cam if needed, this is used if player was hit by an enemy instead of new health being loaded, cannot shake on death
         {
             enableAnimation(5);
             beingHit = true;
             if(shake == true)
             {
-                StartCoroutine(Cam.GetComponent<CameraShake>().CamShake(0.1f, 0.2f));
+                Cam = GameObject.FindWithTag("MainCamera");
+                Cam.GetComponent<CameraShake>().startShake(0.3f, 1.5f);
             }
         }
     }
@@ -560,11 +602,7 @@ public class Player : MonoBehaviour
         return health;
     }
 
-    void Attack()
-    {
-
-    }
-
+    //Activates attackRange for a set amount of time before turning it off again
     IEnumerator AttackTimer()
     {
         if(direction == false)

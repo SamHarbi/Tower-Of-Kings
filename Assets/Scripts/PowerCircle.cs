@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Visual wheels around a boss
+*/
+
 public class PowerCircle : MonoBehaviour
 {
-    public GameObject Boss;
-    public float speed;
-    private float maxSpeed;
-    private float minSpeed;
-    public bool speeding; //You can't do that! You'll get a ticket :P
+    public GameObject Boss; //The boss linked to these wheels
+    public float speed; //Current spinning speed
+    private float maxSpeed; //Maximum spinning speed
+    private float minSpeed; //Minimum spinning speed
+    public bool speeding; //You can't do that! You'll get a ticket :P - Is wheel increasing in speed?
+    
     // Start is called before the first frame update
     void Start()
     {
+        //Initialise values
         speed = 20;
         maxSpeed = 500;
         speeding = false;
-        minSpeed = -speed;
+        minSpeed = -speed; //rotate backwards at minimum speed
     }
 
     // Update is called once per frame
