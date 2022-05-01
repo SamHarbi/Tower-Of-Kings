@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    An Animation State that loops in time with LAS and runs an animation. Built as a State Design Pattern where each Instance of AnimationData acts as a unique state with it's own timing 
+    and frames. Most GameObjects using this class to implement a DFA where only one state can be running.
+*/
+
 public class AnimationData : MonoBehaviour
 {
     public Sprite[] frames; //Frames making the Animation

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Audio and Visual Effects and fixes that are dependant on Player's y position in the tower
+*/
+
 public class CameraLevelEffects : MonoBehaviour
 {
     

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Logic that allows walls to be broken by a pickaxe 
+*/
+
 public class Breakable : MonoBehaviour
 {
     private GameObject Inventory;

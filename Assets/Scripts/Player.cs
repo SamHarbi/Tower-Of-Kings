@@ -306,8 +306,6 @@ public class Player : MonoBehaviour
             attackRangeLeft.SetActive(false);
             attackRangeRight.SetActive(true);
         }
-       
-        
 
     }
 
@@ -352,7 +350,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    //Picks an Animation to play based on Player's State.
+    //Picks an Animation to play based on Player's State. Each AnimationData Object acts as a State that changes the visual of the GameObject
     void enableAnimation(int num)
     {
         if(attacking == true && num < 3)// If attacking while Idle or moving

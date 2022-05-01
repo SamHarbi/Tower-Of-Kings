@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    logic for handling the dialog panel 
+*/
+
 public class DialogSystem : MonoBehaviour
 {
     

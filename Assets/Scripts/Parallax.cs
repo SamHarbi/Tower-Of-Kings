@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Moves an Object based on far the Player moves from it- Used by farBackground tilemap to create a Parallax effect
+*/
+
 public class Parallax : MonoBehaviour
 {
     public GameObject Player;

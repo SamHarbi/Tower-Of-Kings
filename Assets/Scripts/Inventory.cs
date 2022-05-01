@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory inventory;
+    
     public GameObject InventoryPanel;
     public GameObject settingsPanel;
     public GameObject helpPanel;
@@ -17,6 +19,19 @@ public class Inventory : MonoBehaviour
     private bool pauseStatus; //Is game paused?
     private int openPanelID; //Which panel is open
     private bool timeOut;
+
+    private void Awake() 
+    { 
+        //If there is another LAS Instance, delete this one
+        if (inventory != null && inventory != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            inventory = this; 
+        } 
+    }
 
     // Start is called before the first frame update
     void Start()

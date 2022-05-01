@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 /*
     Controls menu cursor, which selects options and calls code for each options
     This class would fit very well into a Strategy Pattern. With if(menu) being replaced by another strategy. 
+    Currently this class has a state pattern with two states being dictated by the menu variable, but this is not very extensible in this case
 */
 
 public class CursorController : MonoBehaviour

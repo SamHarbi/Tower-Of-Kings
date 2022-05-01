@@ -323,7 +323,7 @@ public class AIController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    //Select an AnimationData Object to play
+    //Select an AnimationData Object to play. Each AnimationData Object acts as a State that changes the visual of the GameObject
     public void enableAnimation(int num)
     {
         //Run set animation and deactivate current running Animation

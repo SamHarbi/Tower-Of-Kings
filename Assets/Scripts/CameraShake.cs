@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Shakes Camera (or any other gameObject for that matter) at a set intensity within a set timeframe
+*/
+
 public class CameraShake : MonoBehaviour
 {
     //Code Heavily inspired by https://www.youtube.com/watch?v=9A9yj8KnM8c

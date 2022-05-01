@@ -7,7 +7,7 @@ using UnityEngine;
    selected before the main scene was loaded
 */
 
-public class MenuSettings
+public static class MenuSettings
 {
    public static bool loadGame;
 }

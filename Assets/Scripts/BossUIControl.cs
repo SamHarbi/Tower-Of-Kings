@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/* 
+    Controls all UI elements for a Boss Fight, essentially everything that is on canvas and cameras
+    Implements a Mediator Pattern between all Boss Scripts
+*/
+
 public class BossUIControl : MonoBehaviour
 {
     

@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class LogicalAnimationSystem : MonoBehaviour
 {
-    //Singleton Pattern- There can only one LAS Instance in the game. Manages AnimationData Objects and Informs them when to update
+    //Singleton Pattern- There can only one LAS Instance in the game. Manages AnimationData Objects and Informs them when to update through ticks
+    //Although I could just use Unity's Time.deltaTime I would not be able to modify it without affecting other Unity Systems. Think of LAS as a time manager for Animations only
+
     public static LogicalAnimationSystem LAS;
 
 
     public GameObject animationPrefab; //Animation Data Prefab
     public List<GameObject> Animations; //List of all Animations in the Game
-    public float Tick; //How long a single update is
+    public float Tick; //How long a single Animation update is
 
     private float timePassed;
 

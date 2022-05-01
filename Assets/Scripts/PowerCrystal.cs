@@ -2,19 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Crystals that stun the third boss on hit and cause a longer stun if all are hit- allowing the Player to do damage to the Boss
+*/
+
 public class PowerCrystal : MonoBehaviour
 {
     
     public GameObject[] AnimationSet;
     public GameObject LAS;
     private int currAnim;
-    public bool State;
+    public bool State; //Is the crystal broken or not?
     private GameObject Particles;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Start Idle Animation
+        //Start Idle Animation and setup values
         currAnim = 0;
         enableAnimation(0);
         State = true;
@@ -25,16 +29,9 @@ public class PowerCrystal : MonoBehaviour
     {
         LAS = GameObject.FindWithTag("LAS");
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
-
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Return to a idle unbroken state
     public void ResetState()
     {
         enableAnimation(0);
@@ -46,15 +43,15 @@ public class PowerCrystal : MonoBehaviour
     {
         if(col.tag == "PlayerAttackRange")
         {
+            //Change to be broken
             enableAnimation(1);
             State = false;
-
-            
             Particles.GetComponent<ParticleSystem>().Stop();
             
         }
     }
 
+     //Each AnimationData Object acts as a State that changes the visual of the GameObject
      public void enableAnimation(int num)
     {
         //Run set animation and deactivate current running Animation

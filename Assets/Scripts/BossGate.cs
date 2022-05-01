@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+    Sits at the border of a Boss Room / Area and informs BossUIControl when the Player leaves or enters it 
+*/
+
 public class BossGate : MonoBehaviour
 {
     

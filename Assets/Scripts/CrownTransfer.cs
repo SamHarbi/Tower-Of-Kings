@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Logic to change own animation when Player collides (used by crown object in throne room)
+*/
+
 public class CrownTransfer : MonoBehaviour
 {
     private int currAnim; //Currently running animation
@@ -25,6 +29,7 @@ public class CrownTransfer : MonoBehaviour
         }
     }
 
+    //Each AnimationData Object acts as a State that changes the visual of the GameObject
     public void enableAnimation(int num)
     {
         //Run set animation and deactivate current running Animation
