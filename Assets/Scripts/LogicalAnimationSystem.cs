@@ -7,6 +7,12 @@ public class LogicalAnimationSystem : MonoBehaviour
     //Singleton Pattern- There can only one LAS Instance in the game. Manages AnimationData Objects and Informs them when to update through ticks
     //Although I could just use Unity's Time.deltaTime I would not be able to modify it without affecting other Unity Systems. Think of LAS as a time manager for Animations only
 
+    /*
+        Awake Method copied from 
+        French, J. (2021). Singletons in Unity (done right). [online] Game Dev Beginner. 
+        Available at: https://gamedevbeginner.com/singletons-in-unity-the-right-way/ [Accessed 1 May 2022].
+    */
+    
     public static LogicalAnimationSystem LAS;
 
 

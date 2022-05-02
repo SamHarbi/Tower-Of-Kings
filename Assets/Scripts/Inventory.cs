@@ -4,6 +4,10 @@ using UnityEngine;
 
 /*
     Singleton Pattern Class- Only one instance of Inventory Exists and it manages all items picked up by player and displays it in a UI implementation
+    
+    Awake Method copied from 
+    French, J. (2021). Singletons in Unity (done right). [online] Game Dev Beginner. 
+    Available at: https://gamedevbeginner.com/singletons-in-unity-the-right-way/ [Accessed 1 May 2022].
 */
 
 public class Inventory : MonoBehaviour
@@ -64,20 +68,26 @@ public class Inventory : MonoBehaviour
             return; //ignore all input below
         }
 
-        //Open next panel
-        if (Input.GetAxis("Dpad-Horizontal") > 0 && pauseStatus == true)
+        //Open next panel  
+        if (Input.GetAxis("Dpad-Horizontal") > 0 || Input.GetKey("w") || Input.GetButtonDown("subup"))
         {
-            openPanelID++;
-            scrollTabs();
-            StartCoroutine(delay()); 
+            if(pauseStatus == true)
+            {
+                openPanelID++;
+                scrollTabs();
+                StartCoroutine(delay()); 
+            }
         }
 
         //Open prev panel
-        if (Input.GetAxis("Dpad-Horizontal") < 0 && pauseStatus == true)
+        if (Input.GetAxis("Dpad-Horizontal") < 0 || Input.GetKey("s") || Input.GetButtonDown("subdown"))
         {
-            openPanelID--;
-            scrollTabs();
-            StartCoroutine(delay()); 
+            if(pauseStatus == true)
+            {
+                openPanelID--;
+                scrollTabs();
+                StartCoroutine(delay()); 
+            }
         }
     }
 
