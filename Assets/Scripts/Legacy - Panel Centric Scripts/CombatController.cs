@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This code is not used and is legacy from the cancelled panel combat system (See report for more info)
+*/
+
 public class CombatController : MonoBehaviour
 {
     private Animator anim; //Animation Controller

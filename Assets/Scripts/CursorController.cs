@@ -67,7 +67,7 @@ public class CursorController : MonoBehaviour
               return;
          }
          
-        if (Input.GetAxis("Dpad-Vertical") < 0 || Input.GetKey("a"))
+        if (Input.GetAxis("Dpad-Vertical") < 0 || Input.GetKey("a") || Input.GetKey("down"))
         {
             pointer = pointer-1;
             if(pointer < 0) //handle negative pointers
@@ -76,7 +76,7 @@ public class CursorController : MonoBehaviour
             }
             Move(pointer);
         }
-        else if(Input.GetAxis("Dpad-Vertical") > 0 || Input.GetKey("d"))
+        else if(Input.GetAxis("Dpad-Vertical") > 0 || Input.GetKey("d") || Input.GetKey("up"))
          {
             pointer = Mathf.Abs((pointer+1) % allButtons.Length);
             Move(pointer);

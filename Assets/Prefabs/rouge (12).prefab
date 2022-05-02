@@ -256,7 +256,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.077697754, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -267,7 +267,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.5, y: 2.5}
+  m_Size: {x: 2.3446045, y: 2.5}
   m_EdgeRadius: 0
 --- !u!95 &8451738114264444366
 Animator:
@@ -318,18 +318,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AudioSource: {fileID: 89693254192448184}
   lowPriorAudioSource: {fileID: 89693254192448184}
+  hit:
+  - {fileID: 8300000, guid: f312920a6fa263241bae74b7a286b20e, type: 3}
+  - {fileID: 8300000, guid: f312920a6fa263241bae74b7a286b20e, type: 3}
   slash:
   - {fileID: 8300000, guid: 34c25ea287e206a458ecb243da20a89b, type: 3}
   jump: {fileID: 0}
+  pickup: {fileID: 0}
+  win: {fileID: 0}
+  lose: {fileID: 0}
   chainMail:
   - {fileID: 8300000, guid: f6b0a9892dbc01b4584996ed5112cda5, type: 3}
   - {fileID: 8300000, guid: 5d092f3ad527f73458220740e1df5656, type: 3}
   - {fileID: 8300000, guid: 346ffc469331b18488f9cff18e47b41a, type: 3}
   - {fileID: 8300000, guid: 813b213e71874f84bb0abfdf9a1331a0, type: 3}
   - {fileID: 8300000, guid: faa2716a3cc8ae547937ee4e19288fe7, type: 3}
-  hit:
-  - {fileID: 8300000, guid: f312920a6fa263241bae74b7a286b20e, type: 3}
-  - {fileID: 8300000, guid: f312920a6fa263241bae74b7a286b20e, type: 3}
 --- !u!114 &7992846753637156593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d666f939d9ca61543b55cefe40eb99a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 0}
 --- !u!1 &8451738114493348098
 GameObject:
   m_ObjectHideFlags: 0

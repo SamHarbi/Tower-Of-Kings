@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    This code is not used anymore but was used to test different combat feel
+*/
 public class Hitbox : MonoBehaviour
 {
     

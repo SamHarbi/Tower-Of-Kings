@@ -7,7 +7,15 @@ public class Pause : MonoBehaviour
     private bool pauseState;
     public GameObject GameSave;
     
-    //Inspired By https://gamedevbeginner.com/the-right-way-to-pause-the-game-in-unity/
+    //Inspired By 
+    /*
+        French, J. (2020). The right way to pause a game in Unity. 
+        [online] Game Dev Beginner. Available at: https://gamedevbeginner.com/the-right-way-to-pause-the-game-in-unity/.
+
+    */
+
+    //No longer used as Pausing was integrated with Inventory, but this class remains useful to test pure pause functionality without any overhead 
+
     // Start is called before the first frame update
     void Start()
     {

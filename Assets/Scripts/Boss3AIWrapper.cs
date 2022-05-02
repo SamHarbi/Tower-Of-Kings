@@ -215,7 +215,7 @@ public class Boss3AIWrapper : MonoBehaviour
         waveTimer = waveTimer - (0.8f* Time.deltaTime); //Update how much time has passed 
 
         /*These could be moved to other classes to make it easier to add more waves in a strategy design pattern (each wave is one way of damaging the player) or as States
-          that the Boss is in
+          that the Boss is in. Currently these 2 conditional states with AIController create a NFA where the Boss can be in more than one state (One through AIController and one here)
 
           But due to there being only 2 waves and not enough time, I decided to keep it this way
         */
@@ -240,7 +240,7 @@ public class Boss3AIWrapper : MonoBehaviour
             //Debug.Log("Wave" + waveTimer);
             return;
         }
-        else if(currWaveID == 1)
+        else if(currWaveID == 1) //Flame Wave - this will set AIController to Idle
         {
             if (Debug.isDebugBuild)
             {

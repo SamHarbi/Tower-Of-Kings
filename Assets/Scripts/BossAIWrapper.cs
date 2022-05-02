@@ -127,6 +127,8 @@ public class BossAIWrapper : MonoBehaviour
 
                     bossUIControl.GetComponent<BossUIControl>().endBossFight();
                     Inventory.GetComponent<Inventory>().addItem(0); //Add key piece
+
+                    StartCoroutine(BossDeathTimer()); // Destroy falling boss Object
                 }
         }
     }
@@ -141,8 +143,9 @@ public class BossAIWrapper : MonoBehaviour
     //Time delay before boss "dies" and is set to be inactive
     IEnumerator BossDeathTimer()
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2.5f); 
         gameObject.SetActive(false);
+        //Destroy(gameObject);
     }
 
     //Check if the current running animation is currently a within a certain range of frames

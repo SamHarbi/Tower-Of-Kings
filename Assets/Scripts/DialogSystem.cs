@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 /*
     logic for handling the dialog panel 
+
+    Code inspired by 
+    kathode (2013). Any better way to handle strings for a ‘typewriter’ style effect? [online] Unity Forum. 
+    Available at: https://forum.unity.com/threads/any-better-way-to-handle-strings-for-a-typewriter-style-effect.513230/ [Accessed 1 May 2022].
 */
 
 public class DialogSystem : MonoBehaviour

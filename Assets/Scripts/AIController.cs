@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 /*
 
-This class implements a State Machine structure, based on what state currently is active as recorded in actionstate variable. Only one state can be active at a time and every 
+This class implements a State Machine structure, based on what state currently is active as recorded in the actionstate variable. Only one state can be active at a time and every 
 state loops back to State_Idle on update, before the search method decides on what state should be set before the next Update based on input information on the state of the 
 world (Distance to Player). 
 
@@ -23,7 +23,7 @@ In the case of OnTriggerEnter2d, BossWrappers do not pass on requests so it can 
 
 public class AIController : MonoBehaviour
 {
-    //***Legacy Search AI Variables - See Explanation below or in the Report***
+    //***Legacy Search AI Variables - See Explanation below***
     //public GameObject path; //GameObject Path with Tilemap
     //private Tilemap tm; //Tilemap Component
     //public BoundsInt area;
@@ -67,7 +67,7 @@ public class AIController : MonoBehaviour
     // Start is called before the first frame update by Wrapper
     public void WrappedStart()
     {
-        //Legacy Search AI Variables - See Explanation below or in the Report
+        //Legacy Search AI Variables - See Explanation below
         //path = GameObject.FindWithTag("Path"); 
         //tm = path.GetComponent<Tilemap>();
         //area = tm.cellBounds;
@@ -195,6 +195,16 @@ public class AIController : MonoBehaviour
     the AI search with a simpler distance comparison. 
 
     I keep this code here because I hope to expand the AI in the future with it. 
+
+    This code copies some code from:
+
+    danbrani (2017). Tile Map - Tilemap tile positions assistance. [online] Unity Forum. 
+    Available at: https://forum.unity.com/threads/tilemap-tile-positions-assistance.485867/.
+
+    Shirotha (2018). unity3d - How can I get the x,y coordinate location of a tile in the tilemap? [online] Stack Overflow. 
+    Available at: https://stackoverflow.com/questions/48277320/how-can-i-get-the-x-y-coordinate-location-of-a-tile-in-the-tilemap.
+
+    
 
 */
 /*

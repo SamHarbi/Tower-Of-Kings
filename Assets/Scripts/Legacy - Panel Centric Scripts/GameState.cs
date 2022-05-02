@@ -8,6 +8,9 @@ using UnityEngine;
 
     raywenderlich.com. 2017. How to Save and Load a Game in Unity. [online] Available at: <https://www.raywenderlich.com/418-how-to-save-and-load-a-game-in-unity> [Accessed 24 April 2022].
 
+ 
+    This code is not used because I had to redesign the save system to fix a vulnerability, see in the report the section on Security - Integrity 
+
 */
 
 [System.Serializable]

@@ -114,6 +114,10 @@ public class CameraLevelEffects : MonoBehaviour
     }
 
     //Fade audio step by step represented by change
+    //Structure inspired by 
+    /*Boris1998 (2013). Fade Out Audio Source. [online] Unity Forum. 
+    Available at: https://forum.unity.com/threads/fade-out-audio-source.335031/ [Accessed 1 May 2022].
+    */
     IEnumerator audioFade(float goal, float change)
     {
         //AudioSourceTheme.GetComponent<AudioSource>().Play();

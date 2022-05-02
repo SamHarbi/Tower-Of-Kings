@@ -8,7 +8,11 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    //Code Heavily inspired by https://www.youtube.com/watch?v=9A9yj8KnM8c
+    /*
+        Code inspired by (and partially copied) from 
+        Brackeys (2018). CAMERA SHAKE in Unity. [online] www.youtube.com.
+         Available at: https://www.youtube.com/watch?v=9A9yj8KnM8c [Accessed 1 May 2022]. 
+    */
     
     Vector3 originalPos;
 
@@ -38,8 +42,10 @@ public class CameraShake : MonoBehaviour
 
         }
 
-        //return back to original positions
-        transform.position = originalPos;
+        //return back to original positions relative to player
+        Vector3 playerPos = GameObject.FindWithTag("Player").transform.position;
+        transform.position = new Vector3(playerPos.x, playerPos.y + 1, -10);
+        
 
         yield return null;
     }

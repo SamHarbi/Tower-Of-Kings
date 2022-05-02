@@ -50,7 +50,7 @@ public class Parallax : MonoBehaviour
             Using an Asymptote function to limit the movment of the parralex effect as the
             Player gets further away from orgin, the function choosen for this is 
 
-            M / 20*X^2 + 1 Where M is the max parrallax displacment in a single step and X is displacment so far
+            M / 20*X^2 + 1 Where M is the max parallax displacment in a single step and X is displacment so far
 
         */
 

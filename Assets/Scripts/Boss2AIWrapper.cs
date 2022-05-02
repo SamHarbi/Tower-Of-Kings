@@ -52,16 +52,20 @@ public class Boss2AIWrapper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         search();
 
         //If an Attack Animation is playing, ensure that damage can be done by this enemy to Player
         if(getAnimationProgress(2) == true)
         {
-            attackRange.SetActive(true);
+            //attackRange.SetActive(true);
+            attackRange.GetComponent<CircleCollider2D>().enabled = true;
+            Debug.Log("HUH???");
         }
         else
         {
-            attackRange.SetActive(false);
+            //attackRange.SetActive(false);
+            attackRange.GetComponent<CircleCollider2D>().enabled = false;
         }
 
         Controller.WrappedUpdate(); //Pass on to wrapped

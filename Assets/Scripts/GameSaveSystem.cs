@@ -14,7 +14,7 @@ using UnityEngine;
     raywenderlich.com. (2017). How to Save and Load a Game in Unity. [online] Available at: 
     <https://www.raywenderlich.com/418-how-to-save-and-load-a-game-in-unity> [Accessed 24 April 2022].
 
-    But due to recent updates on security issues with BinaryFormatter, this has been reworked to use the recommended alternative 
+    But due to recent updates on security issues with BinaryFormatter, this has been heavily reworked to use the recommended alternative 
     
     GrabYourPitchforks (03/11/2022). Deserialization risks in use of BinaryFormatter and related types. [online] docs.microsoft.com. Available at: 
     https://docs.microsoft.com/en-us/dotnet/standard/serialization/binaryformatter-security-guide.

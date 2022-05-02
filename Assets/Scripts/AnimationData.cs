@@ -64,6 +64,7 @@ public class AnimationData : MonoBehaviour
 
     //tickDown is called by Logical Animation System every time a set number of updates passes
     //Observor Pattern - LAS has a list of subscribers (AnimationData Objects) that it calls whenever a change happens (One Tick)
+    //TickDown() is the interface through which LAS informs it's subscribers 
     public void tickDown()
     {
         if(Running == false && nonloop == false)

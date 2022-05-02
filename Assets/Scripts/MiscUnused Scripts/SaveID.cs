@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Not used, was created to test how best to save enemy data
+    Structure Inspired by 
+    
+    raywenderlich.com. 2017. How to Save and Load a Game in Unity. 
+    [online] Available at: <https://www.raywenderlich.com/418-how-to-save-and-load-a-game-in-unity> [Accessed 24 April 2022].
+*/
+
+
 public class SaveID : MonoBehaviour
 {
     
