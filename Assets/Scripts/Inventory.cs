@@ -143,6 +143,8 @@ public class Inventory : MonoBehaviour
                //unpause game
                Time.timeScale = 1;
                pauseStatus = false;
+               
+               // I don't know why I did this but not doing it fixes a speed up bug on pause
                GameSave.GetComponent<GameSaveSystem>().UnPause();
            }
     }

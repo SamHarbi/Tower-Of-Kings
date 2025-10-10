@@ -221,7 +221,7 @@ public class Player : MonoBehaviour
         }
 
         //Gravity Logic - Heavy Fall and light jump
-        if(RB.velocity.y < 0.1) //If falling
+        if(RB.linearVelocity.y < 0.1) //If falling
         {
             RB.gravityScale = 8; //High Gravity
         }
@@ -343,7 +343,7 @@ public class Player : MonoBehaviour
     //Apply Physics force to jump into the Air
     void Jump()
     {
-        if(Mathf.Approximately(RB.velocity.y, 0f) || onPlatform == true) //Check if player is on the ground or on a platform 
+        if(Mathf.Approximately(RB.linearVelocity.y, 0f) || onPlatform == true) //Check if player is on the ground or on a platform 
         {
             GetComponent<Rigidbody2D>().AddForce(transform.up * 1000);
             GetComponent<SoundFXManager>().Jump();
