@@ -38,6 +38,9 @@ public class Player : MonoBehaviour
     private int currAnim; //Currently running Animation
     private bool loseAudioStarted;
 
+    private ContactFilter2D groundContactFilter;
+    public LayerMask groundLayers;
+
     // private Animator anim; Legacy Unity built-in Animation
 
     /* legacy panel centric attack variables
@@ -91,7 +94,11 @@ public class Player : MonoBehaviour
         AnimationSet = LAS.GetComponent<LogicalAnimationSystem>().getAnimationDataArray(gameObject);
         currAnim = 1;
         enableAnimation(0);
-        
+
+        groundContactFilter = new ContactFilter2D();
+        groundContactFilter.SetLayerMask(groundLayers);
+        groundContactFilter.useTriggers = false;
+
     }
 
     // Update is called once per frame
@@ -410,19 +417,20 @@ public class Player : MonoBehaviour
     }
 
     //Moves the player by changing it's transform position by a set amount mod calculated with speed and time
-    void Move(float mod)
-    {
-        if(health > 0) //Must be alive to move
-        {
-            Vector3 change;
-
-            //anim.SetBool("Running", true); Legacy unity builtin animation
-            //anim.SetBool("Running", false);
+    void Move(float mod) {
+        List<RaycastHit2D> results = new List<RaycastHit2D>();
+        //Must be alive to move
+        if(health > 0) {
+            if(mod < 0) {
+                Physics2D.Raycast(transform.position, Vector2.left, groundContactFilter, results, 1.0f);
+                if (results.Count > 0) return;
+            } else {
+                Physics2D.Raycast(transform.position, Vector2.right, groundContactFilter, results, 1.0f);
+                if (results.Count > 0) return;
+            }
             
             enableAnimation(1);
-            
-            change = new Vector3(mod * speed * Time.deltaTime, 0, 0);
-            transform.position += change;
+            transform.position += new Vector3(mod * speed * Time.deltaTime, 0, 0);
         }
     }
 
